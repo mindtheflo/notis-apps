@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["app", "lib", "notis.config.ts", "vite.config.ts"]
+}

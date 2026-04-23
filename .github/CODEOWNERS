@@ -1,0 +1,12 @@
+# Any change to an app requires Notis store-reviewer sign-off.
+# The store-reviewers team is the gate for everything that ships to users.
+/apps/**                  @notis/store-reviewers
+
+# Infrastructure (workflows, scripts, vendored SDK) needs tighter control.
+/.github/**               @notis/store-maintainers
+/scripts/**               @notis/store-maintainers
+/packages/notis-sdk/**    @notis/store-maintainers
+
+# Root configs
+/package.json             @notis/store-maintainers
+/tsconfig.json            @notis/store-maintainers

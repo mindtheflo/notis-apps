@@ -1,0 +1,81 @@
+name: merge-publish
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: merge-publish
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    name: Detect changed apps
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.detect.outputs.apps }}
+      any: ${{ steps.detect.outputs.any }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - id: detect
+        name: Detect changed apps since previous push
+        run: |
+          # github.event.before is the previous HEAD of main prior to this push.
+          # For the very first push, it's 0000...; in that case we publish everything.
+          BEFORE="${{ github.event.before }}"
+          HEAD="${{ github.sha }}"
+          ZERO="0000000000000000000000000000000000000000"
+          if [ "$BEFORE" = "$ZERO" ]; then
+            echo "First push to main; detecting all apps."
+            npm run -s detect-changed -- --all --out "$GITHUB_OUTPUT"
+          else
+            npm run -s detect-changed -- --base "$BEFORE" --head "$HEAD" --out "$GITHUB_OUTPUT"
+          fi
+
+  publish:
+    name: Publish ${{ matrix.app }}
+    needs: detect
+    if: needs.detect.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        app: ${{ fromJson(needs.detect.outputs.apps) }}
+    env:
+      NOTIS_REGISTRY_WEBHOOK_URL: ${{ vars.NOTIS_REGISTRY_WEBHOOK_URL }}
+      NOTIS_REGISTRY_WEBHOOK_SECRET: ${{ secrets.NOTIS_REGISTRY_WEBHOOK_SECRET }}
+      SUPABASE_STORAGE_URL: ${{ vars.SUPABASE_STORAGE_URL }}
+      SUPABASE_STORAGE_SERVICE_KEY: ${{ secrets.SUPABASE_STORAGE_SERVICE_KEY }}
+      SUPABASE_STORAGE_BUCKET: ${{ vars.SUPABASE_STORAGE_BUCKET || 'app-code' }}
+      COMMIT_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build bundle
+        run: npm run -s build --workspace apps/${{ matrix.app }}
+
+      - name: Publish to Notis registry
+        run: npm run -s publish-webhook -- apps/${{ matrix.app }}

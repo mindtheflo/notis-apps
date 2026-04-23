@@ -1,0 +1,116 @@
+name: pr-validate
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: pr-validate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect:
+    name: Detect changed apps
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.detect.outputs.apps }}
+      any: ${{ steps.detect.outputs.any }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - id: detect
+        name: Detect changed apps
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          npm run -s detect-changed -- --base "$BASE_SHA" --head "$HEAD_SHA" --out "$GITHUB_OUTPUT"
+
+  validate:
+    name: Validate ${{ matrix.app }}
+    needs: detect
+    if: needs.detect.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.detect.outputs.apps) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate manifest
+        run: npm run -s validate -- apps/${{ matrix.app }}
+
+      - name: Ensure semver bump
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          npm run -s check-semver -- apps/${{ matrix.app }} --base "$BASE_SHA"
+
+      - name: Typecheck
+        run: npm run -s typecheck --workspace apps/${{ matrix.app }}
+
+      - name: Build bundle
+        run: npm run -s build --workspace apps/${{ matrix.app }}
+
+      - name: Bundle size cap
+        run: |
+          MAX_BYTES=$((1024 * 1024))  # 1 MiB gzipped cap
+          BUNDLE_DIR="apps/${{ matrix.app }}/dist"
+          if [ ! -d "$BUNDLE_DIR" ]; then
+            echo "No dist/ produced for apps/${{ matrix.app }}" >&2
+            exit 1
+          fi
+          TOTAL=$(find "$BUNDLE_DIR" -type f -name '*.js' -exec gzip -c {} \; | wc -c)
+          echo "Gzipped JS total: $TOTAL bytes (cap $MAX_BYTES)"
+          if [ "$TOTAL" -gt "$MAX_BYTES" ]; then
+            echo "::error::Bundle exceeds 1 MiB gzipped cap for apps/${{ matrix.app }}" >&2
+            exit 1
+          fi
+
+      - name: Forbidden-import scan
+        run: |
+          BUNDLE_DIR="apps/${{ matrix.app }}/dist"
+          FORBIDDEN='\beval\s*\(|new Function\s*\(|document\.write\s*\(|__proto__\s*='
+          if grep -RInE "$FORBIDDEN" "$BUNDLE_DIR"; then
+            echo "::error::Forbidden pattern found in apps/${{ matrix.app }} bundle" >&2
+            exit 1
+          fi
+
+  summary:
+    name: All apps validated
+    needs: [detect, validate]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summary
+        run: |
+          if [ "${{ needs.detect.outputs.any }}" != "true" ]; then
+            echo "No apps touched by this PR."
+            exit 0
+          fi
+          if [ "${{ needs.validate.result }}" != "success" ]; then
+            echo "::error::One or more apps failed validation" >&2
+            exit 1
+          fi
+          echo "All apps passed validation."

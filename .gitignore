@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.notis/
+.turbo/
+.vite/
+.cache/
+
+# secrets
+.env
+.env.local
+.env.*.local
+
+# os
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+*.log
