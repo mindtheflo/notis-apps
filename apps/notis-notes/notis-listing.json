@@ -1,0 +1,14 @@
+{
+  "description": "A calm notes workspace for capturing structured ideas, organizing pages, and browsing connected note collections inside Notis.",
+  "name": "Notis Notes",
+  "screenshots": [
+    {
+      "alt": null,
+      "path": "screenshots/01.png",
+      "public_url": "https://jhgrvlwivajaifrunqpe.supabase.co/storage/v1/object/public/app-listing-assets/5a41ca1b-0d25-4111-baa3-fcc1a10e3092/4f91ec9c-7fe0-4e36-8a6a-6fc95abb8dc7.png"
+    }
+  ],
+  "source_app_id": "2858fcd2-1215-46cb-a414-87174b444ecf",
+  "source_version": 2,
+  "submitted_by_notis_user_id": "5a41ca1b-0d25-4111-baa3-fcc1a10e3092"
+}
