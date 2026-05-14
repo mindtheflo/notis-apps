@@ -37,7 +37,7 @@ type UpsertRollResult = {
 };
 
 export function useRollDocuments(pageSize?: number) {
-  const queryRolls = useTool<QueryRollsArgs, QueryRollsResult>('notis-default-query');
+  const queryRolls = useTool('notis-default-query');
   const [documents, setDocuments] = useState<RollDocument[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const [fetchKey, setFetchKey] = useState(0);
@@ -50,10 +50,13 @@ export function useRollDocuments(pageSize?: number) {
     let cancelled = false;
     setError(null);
 
+    const args: QueryRollsArgs = { database_slug: 'rolls', query: { page_size: pageSize } };
+
     queryRolls
-      .call({ database_slug: 'rolls', query: { page_size: pageSize } })
-      .then((result) => {
+      .call(args)
+      .then((rawResult) => {
         if (cancelled) return;
+        const result = rawResult as QueryRollsResult;
         const message = result.error ?? result.message;
         if (message && !result.documents) {
           throw new Error(message);
@@ -80,18 +83,19 @@ export function useRollDocuments(pageSize?: number) {
 }
 
 export function usePersistRoll() {
-  const upsertRoll = useTool<UpsertRollArgs, UpsertRollResult>('notis-default-upsert_rolls');
+  const upsertRoll = useTool('notis-default-upsert_rolls');
 
   const persist = useCallback(
     async (roll: Roll) => {
-      const result = await upsertRoll.call({
+      const args: UpsertRollArgs = {
         title: formatNumber(roll.value),
         Value: roll.value,
         Mode: roll.mode,
         Min: roll.min,
         Max: roll.max,
         'Rolled At': roll.at,
-      });
+      };
+      const result = await upsertRoll.call(args) as UpsertRollResult;
       const message = result.error ?? result.message;
       if (message && result.status === 'error') {
         throw new Error(message);

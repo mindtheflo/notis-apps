@@ -1,7 +1,7 @@
-import { defineNotisApp } from '@notis/sdk/config';
+import { defineNotisApp, type NotisAppConfig } from '@notis/sdk/config';
 
-export default defineNotisApp({
-  name: 'notis-random',
+const config: NotisAppConfig & Record<string, unknown> = {
+  name: 'Random Number Generator',
   title: 'Random Number Generator',
   description: 'Generate random numbers with configurable bounds, and keep a history of everything you rolled.',
   icon: 'lucide:dices',
@@ -40,4 +40,6 @@ export default defineNotisApp({
     'notis-default-query',
     'notis-default-upsert_rolls',
   ],
-});
+};
+
+export default defineNotisApp(config);
