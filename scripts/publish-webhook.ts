@@ -66,9 +66,10 @@ async function uploadBundle(
   bucket: string,
   registrySlug: string,
   version: string,
-): Promise<string> {
+): Promise<{ bundleUrl: string; cssUrl?: string }> {
   const basePrefix = `registry/${registrySlug}/v${version}`;
   let primaryObjectUrl: string | null = null;
+  let cssUrl: string | undefined;
 
   for (const file of files) {
     const relPath = relative(distDir, file).split('\\').join('/');
@@ -91,10 +92,13 @@ async function uploadBundle(
     if (relPath === 'bundle.js' || (!primaryObjectUrl && relPath.endsWith('.js'))) {
       primaryObjectUrl = `${storageUrl}/storage/v1/object/public/${bucket}/${target}`;
     }
+    if (relPath === 'app.css' || (!cssUrl && relPath.endsWith('.css'))) {
+      cssUrl = `${storageUrl}/storage/v1/object/public/${bucket}/${target}`;
+    }
   }
 
   if (!primaryObjectUrl) die('No .js bundle file found in dist/');
-  return primaryObjectUrl;
+  return { bundleUrl: primaryObjectUrl, cssUrl };
 }
 
 const appPath = process.argv[2];
@@ -103,10 +107,12 @@ if (!appPath) die('Usage: tsx scripts/publish-webhook.ts apps/<slug>');
 const absolute = resolve(process.cwd(), appPath);
 const configPath = join(absolute, 'notis.config.ts');
 const packageJsonPath = join(absolute, 'package.json');
+const listingJsonPath = join(absolute, 'notis-listing.json');
 const distDir = join(absolute, 'dist');
 
 if (!existsSync(configPath)) die(`notis.config.ts not found at ${configPath}`);
 if (!existsSync(packageJsonPath)) die(`package.json not found at ${packageJsonPath}`);
+if (!existsSync(listingJsonPath)) die(`notis-listing.json not found at ${listingJsonPath}`);
 if (!existsSync(distDir)) die(`dist/ not found; run the build step first`);
 
 const packageJson = (await import(pathToFileURL(packageJsonPath).href, {
@@ -115,7 +121,25 @@ const packageJson = (await import(pathToFileURL(packageJsonPath).href, {
 if (!packageJson.notisAppVersion) die('package.json is missing notisAppVersion');
 
 const manifestModule = await import(pathToFileURL(configPath).href);
-const manifest = manifestModule.default as Record<string, unknown>;
+const sourceManifest = manifestModule.default as Record<string, unknown>;
+const listing = JSON.parse(readFileSync(listingJsonPath, 'utf8')) as Record<string, unknown>;
+const sourceApp = sourceManifest.app && typeof sourceManifest.app === 'object'
+  ? sourceManifest.app as Record<string, unknown>
+  : {};
+const author = listing.author ?? sourceApp.author ?? sourceManifest.author;
+const manifest = {
+  ...sourceManifest,
+  app: {
+    ...sourceApp,
+    name: sourceApp.name ?? sourceManifest.name ?? listing.name,
+    title: sourceApp.title ?? listing.name ?? sourceManifest.name,
+    description: sourceApp.description ?? listing.description ?? sourceManifest.description,
+    tagline: sourceApp.tagline ?? listing.tagline ?? sourceManifest.tagline,
+    categories: sourceApp.categories ?? listing.categories ?? sourceManifest.categories,
+    version_notes: sourceApp.version_notes ?? listing.version_notes ?? sourceManifest.version_notes,
+    author,
+  },
+};
 const canonical = canonicalJsonStringify(manifest);
 const manifestHash = `sha256:${sha256(canonical)}`;
 
@@ -127,14 +151,44 @@ const webhookUrl = process.env.NOTIS_REGISTRY_WEBHOOK_URL?.trim() ?? '';
 const webhookSecret = process.env.NOTIS_REGISTRY_WEBHOOK_SECRET?.trim() ?? '';
 
 let bundleUrl: string;
+let cssUrl: string | undefined;
 if (webhookUrl) {
   const storageUrl = requireEnv('SUPABASE_STORAGE_URL');
   const serviceKey = requireEnv('SUPABASE_STORAGE_SERVICE_KEY');
   const bucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || 'app-code';
-  bundleUrl = await uploadBundle(bundleFiles, distDir, storageUrl, serviceKey, bucket, registrySlug, packageJson.notisAppVersion);
+  ({ bundleUrl, cssUrl } = await uploadBundle(
+    bundleFiles,
+    distDir,
+    storageUrl,
+    serviceKey,
+    bucket,
+    registrySlug,
+    packageJson.notisAppVersion,
+  ));
 } else {
   bundleUrl = `dry-run://registry/${registrySlug}/v${packageJson.notisAppVersion}/bundle.js`;
+  cssUrl = bundleFiles.some((file) => file.endsWith('.css'))
+    ? `dry-run://registry/${registrySlug}/v${packageJson.notisAppVersion}/app.css`
+    : undefined;
 }
+
+const commitSha = process.env.COMMIT_SHA?.trim() || 'main';
+const repository = process.env.GITHUB_REPOSITORY?.trim() || 'mindtheflo/notis-apps';
+const screenshots = Array.isArray(listing.screenshots)
+  ? listing.screenshots.map((entry) => {
+      if (!entry || typeof entry !== 'object') return entry;
+      const screenshot = entry as Record<string, unknown>;
+      const screenshotPath = typeof screenshot.path === 'string' ? screenshot.path : '';
+      return {
+        ...screenshot,
+        public_url: screenshot.public_url || (
+          screenshotPath
+            ? `https://raw.githubusercontent.com/${repository}/${commitSha}/apps/${registrySlug}/${screenshotPath}`
+            : undefined
+        ),
+      };
+    })
+  : [];
 
 const payload = {
   registry_slug: registrySlug,
@@ -142,10 +196,22 @@ const payload = {
   manifest,
   manifest_hash: manifestHash,
   bundle_url: bundleUrl,
+  css_url: cssUrl,
   bundle_sha256: `sha256:${bundleContentHash}`,
-  commit_sha: process.env.COMMIT_SHA ?? '',
+  commit_sha: commitSha,
+  name: listing.name,
+  description: listing.description,
+  tagline: listing.tagline,
+  categories: listing.categories,
+  category: listing.category,
+  version_notes: listing.version_notes,
+  author,
+  screenshots,
+  submitted_by_notis_user_id: listing.submitted_by_notis_user_id,
+  source_app_id: listing.source_app_id,
+  source_version: listing.source_version,
   published_at: new Date().toISOString(),
-  published_by: 'ci',
+  published_by: listing.submitted_by_notis_user_id ?? 'ci',
   timestamp: Math.floor(Date.now() / 1000),
   nonce: randomUUID(),
 };
