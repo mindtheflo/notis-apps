@@ -2,9 +2,14 @@ import { notisViteConfig } from '@notis/sdk/vite';
 import react from '@vitejs/plugin-react';
 import appConfig from './notis.config';
 
-const config = notisViteConfig(appConfig);
+const base = notisViteConfig(appConfig);
 
 export default {
-  ...config,
-  plugins: [react(), ...(config.plugins || [])],
+  ...base,
+  plugins: [react(), ...(base.plugins || [])],
+  build: {
+    ...base.build,
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
 };
