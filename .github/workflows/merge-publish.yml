@@ -19,13 +19,13 @@ jobs:
       apps: ${{ steps.detect.outputs.apps }}
       any: ${{ steps.detect.outputs.any }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - run: npm ci
@@ -58,21 +58,29 @@ jobs:
     env:
       NOTIS_REGISTRY_WEBHOOK_URL: ${{ vars.NOTIS_REGISTRY_WEBHOOK_URL }}
       NOTIS_REGISTRY_WEBHOOK_SECRET: ${{ secrets.NOTIS_REGISTRY_WEBHOOK_SECRET }}
+      NOTIS_REGISTRY_REQUIRE_WEBHOOK: 'true'
       SUPABASE_STORAGE_URL: ${{ vars.SUPABASE_STORAGE_URL }}
       SUPABASE_STORAGE_SERVICE_KEY: ${{ secrets.SUPABASE_STORAGE_SERVICE_KEY }}
-      SUPABASE_STORAGE_BUCKET: ${{ vars.SUPABASE_STORAGE_BUCKET || 'app-code' }}
+      SUPABASE_STORAGE_BUCKET: ${{ vars.SUPABASE_STORAGE_BUCKET || 'notis-app-registry' }}
       COMMIT_SHA: ${{ github.sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - run: npm ci
+
+      - name: Validate registry configuration
+        run: |
+          test -n "$NOTIS_REGISTRY_WEBHOOK_URL" || { echo "::error::NOTIS_REGISTRY_WEBHOOK_URL is not configured"; exit 1; }
+          test -n "$NOTIS_REGISTRY_WEBHOOK_SECRET" || { echo "::error::NOTIS_REGISTRY_WEBHOOK_SECRET is not configured"; exit 1; }
+          test -n "$SUPABASE_STORAGE_URL" || { echo "::error::SUPABASE_STORAGE_URL is not configured"; exit 1; }
+          test -n "$SUPABASE_STORAGE_SERVICE_KEY" || { echo "::error::SUPABASE_STORAGE_SERVICE_KEY is not configured"; exit 1; }
 
       - name: Build bundle
         run: npm run -s build --workspace apps/${{ matrix.app }}

@@ -10,7 +10,7 @@ export default defineNotisApp({
   categories: ['Personal', 'Productivity'],
   tagline: 'Browse and refine the days you journal with Notis.',
   versionNotes:
-    'Browse-first redesign: entries are created by telling Notis about your day; the app now focuses on reviewing and editing past entries with month grouping, mood filtering, and newer/older navigation.',
+    'Production publication fix: Journal now ships with durable public bundle, CSS, and screenshot assets while preserving its browse-first journal experience.',
   screenshots: [
     {
       path: 'metadata/screenshot-1.png',

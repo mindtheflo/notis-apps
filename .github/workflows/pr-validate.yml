@@ -20,13 +20,13 @@ jobs:
       apps: ${{ steps.detect.outputs.apps }}
       any: ${{ steps.detect.outputs.any }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - run: npm ci
@@ -48,13 +48,13 @@ jobs:
       matrix:
         app: ${{ fromJson(needs.detect.outputs.apps) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - run: npm ci
@@ -105,6 +105,10 @@ jobs:
     steps:
       - name: Summary
         run: |
+          if [ "${{ needs.detect.result }}" != "success" ]; then
+            echo "::error::Changed-app detection failed" >&2
+            exit 1
+          fi
           if [ "${{ needs.detect.outputs.any }}" != "true" ]; then
             echo "No apps touched by this PR."
             exit 0

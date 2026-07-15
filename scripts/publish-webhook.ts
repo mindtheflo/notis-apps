@@ -4,11 +4,12 @@
  *
  * Designed to run inside the merge-publish workflow on pushes to main. Requires
  * these env vars:
- *   NOTIS_REGISTRY_WEBHOOK_URL    (empty -> dry run: payload is printed, not POSTed)
+ *   NOTIS_REGISTRY_WEBHOOK_URL    (empty -> dry run unless webhook is required)
  *   NOTIS_REGISTRY_WEBHOOK_SECRET (HMAC-SHA256 signing key)
+ *   NOTIS_REGISTRY_REQUIRE_WEBHOOK (true -> fail instead of running a dry run)
  *   SUPABASE_STORAGE_URL          (https://xxx.supabase.co)
  *   SUPABASE_STORAGE_SERVICE_KEY  (service-role key; write access to the bucket)
- *   SUPABASE_STORAGE_BUCKET       (defaults to "app-code")
+ *   SUPABASE_STORAGE_BUCKET       (defaults to "notis-app-registry")
  *   COMMIT_SHA                    (the commit that triggered the publish)
  *
  * Usage:
@@ -58,6 +59,37 @@ function collectBundleFiles(distDir: string): string[] {
   return out;
 }
 
+function contentTypeForPath(path: string): string {
+  if (path.endsWith('.js')) return 'text/javascript';
+  if (path.endsWith('.css')) return 'text/css';
+  if (path.endsWith('.png')) return 'image/png';
+  return 'application/octet-stream';
+}
+
+async function uploadObject(
+  file: string,
+  target: string,
+  storageUrl: string,
+  serviceKey: string,
+  bucket: string,
+): Promise<string> {
+  const response = await fetch(`${storageUrl}/storage/v1/object/${bucket}/${target}`, {
+    method: 'POST',
+    headers: {
+      apikey: serviceKey,
+      authorization: `Bearer ${serviceKey}`,
+      'x-upsert': 'true',
+      'content-type': contentTypeForPath(file),
+    },
+    body: new Uint8Array(readFileSync(file)),
+  });
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    die(`Failed to upload ${target}: ${response.status} ${text}`);
+  }
+  return `${storageUrl}/storage/v1/object/public/${bucket}/${target}`;
+}
+
 async function uploadBundle(
   files: string[],
   distDir: string,
@@ -74,26 +106,12 @@ async function uploadBundle(
   for (const file of files) {
     const relPath = relative(distDir, file).split('\\').join('/');
     const target = `${basePrefix}/${relPath}`;
-    const body = readFileSync(file);
-    const url = `${storageUrl}/storage/v1/object/${bucket}/${target}`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${serviceKey}`,
-        'x-upsert': 'true',
-        'content-type': 'application/octet-stream',
-      },
-      body: new Uint8Array(body),
-    });
-    if (!response.ok) {
-      const text = await response.text().catch(() => '');
-      die(`Failed to upload ${relPath}: ${response.status} ${text}`);
-    }
+    const publicUrl = await uploadObject(file, target, storageUrl, serviceKey, bucket);
     if (relPath === 'bundle.js' || (!primaryObjectUrl && relPath.endsWith('.js'))) {
-      primaryObjectUrl = `${storageUrl}/storage/v1/object/public/${bucket}/${target}`;
+      primaryObjectUrl = publicUrl;
     }
     if (relPath === 'app.css' || (!cssUrl && relPath.endsWith('.css'))) {
-      cssUrl = `${storageUrl}/storage/v1/object/public/${bucket}/${target}`;
+      cssUrl = publicUrl;
     }
   }
 
@@ -149,13 +167,21 @@ const bundleContentHash = sha256(Buffer.concat(bundleFiles.sort().map((f) => rea
 
 const webhookUrl = process.env.NOTIS_REGISTRY_WEBHOOK_URL?.trim() ?? '';
 const webhookSecret = process.env.NOTIS_REGISTRY_WEBHOOK_SECRET?.trim() ?? '';
+const requireWebhook = ['1', 'true', 'yes'].includes(
+  (process.env.NOTIS_REGISTRY_REQUIRE_WEBHOOK ?? '').trim().toLowerCase(),
+);
+
+if (!webhookUrl && requireWebhook) die('Missing required env var NOTIS_REGISTRY_WEBHOOK_URL');
+
+const storageUrl = process.env.SUPABASE_STORAGE_URL?.trim() ?? '';
+const serviceKey = process.env.SUPABASE_STORAGE_SERVICE_KEY?.trim() ?? '';
+const bucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || 'notis-app-registry';
 
 let bundleUrl: string;
 let cssUrl: string | undefined;
 if (webhookUrl) {
-  const storageUrl = requireEnv('SUPABASE_STORAGE_URL');
-  const serviceKey = requireEnv('SUPABASE_STORAGE_SERVICE_KEY');
-  const bucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || 'app-code';
+  requireEnv('SUPABASE_STORAGE_URL');
+  requireEnv('SUPABASE_STORAGE_SERVICE_KEY');
   ({ bundleUrl, cssUrl } = await uploadBundle(
     bundleFiles,
     distDir,
@@ -173,21 +199,27 @@ if (webhookUrl) {
 }
 
 const commitSha = process.env.COMMIT_SHA?.trim() || 'main';
-const repository = process.env.GITHUB_REPOSITORY?.trim() || 'mindtheflo/notis-apps';
 const screenshots = Array.isArray(listing.screenshots)
-  ? listing.screenshots.map((entry) => {
+  ? await Promise.all(listing.screenshots.map(async (entry) => {
       if (!entry || typeof entry !== 'object') return entry;
       const screenshot = entry as Record<string, unknown>;
       const screenshotPath = typeof screenshot.path === 'string' ? screenshot.path : '';
+      if (!screenshotPath) die('Screenshot is missing path');
+      const sourcePath = resolve(absolute, screenshotPath);
+      const relativeSourcePath = relative(absolute, sourcePath);
+      if (relativeSourcePath.startsWith('..') || relativeSourcePath === '') {
+        die(`Screenshot path escapes app directory: ${screenshotPath}`);
+      }
+      if (!existsSync(sourcePath)) die(`Screenshot not found: ${screenshotPath}`);
+      const target = `registry/${registrySlug}/v${packageJson.notisAppVersion}/${screenshotPath}`;
+      const publicUrl = webhookUrl
+        ? await uploadObject(sourcePath, target, storageUrl, serviceKey, bucket)
+        : `dry-run://${target}`;
       return {
         ...screenshot,
-        public_url: screenshot.public_url || (
-          screenshotPath
-            ? `https://raw.githubusercontent.com/${repository}/${commitSha}/apps/${registrySlug}/${screenshotPath}`
-            : undefined
-        ),
+        public_url: publicUrl,
       };
-    })
+    }))
   : [];
 
 const payload = {
