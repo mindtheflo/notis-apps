@@ -1,0 +1,34 @@
+{
+  "author": {
+    "name": "Notis"
+  },
+  "categories": [
+    "Personal",
+    "Productivity"
+  ],
+  "category": "Personal",
+  "description": "A calm, structured daily journal that pairs your reflections with wellbeing and medication tracking \u2014 morning and overall mood, motivation, sleepiness, meaningful tasks, appetite, and how long your medication kept you switched on. Entries are captured by telling Notis about your day; the app is your place to browse and refine them.",
+  "name": "Journal",
+  "screenshots": [
+    {
+      "alt": "Journal timeline with five populated daily entries and a selected reflection.",
+      "path": "screenshots/01.png",
+      "source_path": "metadata/screenshot-1.png"
+    },
+    {
+      "alt": "Journal entry editor showing mood, energy, tasks, medication, and reflection fields.",
+      "path": "screenshots/02.png",
+      "source_path": "metadata/screenshot-2.png"
+    },
+    {
+      "alt": "Journal insights dashboard with populated wellbeing and medication trends.",
+      "path": "screenshots/03.png",
+      "source_path": "metadata/screenshot-3.png"
+    }
+  ],
+  "source_app_id": "4f86c9aa-8dc8-42bb-8e0a-8eaeba9ec4dd",
+  "source_version": 4,
+  "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
+  "tagline": "Browse and refine the days you journal with Notis.",
+  "version_notes": "Browse-first redesign: entries are created by telling Notis about your day; the app now focuses on reviewing and editing past entries with month grouping, mood filtering, and newer/older navigation."
+}
