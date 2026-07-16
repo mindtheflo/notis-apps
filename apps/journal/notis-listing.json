@@ -1,34 +1,55 @@
 {
   "author": {
-    "name": "Florian (Flo) Pariset"
+    "name": "Notis"
   },
   "categories": [
     "Personal",
     "Productivity"
   ],
   "category": "Personal",
-  "description": "A calm, structured daily journal that pairs your reflections with wellbeing and medication tracking \u2014 morning and overall mood, motivation, sleepiness, meaningful tasks, appetite, and how long your medication kept you switched on. Entries are captured by telling Notis about your day; the app is your place to browse and refine them.",
-  "name": "Journal",
+  "description": "A display-only five-minute journal built from your morning and evening check-ins with Notis. Browse daily mood, energy, motivation, gratitude, intentions, affirmations, highlights, lessons, and free-form reflections, then use Stats to see trends and ritual consistency over time.",
+  "name": "5 Minutes Journal",
   "screenshots": [
     {
-      "alt": "Journal timeline with five populated daily entries and a selected reflection.",
+      "alt": "5 Minutes Journal timeline with a morning check-in: mood scale, energy and motivation, gratitudes, intention, and affirmation.",
       "path": "screenshots/01.png",
-      "source_path": "metadata/screenshot-1.png"
+      "source_path": "metadata/screenshot-1.png",
+      "theme": "light"
     },
     {
-      "alt": "Journal entry editor showing mood, energy, tasks, medication, and reflection fields.",
+      "alt": "5 Minutes Journal timeline in dark mode with a morning check-in, mood, energy, motivation, gratitudes, intention, and affirmation.",
       "path": "screenshots/02.png",
-      "source_path": "metadata/screenshot-2.png"
+      "source_path": "metadata/screenshot-2.png",
+      "theme": "dark"
     },
     {
-      "alt": "Journal insights dashboard with populated wellbeing and medication trends.",
+      "alt": "A completed day with both the morning ritual and the evening reflection, highlight, and lesson.",
       "path": "screenshots/03.png",
-      "source_path": "metadata/screenshot-3.png"
+      "source_path": "metadata/screenshot-3.png",
+      "theme": "light"
+    },
+    {
+      "alt": "A completed 5 Minutes Journal day in dark mode with both the morning ritual and evening reflection.",
+      "path": "screenshots/04.png",
+      "source_path": "metadata/screenshot-4.png",
+      "theme": "dark"
+    },
+    {
+      "alt": "Stats page with mood trends, energy and motivation, ritual consistency, and the gratitude wall.",
+      "path": "screenshots/05.png",
+      "source_path": "metadata/screenshot-5.png",
+      "theme": "light"
+    },
+    {
+      "alt": "5 Minutes Journal Stats in dark mode with mood trends, ritual consistency, and recent gratitudes.",
+      "path": "screenshots/06.png",
+      "source_path": "metadata/screenshot-6.png",
+      "theme": "dark"
     }
   ],
   "source_app_id": "4f86c9aa-8dc8-42bb-8e0a-8eaeba9ec4dd",
-  "source_version": 4,
+  "source_version": 9,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
-  "tagline": "Browse and refine the days you journal with Notis.",
-  "version_notes": "Corrected the visible publisher attribution to Florian (Flo) Pariset, the authenticated Notis account that publishes Journal."
+  "tagline": "Five intentional minutes with Notis, split between morning and evening.",
+  "version_notes": "Journal is now 5 Minutes Journal. This release adds a clearer daily overview, a focused evening reflection, long-term Stats, and dedicated light and dark Store screenshots."
 }

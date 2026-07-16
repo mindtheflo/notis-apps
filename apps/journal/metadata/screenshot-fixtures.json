@@ -4,116 +4,129 @@
       "documents": [
         {
           "id": "journal-demo-1",
-          "title": "A steady, productive day",
-          "content_markdown": "Woke up clear-headed. Medication settled in quickly, I protected the morning for focused work, and still had enough energy for a long walk after dinner.",
-          "created_time": "2026-07-15T08:00:00.000Z",
-          "last_edited_time": "2026-07-15T20:15:00.000Z",
+          "title": "Journal — 2026-07-16",
+          "content_markdown": "",
+          "created_time": "2026-07-16T08:00:00.000Z",
           "properties": {
-            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "A steady, productive day" } }] },
-            "Date": { "type": "date", "date": { "start": "2026-07-15", "end": null, "timezone": null } },
-            "Morning Mood": { "type": "select", "select": { "id": "good", "name": "Good", "color": "blue" } },
-            "General Mood": { "type": "select", "select": { "id": "good", "name": "Good", "color": "blue" } },
-            "Motivation": { "type": "number", "number": 8 },
-            "Sleepiness": { "type": "number", "number": 3 },
-            "Meaningful Tasks": { "type": "number", "number": 4 },
-            "Appetite": { "type": "select", "select": { "id": "normal", "name": "Normal", "color": "green" } },
-            "Medication Onset": { "type": "date", "date": { "start": "2026-07-15T08:30:00.000Z", "end": null, "timezone": null } },
-            "Medication Wore Off": { "type": "date", "date": { "start": "2026-07-15T16:00:00.000Z", "end": null, "timezone": null } }
+            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Journal — 2026-07-16" } }] },
+            "Date": { "type": "date", "date": { "start": "2026-07-16", "end": null, "timezone": null } },
+            "Morning Mood": { "type": "number", "number": 6 },
+            "Morning Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "rested" } }] },
+            "Morning Feeling": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Calm and a little excited about the demo this afternoon." } }] },
+            "Energy": { "type": "number", "number": 8 },
+            "Motivation": { "type": "number", "number": 9 },
+            "Gratitude 1": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "A slow coffee on the balcony before anyone was awake" } }] },
+            "Gratitude 2": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Camille laughing at my terrible pun last night" } }] },
+            "Gratitude 3": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "That my back finally feels normal again" } }] },
+            "Intention": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "One deep-work block on the launch page before opening messages." } }] },
+            "Affirmation": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "I am allowed to do one thing at a time." } }] }
           }
         },
         {
           "id": "journal-demo-2",
-          "title": "Best day this week",
-          "content_markdown": "Everything clicked: deep focus, a proper lunch, and an easy evening with friends.",
-          "created_time": "2026-07-14T08:00:00.000Z",
+          "title": "Journal — 2026-07-15",
+          "content_markdown": "Started the day convinced it was a write-off. By 16:00 the fix was shipped and the walk with Théo unknotted the roadmap question that has been bugging me for a week. Note to self: leave the house earlier.",
+          "created_time": "2026-07-15T08:00:00.000Z",
           "properties": {
-            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Best day this week" } }] },
-            "Date": { "type": "date", "date": { "start": "2026-07-14", "end": null, "timezone": null } },
-            "Morning Mood": { "type": "select", "select": { "id": "amazing", "name": "Amazing", "color": "green" } },
-            "General Mood": { "type": "select", "select": { "id": "amazing", "name": "Amazing", "color": "green" } },
-            "Motivation": { "type": "number", "number": 9 },
-            "Sleepiness": { "type": "number", "number": 2 },
-            "Meaningful Tasks": { "type": "number", "number": 6 },
-            "Appetite": { "type": "select", "select": { "id": "high", "name": "High", "color": "blue" } },
-            "Medication Onset": { "type": "date", "date": { "start": "2026-07-14T08:00:00.000Z", "end": null, "timezone": null } },
-            "Medication Wore Off": { "type": "date", "date": { "start": "2026-07-14T17:00:00.000Z", "end": null, "timezone": null } }
+            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Journal — 2026-07-15" } }] },
+            "Date": { "type": "date", "date": { "start": "2026-07-15", "end": null, "timezone": null } },
+            "Morning Mood": { "type": "number", "number": 4 },
+            "Morning Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "foggy" } }] },
+            "Morning Feeling": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Slept badly, brain still booting." } }] },
+            "Energy": { "type": "number", "number": 4 },
+            "Motivation": { "type": "number", "number": 6 },
+            "Gratitude 1": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Rain on the window while working" } }] },
+            "Gratitude 2": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "The boulangerie was still open at 19:30" } }] },
+            "Gratitude 3": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "A friend checking in for no reason" } }] },
+            "Intention": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Keep the day small: ship the fix, walk at lunch." } }] },
+            "Affirmation": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "I am steady even on slow days." } }] },
+            "Day Mood": { "type": "number", "number": 6 },
+            "Day Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "redeemed" } }] },
+            "Highlight": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "The afternoon walk turned into an hour of ideas with Théo." } }] },
+            "Lesson": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "A rough morning predicts nothing about the afternoon." } }] }
           }
         },
         {
           "id": "journal-demo-3",
-          "title": "Foggy start, strong finish",
-          "content_markdown": "The morning was slow, but a reset outside helped. Finished the one task that mattered most.",
-          "created_time": "2026-07-13T08:00:00.000Z",
+          "title": "Journal — 2026-07-14",
+          "content_markdown": "",
+          "created_time": "2026-07-14T08:00:00.000Z",
           "properties": {
-            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Foggy start, strong finish" } }] },
-            "Date": { "type": "date", "date": { "start": "2026-07-13", "end": null, "timezone": null } },
-            "Morning Mood": { "type": "select", "select": { "id": "low", "name": "Low", "color": "orange" } },
-            "General Mood": { "type": "select", "select": { "id": "neutral", "name": "Neutral", "color": "gray" } },
-            "Motivation": { "type": "number", "number": 5 },
-            "Sleepiness": { "type": "number", "number": 6 },
-            "Meaningful Tasks": { "type": "number", "number": 2 },
-            "Appetite": { "type": "select", "select": { "id": "low", "name": "Low", "color": "orange" } },
-            "Medication Onset": { "type": "date", "date": { "start": "2026-07-13T09:15:00.000Z", "end": null, "timezone": null } },
-            "Medication Wore Off": { "type": "date", "date": { "start": "2026-07-13T15:30:00.000Z", "end": null, "timezone": null } }
+            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Journal — 2026-07-14" } }] },
+            "Date": { "type": "date", "date": { "start": "2026-07-14", "end": null, "timezone": null } },
+            "Morning Mood": { "type": "number", "number": 7 },
+            "Morning Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "sunny" } }] },
+            "Morning Feeling": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Woke up before the alarm, ready to go." } }] },
+            "Energy": { "type": "number", "number": 9 },
+            "Motivation": { "type": "number", "number": 9 },
+            "Gratitude 1": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Eight hours of sleep, finally" } }] },
+            "Gratitude 2": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "The new espresso beans" } }] },
+            "Gratitude 3": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "A clear calendar until noon" } }] },
+            "Intention": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Finish the investor update and actually send it." } }] },
+            "Affirmation": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "I am building something worth the patience it takes." } }] },
+            "Day Mood": { "type": "number", "number": 7 },
+            "Day Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "unstoppable" } }] },
+            "Highlight": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Sent the update and got two warm replies within the hour." } }] },
+            "Lesson": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Momentum compounds when I front-load the scary task." } }] }
           }
         },
         {
           "id": "journal-demo-4",
-          "title": "Low energy, rested anyway",
-          "content_markdown": "Heavy eyes most of the day. Chose recovery over forcing it, and that was the right decision.",
-          "created_time": "2026-07-12T08:00:00.000Z",
+          "title": "Journal — 2026-07-13",
+          "content_markdown": "",
+          "created_time": "2026-07-13T08:00:00.000Z",
           "properties": {
-            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Low energy, rested anyway" } }] },
-            "Date": { "type": "date", "date": { "start": "2026-07-12", "end": null, "timezone": null } },
-            "Morning Mood": { "type": "select", "select": { "id": "rough", "name": "Rough", "color": "red" } },
-            "General Mood": { "type": "select", "select": { "id": "low", "name": "Low", "color": "orange" } },
-            "Motivation": { "type": "number", "number": 3 },
-            "Sleepiness": { "type": "number", "number": 8 },
-            "Meaningful Tasks": { "type": "number", "number": 1 },
-            "Appetite": { "type": "select", "select": { "id": "normal", "name": "Normal", "color": "green" } },
-            "Medication Onset": { "type": "date", "date": { "start": "2026-07-12T10:00:00.000Z", "end": null, "timezone": null } },
-            "Medication Wore Off": { "type": "date", "date": { "start": "2026-07-12T14:00:00.000Z", "end": null, "timezone": null } }
+            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Journal — 2026-07-13" } }] },
+            "Date": { "type": "date", "date": { "start": "2026-07-13", "end": null, "timezone": null } },
+            "Morning Mood": { "type": "number", "number": 3 },
+            "Morning Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "heavy" } }] },
+            "Morning Feeling": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Anxious about the support backlog." } }] },
+            "Energy": { "type": "number", "number": 3 },
+            "Motivation": { "type": "number", "number": 4 },
+            "Gratitude 1": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Tea instead of a third coffee" } }] },
+            "Gratitude 2": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "The cat sleeping on my desk all morning" } }] },
+            "Intention": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Answer ten tickets, then stop counting." } }] },
+            "Affirmation": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "I am more than my inbox." } }] },
+            "Day Mood": { "type": "number", "number": 4 },
+            "Day Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "okay" } }] },
+            "Highlight": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Closed the hardest ticket with an actual fix, not a workaround." } }] },
+            "Lesson": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Naming the dread out loud makes it about half as loud." } }] }
           }
         },
         {
           "id": "journal-demo-5",
-          "title": "Back on track",
-          "content_markdown": "A quiet, consistent day. Nothing dramatic, just good routines doing their job.",
-          "created_time": "2026-07-11T08:00:00.000Z",
+          "title": "Journal — 2026-07-12",
+          "content_markdown": "Quiet, focused day. The kind that does not make stories but makes progress.",
+          "created_time": "2026-07-12T08:00:00.000Z",
           "properties": {
-            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Back on track" } }] },
-            "Date": { "type": "date", "date": { "start": "2026-07-11", "end": null, "timezone": null } },
-            "Morning Mood": { "type": "select", "select": { "id": "neutral", "name": "Neutral", "color": "gray" } },
-            "General Mood": { "type": "select", "select": { "id": "good", "name": "Good", "color": "blue" } },
+            "Name": { "type": "title", "title": [{ "type": "text", "text": { "content": "Journal — 2026-07-12" } }] },
+            "Date": { "type": "date", "date": { "start": "2026-07-12", "end": null, "timezone": null } },
+            "Morning Mood": { "type": "number", "number": 5 },
+            "Morning Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "curious" } }] },
+            "Morning Feeling": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Mildly under-slept but interested in the day." } }] },
+            "Energy": { "type": "number", "number": 6 },
             "Motivation": { "type": "number", "number": 7 },
-            "Sleepiness": { "type": "number", "number": 4 },
-            "Meaningful Tasks": { "type": "number", "number": 3 },
-            "Appetite": { "type": "select", "select": { "id": "normal", "name": "Normal", "color": "green" } },
-            "Medication Onset": { "type": "date", "date": { "start": "2026-07-11T08:45:00.000Z", "end": null, "timezone": null } },
-            "Medication Wore Off": { "type": "date", "date": { "start": "2026-07-11T16:30:00.000Z", "end": null, "timezone": null } }
+            "Gratitude 1": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Morning light in the kitchen" } }] },
+            "Gratitude 2": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "A podcast that made the dishes disappear" } }] },
+            "Gratitude 3": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Knowing exactly what today is for" } }] },
+            "Intention": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "Prototype the stats page before lunch." } }] },
+            "Affirmation": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "I am learning fast enough." } }] },
+            "Day Mood": { "type": "number", "number": 6 },
+            "Day Mood Word": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "satisfying" } }] },
+            "Highlight": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "The prototype clicked on the third try." } }] },
+            "Lesson": { "type": "rich_text", "rich_text": [{ "type": "text", "text": { "content": "The second draft is where the good ideas live." } }] }
           }
         }
       ]
-    },
-    "LOCAL_NOTIS_DATABASE_GET_DOCUMENT": {
-      "status": "success",
-      "document": {
-        "id": "journal-demo-1",
-        "title": "A steady, productive day",
-        "content_markdown": "Woke up clear-headed. Medication settled in quickly, I protected the morning for focused work, and still had enough energy for a long walk after dinner.",
-        "created_time": "2026-07-15T08:00:00.000Z",
-        "last_edited_time": "2026-07-15T20:15:00.000Z",
-        "properties": {}
-      }
     }
   },
   "scenarios": {
     "journal-overview": { "actions": [] },
-    "journal-entry-editor": {
+    "journal-evening": {
       "actions": [
-        { "type": "click", "selector": "[data-screenshot-action='edit-entry']", "settle_ms": 700 }
+        { "type": "click", "selector": "[data-rail-row='2026-07-15']", "settle_ms": 700 }
       ]
     },
-    "journal-insights": { "actions": [] }
+    "journal-stats": { "actions": [] }
   }
 }
