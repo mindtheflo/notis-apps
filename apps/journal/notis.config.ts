@@ -7,11 +7,11 @@ export default defineNotisApp({
     'A display-only five-minute journal built from your morning and evening check-ins with Notis. Browse daily mood, energy, motivation, gratitude, intentions, affirmations, highlights, lessons, and free-form reflections, then use Stats to see trends and ritual consistency over time.',
   icon: 'phosphor:notebook',
   accent: 'amber',
-  author: { name: 'Notis' },
+  author: { name: 'Florian (Flo) Pariset' },
   categories: ['Personal', 'Productivity'],
   tagline: 'Five intentional minutes with Notis, split between morning and evening.',
   versionNotes:
-    'Store screenshots now use the shared deep-blue Notis background in both light and dark presentation modes.',
+    'Restores the Store publisher attribution to Florian (Flo) Pariset while retaining the corrected light and dark screenshots.',
   screenshots: [
     {
       path: 'metadata/screenshot-1.png',
