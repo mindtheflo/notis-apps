@@ -3,13 +3,15 @@
 /**
  * Shared data layer + domain model for Journal.
  *
- * Everything the Journal and Insights routes need to read and write
- * `journal_entries` lives here: the metric config, the entry adapter over the
- * SDK's normalized documents, the query/upsert hooks, and formatting helpers.
+ * The journal is capture-less by design: entries are created and completed by
+ * the Notis morning and evening automations, and the app only reads
+ * `journal_entries`. Everything both routes need lives here — the mood scale,
+ * the entry adapter over SDK-normalized documents, completeness helpers, and
+ * formatting utilities.
  */
 
-import { useCallback, useMemo } from 'react';
-import { useDocuments, useUpsertDocument, type DocumentRecord } from '@notis/sdk';
+import { useMemo } from 'react';
+import { useDocuments, type DocumentRecord } from '@notis/sdk';
 
 export const JOURNAL_DATABASE_SLUG = 'journal_entries';
 
@@ -18,70 +20,83 @@ export const PROP = {
   title: 'Name',
   date: 'Date',
   morningMood: 'Morning Mood',
-  mood: 'General Mood', // the day's overall mood
+  morningMoodWord: 'Morning Mood Word',
+  morningFeeling: 'Morning Feeling',
+  energy: 'Energy',
   motivation: 'Motivation',
-  sleepiness: 'Sleepiness',
-  tasks: 'Meaningful Tasks',
-  appetite: 'Appetite',
-  medOnset: 'Medication Onset',
-  medWoreOff: 'Medication Wore Off',
+  gratitude1: 'Gratitude 1',
+  gratitude2: 'Gratitude 2',
+  gratitude3: 'Gratitude 3',
+  intention: 'Intention',
+  affirmation: 'Affirmation',
+  dayMood: 'Day Mood',
+  dayMoodWord: 'Day Mood Word',
+  highlight: 'Highlight',
+  lesson: 'Lesson',
 } as const;
 
 export interface JournalEntry {
   id: string;
   title: string;
   date: string | null; // YYYY-MM-DD for the day this entry is for
-  morningMood: string | null;
-  mood: string | null; // overall / general mood for the day
-  motivation: number | null;
-  sleepiness: number | null;
-  meaningfulTasks: number | null;
-  appetite: string | null;
-  medOnset: string | null; // ISO date-time
-  medWoreOff: string | null; // ISO date-time
-  /** Markdown body of the entry document. Edited via the embedded editor. */
-  reflection: string | null;
+  /** Waking mood on the 1–7 pleasant scale. */
+  morningMood: number | null;
+  morningMoodWord: string | null;
+  morningFeeling: string | null;
+  energy: number | null; // 1–10
+  motivation: number | null; // 1–10
+  gratitudes: [string | null, string | null, string | null];
+  intention: string | null;
+  affirmation: string | null;
+  /** Whole-day mood on the 1–7 pleasant scale, filled in the evening. */
+  dayMood: number | null;
+  dayMoodWord: string | null;
+  highlight: string | null;
+  lesson: string | null;
+  /** Markdown body — the optional free-form entry dictated to Notis. */
+  freeEntry: string | null;
   createdAt: string | null;
   lastEditedTime: string | null;
 }
 
-export interface MoodOption {
-  name: string;
-  score: number; // 1..5, higher is better
+// ---------------------------------------------------------------------------
+// The pleasant–unpleasant mood scale (Apple-watch style, 1..7)
+// ---------------------------------------------------------------------------
+
+export interface MoodStep {
+  value: number; // 1..7
+  label: string;
   color: string; // accent used for dots / bars
   soft: string; // translucent background
 }
 
-/** Ordered best -> worst so segmented controls read naturally. */
-export const MOODS: MoodOption[] = [
-  { name: 'Amazing', score: 5, color: '#10b981', soft: 'rgba(16,185,129,0.14)' },
-  { name: 'Good', score: 4, color: '#3b82f6', soft: 'rgba(59,130,246,0.14)' },
-  { name: 'Neutral', score: 3, color: '#94a3b8', soft: 'rgba(148,163,184,0.16)' },
-  { name: 'Low', score: 2, color: '#f59e0b', soft: 'rgba(245,158,11,0.16)' },
-  { name: 'Rough', score: 1, color: '#ef4444', soft: 'rgba(239,68,68,0.14)' },
+export const MOOD_SCALE: MoodStep[] = [
+  { value: 1, label: 'Very unpleasant', color: '#8b5cf6', soft: 'rgba(139,92,246,0.15)' },
+  { value: 2, label: 'Unpleasant', color: '#6366f1', soft: 'rgba(99,102,241,0.15)' },
+  { value: 3, label: 'Slightly unpleasant', color: '#3b82f6', soft: 'rgba(59,130,246,0.15)' },
+  { value: 4, label: 'Neutral', color: '#0ea5e9', soft: 'rgba(14,165,233,0.15)' },
+  { value: 5, label: 'Slightly pleasant', color: '#14b8a6', soft: 'rgba(20,184,166,0.15)' },
+  { value: 6, label: 'Pleasant', color: '#10b981', soft: 'rgba(16,185,129,0.15)' },
+  { value: 7, label: 'Very pleasant', color: '#f59e0b', soft: 'rgba(245,158,11,0.17)' },
 ];
 
-export const APPETITES = ['None', 'Low', 'Normal', 'High'] as const;
-export type Appetite = (typeof APPETITES)[number];
-
-export const APPETITE_COLOR: Record<string, string> = {
-  None: '#ef4444',
-  Low: '#f59e0b',
-  Normal: '#10b981',
-  High: '#3b82f6',
-};
-
-export function moodMeta(name: string | null | undefined): MoodOption | null {
-  if (!name) return null;
-  return MOODS.find((m) => m.name === name) ?? null;
+export function moodStep(value: number | null | undefined): MoodStep | null {
+  if (value == null) return null;
+  const rounded = Math.round(value);
+  return MOOD_SCALE.find((step) => step.value === rounded) ?? null;
 }
+
+export const ENERGY_COLOR = '#f59e0b';
+export const MOTIVATION_COLOR = '#3b82f6';
+export const MORNING_MOOD_COLOR = '#f59e0b';
+export const DAY_MOOD_COLOR = '#6366f1';
 
 // ---------------------------------------------------------------------------
 // Entry adapter over SDK-normalized documents
 // ---------------------------------------------------------------------------
 
 function str(value: unknown): string | null {
-  return typeof value === 'string' && value.trim().length > 0 ? value : null;
+  return typeof value === 'string' && value.trim().length > 0 ? value.trim() : null;
 }
 
 function num(value: unknown): number | null {
@@ -94,15 +109,23 @@ export function entryFromDocument(document: DocumentRecord): JournalEntry {
     id: document.id,
     title: str(props[PROP.title]) ?? str(document.title) ?? 'Untitled entry',
     date: str(props[PROP.date]),
-    morningMood: str(props[PROP.morningMood]),
-    mood: str(props[PROP.mood]),
+    morningMood: num(props[PROP.morningMood]),
+    morningMoodWord: str(props[PROP.morningMoodWord]),
+    morningFeeling: str(props[PROP.morningFeeling]),
+    energy: num(props[PROP.energy]),
     motivation: num(props[PROP.motivation]),
-    sleepiness: num(props[PROP.sleepiness]),
-    meaningfulTasks: num(props[PROP.tasks]),
-    appetite: str(props[PROP.appetite]),
-    medOnset: str(props[PROP.medOnset]),
-    medWoreOff: str(props[PROP.medWoreOff]),
-    reflection: document.contentMarkdown ?? document.plainText ?? null,
+    gratitudes: [
+      str(props[PROP.gratitude1]),
+      str(props[PROP.gratitude2]),
+      str(props[PROP.gratitude3]),
+    ],
+    intention: str(props[PROP.intention]),
+    affirmation: str(props[PROP.affirmation]),
+    dayMood: num(props[PROP.dayMood]),
+    dayMoodWord: str(props[PROP.dayMoodWord]),
+    highlight: str(props[PROP.highlight]),
+    lesson: str(props[PROP.lesson]),
+    freeEntry: document.contentMarkdown ?? document.plainText ?? null,
     createdAt: document.createdAt ?? null,
     lastEditedTime: document.lastEditedTime ?? null,
   };
@@ -115,6 +138,58 @@ export function sortEntries(entries: JournalEntry[]): JournalEntry[] {
     const bv = b.date ?? b.createdAt ?? '';
     return av < bv ? 1 : av > bv ? -1 : 0;
   });
+}
+
+// ---------------------------------------------------------------------------
+// Completeness — what the automations still need to ask for
+// ---------------------------------------------------------------------------
+
+export function gratitudeCount(entry: JournalEntry): number {
+  return entry.gratitudes.filter(Boolean).length;
+}
+
+/** True when any of the morning ritual fields has been captured. */
+export function morningStarted(entry: JournalEntry): boolean {
+  return (
+    entry.morningMood != null ||
+    entry.morningMoodWord != null ||
+    entry.morningFeeling != null ||
+    entry.energy != null ||
+    entry.motivation != null ||
+    gratitudeCount(entry) > 0 ||
+    entry.intention != null ||
+    entry.affirmation != null
+  );
+}
+
+export function morningComplete(entry: JournalEntry): boolean {
+  return (
+    entry.morningMood != null &&
+    entry.morningMoodWord != null &&
+    entry.energy != null &&
+    entry.motivation != null &&
+    gratitudeCount(entry) === 3 &&
+    entry.intention != null &&
+    entry.affirmation != null
+  );
+}
+
+export function eveningStarted(entry: JournalEntry): boolean {
+  return (
+    entry.dayMood != null ||
+    entry.dayMoodWord != null ||
+    entry.highlight != null ||
+    entry.lesson != null
+  );
+}
+
+export function eveningComplete(entry: JournalEntry): boolean {
+  return (
+    entry.dayMood != null &&
+    entry.dayMoodWord != null &&
+    entry.highlight != null &&
+    entry.lesson != null
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -133,7 +208,7 @@ function toDate(value: string | null): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-/** YYYY-MM-DD in local time, for grouping and <input type="date">. */
+/** YYYY-MM-DD in local time, for grouping and comparisons. */
 export function dayKey(value: string | null): string | null {
   const d = toDate(value);
   if (!d) return null;
@@ -158,6 +233,18 @@ export function formatDay(value: string | null, opts: { weekday?: boolean } = {}
   });
 }
 
+/** "Wednesday, July 16" — the headline identity of a day spread. */
+export function formatDayLong(value: string | null): string {
+  const d = toDate(value);
+  if (!d) return 'No date';
+  return d.toLocaleDateString(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: d.getFullYear() === new Date().getFullYear() ? undefined : 'numeric',
+  });
+}
+
 export function relativeDay(value: string | null): string | null {
   const key = dayKey(value);
   if (!key) return null;
@@ -168,40 +255,14 @@ export function relativeDay(value: string | null): string | null {
   return null;
 }
 
-export function formatTime(value: string | null): string | null {
+/** Short weekday + day-of-month pieces for the timeline rail. */
+export function railDate(value: string | null): { weekday: string; day: string } {
   const d = toDate(value);
-  if (!d) return null;
-  return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-}
-
-/** Hours between medication onset and wearing off, if both are present. */
-export function medActiveHours(entry: JournalEntry): number | null {
-  const start = toDate(entry.medOnset);
-  const end = toDate(entry.medWoreOff);
-  if (!start || !end) return null;
-  const hours = (end.getTime() - start.getTime()) / 3_600_000;
-  return hours > 0 ? Math.round(hours * 10) / 10 : null;
-}
-
-/** Minutes since local midnight, for placing a time on a 24h track. */
-export function minutesOfDay(value: string | null): number | null {
-  const d = toDate(value);
-  if (!d) return null;
-  return d.getHours() * 60 + d.getMinutes();
-}
-
-/** Combine a YYYY-MM-DD day with a HH:mm time into an ISO string. */
-export function combineDateTime(day: string, time: string): string | null {
-  if (!day || !time) return null;
-  const d = new Date(`${day}T${time}`);
-  return Number.isNaN(d.getTime()) ? null : d.toISOString();
-}
-
-/** HH:mm in local time for an <input type="time">. */
-export function timeInputValue(value: string | null): string {
-  const d = toDate(value);
-  if (!d) return '';
-  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  if (!d) return { weekday: '—', day: '·' };
+  return {
+    weekday: d.toLocaleDateString(undefined, { weekday: 'short' }),
+    day: String(d.getDate()),
+  };
 }
 
 export function round1(n: number): number {
@@ -212,111 +273,6 @@ export function average(values: Array<number | null | undefined>): number | null
   const nums = values.filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
   if (!nums.length) return null;
   return round1(nums.reduce((sum, v) => sum + v, 0) / nums.length);
-}
-
-// ---------------------------------------------------------------------------
-// Hooks
-// ---------------------------------------------------------------------------
-
-export function useJournalEntries() {
-  const { documents, loading, error, refetch } = useDocuments(JOURNAL_DATABASE_SLUG, {
-    // A one-year window keeps the embedded app fast while preserving enough
-    // history for useful trends. Older entries remain available in Notis.
-    pageSize: 365,
-    fetchAll: false,
-  });
-
-  const entries = useMemo(
-    () => sortEntries(documents.map(entryFromDocument)),
-    [documents],
-  );
-
-  return { entries, loading, error: error?.message ?? null, refresh: refetch };
-}
-
-/**
- * Editable form state for an existing entry's structured metrics. The
- * reflection is the entry document's markdown body — edited in place through
- * the SDK `DocumentEditor`, not through this draft. Creation happens through
- * Notis.
- */
-export interface EntryDraft {
-  id: string;
-  title: string;
-  date: string; // YYYY-MM-DD
-  morningMood: string | null;
-  mood: string | null;
-  motivation: number | null;
-  sleepiness: number | null;
-  meaningfulTasks: number | null;
-  appetite: string | null;
-  medOnsetTime: string; // HH:mm
-  medWoreOffTime: string; // HH:mm
-}
-
-export function useUpsertEntry() {
-  const { upsert, loading, error } = useUpsertDocument(JOURNAL_DATABASE_SLUG);
-
-  const save = useCallback(
-    async (draft: EntryDraft): Promise<JournalEntry> => {
-      const properties: Record<string, unknown> = {
-        [PROP.title]: draft.title.trim() || 'Untitled entry',
-        [PROP.date]: draft.date ? { start: draft.date, end: null } : null,
-        [PROP.morningMood]: draft.morningMood,
-        [PROP.mood]: draft.mood,
-        [PROP.motivation]: draft.motivation,
-        [PROP.sleepiness]: draft.sleepiness,
-        [PROP.tasks]: draft.meaningfulTasks,
-        [PROP.appetite]: draft.appetite,
-      };
-
-      const onset = combineDateTime(draft.date, draft.medOnsetTime);
-      properties[PROP.medOnset] = onset ? { start: onset, end: null } : null;
-      const woreOff = combineDateTime(draft.date, draft.medWoreOffTime);
-      properties[PROP.medWoreOff] = woreOff ? { start: woreOff, end: null } : null;
-
-      const document = await upsert({
-        documentId: draft.id,
-        operation: 'update',
-        properties,
-      });
-      return entryFromDocument(document);
-    },
-    [upsert],
-  );
-
-  return { save, loading, error };
-}
-
-/** Soft-delete (archive) an existing journal entry. */
-export function useDeleteEntry() {
-  const { upsert, loading, error } = useUpsertDocument(JOURNAL_DATABASE_SLUG);
-
-  const remove = useCallback(
-    async (entryId: string): Promise<void> => {
-      await upsert({ documentId: entryId, operation: 'archive' });
-    },
-    [upsert],
-  );
-
-  return { remove, loading, error };
-}
-
-/** Turn a stored entry into an editable draft. */
-export function entryToDraft(entry: JournalEntry): EntryDraft {
-  return {
-    id: entry.id,
-    title: entry.title === 'Untitled entry' ? '' : entry.title,
-    date: dayKey(entry.date) ?? dayKey(entry.createdAt) ?? todayKey(),
-    morningMood: entry.morningMood,
-    mood: entry.mood,
-    motivation: entry.motivation,
-    sleepiness: entry.sleepiness,
-    meaningfulTasks: entry.meaningfulTasks,
-    appetite: entry.appetite,
-    medOnsetTime: timeInputValue(entry.medOnset),
-    medWoreOffTime: timeInputValue(entry.medWoreOff),
-  };
 }
 
 /** Compute a current daily-journaling streak (consecutive days up to today). */
@@ -345,4 +301,62 @@ export function monthLabel(value: string | null): string {
     month: 'long',
     year: 'numeric',
   });
+}
+
+/**
+ * Most frequent mood adjectives across entries (morning + day words),
+ * lower-cased, best first.
+ */
+export function topMoodWords(
+  entries: JournalEntry[],
+  limit = 12,
+): Array<{ word: string; count: number }> {
+  const counts = new Map<string, number>();
+  for (const entry of entries) {
+    for (const word of [entry.morningMoodWord, entry.dayMoodWord]) {
+      if (!word) continue;
+      const key = word.trim().toLowerCase();
+      if (!key) continue;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+  }
+  return [...counts.entries()]
+    .map(([word, count]) => ({ word, count }))
+    .sort((a, b) => b.count - a.count || a.word.localeCompare(b.word))
+    .slice(0, limit);
+}
+
+/** Recent gratitudes, newest first, flattened from the three slots. */
+export function recentGratitudes(
+  entries: JournalEntry[],
+  limit = 12,
+): Array<{ text: string; date: string | null }> {
+  const items: Array<{ text: string; date: string | null }> = [];
+  for (const entry of entries) {
+    for (const text of entry.gratitudes) {
+      if (text) items.push({ text, date: entry.date });
+    }
+    if (items.length >= limit) break;
+  }
+  return items.slice(0, limit);
+}
+
+// ---------------------------------------------------------------------------
+// Hooks
+// ---------------------------------------------------------------------------
+
+export function useJournalEntries() {
+  const { documents, loading, error, refetch } = useDocuments(JOURNAL_DATABASE_SLUG, {
+    // A one-year window keeps the embedded app fast while preserving enough
+    // history for useful trends. Older entries remain available in Notis.
+    pageSize: 365,
+    fetchAll: false,
+  });
+
+  const entries = useMemo(
+    () => sortEntries(documents.map(entryFromDocument)),
+    [documents],
+  );
+
+  return { entries, loading, error: error?.message ?? null, refresh: refetch };
 }
