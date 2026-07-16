@@ -1,6 +1,6 @@
 {
   "author": {
-    "name": "Notis"
+    "name": "Florian (Flo) Pariset"
   },
   "categories": [
     "Personal",
@@ -48,8 +48,8 @@
     }
   ],
   "source_app_id": "4f86c9aa-8dc8-42bb-8e0a-8eaeba9ec4dd",
-  "source_version": 12,
+  "source_version": 13,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "Five intentional minutes with Notis, split between morning and evening.",
-  "version_notes": "Store screenshots now use the shared deep-blue Notis background in both light and dark presentation modes."
+  "version_notes": "Restores the Store publisher attribution to Florian (Flo) Pariset while retaining the corrected light and dark screenshots."
 }
