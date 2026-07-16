@@ -1,15 +1,15 @@
 {
   "name": "notis-journal",
-  "version": "0.1.2",
-  "notisAppVersion": "0.1.2",
+  "version": "0.1.3",
+  "notisAppVersion": "0.1.3",
   "private": true,
   "type": "module",
   "scripts": {
-    "generate-entry": "tsx ../../scripts/generate-entry.ts .",
-    "prebuild": "npm run generate-entry",
     "dev": "vite",
     "build": "vite build",
     "test": "tsx --test app/journal-core.test.ts",
+    "generate-entry": "tsx ../../scripts/generate-entry.ts .",
+    "prebuild": "npm run generate-entry",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
