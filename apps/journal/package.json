@@ -1,7 +1,7 @@
 {
   "name": "notis-journal",
-  "version": "0.1.3",
-  "notisAppVersion": "0.1.3",
+  "version": "0.1.4",
+  "notisAppVersion": "0.1.4",
   "private": true,
   "type": "module",
   "scripts": {
