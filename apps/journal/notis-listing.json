@@ -48,8 +48,8 @@
     }
   ],
   "source_app_id": "4f86c9aa-8dc8-42bb-8e0a-8eaeba9ec4dd",
-  "source_version": 10,
+  "source_version": 12,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "Five intentional minutes with Notis, split between morning and evening.",
-  "version_notes": "Journal is now 5 Minutes Journal. This release adds a clearer daily overview, a focused evening reflection, long-term Stats, and dedicated light and dark Store screenshots."
+  "version_notes": "Store screenshots now use the shared deep-blue Notis background in both light and dark presentation modes."
 }
