@@ -1,16 +1,12 @@
 {
   "name": "notis-journal",
-  "version": "0.1.2",
-  "notisAppVersion": "0.1.2",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "generate-entry": "tsx ../../scripts/generate-entry.ts .",
-    "prebuild": "npm run generate-entry",
     "dev": "vite",
     "build": "vite build",
-    "test": "tsx --test app/journal-core.test.ts",
-    "typecheck": "tsc --noEmit"
+    "test": "tsx --test app/journal-core.test.ts"
   },
   "dependencies": {
     "@notis/sdk": "file:./packages/sdk",

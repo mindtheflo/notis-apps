@@ -147,6 +147,12 @@ export interface QueryFilter {
 
 export interface NotisRuntimeContext {
   collectionItem?: CollectionItemDetail | null;
+  /**
+   * Set when the app is being rendered by the screenshot harness (`notis apps
+   * screenshot`) for the named listing scenario. Lets apps and SDK components
+   * hide dev-only chrome from listing images.
+   */
+  screenshotScenario?: string | null;
 }
 
 // ---------------------------------------------------------------------------
