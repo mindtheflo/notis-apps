@@ -11,7 +11,7 @@ export default defineNotisApp({
   categories: ['Personal', 'Productivity'],
   tagline: 'Five intentional minutes with Notis, split between morning and evening.',
   versionNotes:
-    'Journal is now 5 Minutes Journal. This release adds a clearer daily overview, a focused evening reflection, long-term Stats, and dedicated light and dark Store screenshots.',
+    'Store screenshots now use the shared deep-blue Notis background in both light and dark presentation modes.',
   screenshots: [
     {
       path: 'metadata/screenshot-1.png',
