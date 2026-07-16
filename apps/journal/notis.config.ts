@@ -6,11 +6,11 @@ export default defineNotisApp({
   description:
     'A calm, structured daily journal that pairs your reflections with wellbeing and medication tracking — morning and overall mood, motivation, sleepiness, meaningful tasks, appetite, and how long your medication kept you switched on. Entries are captured by telling Notis about your day; the app is your place to browse and refine them.',
   icon: 'phosphor:notebook',
-  author: { name: 'Notis' },
+  author: { name: 'Florian (Flo) Pariset' },
   categories: ['Personal', 'Productivity'],
   tagline: 'Browse and refine the days you journal with Notis.',
   versionNotes:
-    'Production publication fix: Journal now ships with durable public bundle, CSS, and screenshot assets while preserving its browse-first journal experience.',
+    'Corrected the visible publisher attribution to Florian (Flo) Pariset, the authenticated Notis account that publishes Journal.',
   screenshots: [
     {
       path: 'metadata/screenshot-1.png',

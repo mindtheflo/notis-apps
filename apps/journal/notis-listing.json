@@ -1,6 +1,6 @@
 {
   "author": {
-    "name": "Notis"
+    "name": "Florian (Flo) Pariset"
   },
   "categories": [
     "Personal",
@@ -30,5 +30,5 @@
   "source_version": 4,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "Browse and refine the days you journal with Notis.",
-  "version_notes": "Production publication fix: Journal now ships with durable public bundle, CSS, and screenshot assets while preserving its browse-first journal experience."
+  "version_notes": "Corrected the visible publisher attribution to Florian (Flo) Pariset, the authenticated Notis account that publishes Journal."
 }
