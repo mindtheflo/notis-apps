@@ -1,8 +1,8 @@
 import type { NotisRuntime } from '@notis/sdk';
 
-/** Build a Notion-shape select value. */
-function select(name: string) {
-  return { type: 'select', select: { id: `opt_${name}`, name, color: 'gray' } };
+/** Build Notion-shape property values, mirroring what the portal runtime returns. */
+function text(content: string) {
+  return { type: 'rich_text', rich_text: [{ type: 'text', text: { content } }] };
 }
 function date(iso: string) {
   return { type: 'date', date: { start: iso, end: '', timezone: null } };
@@ -10,125 +10,166 @@ function date(iso: string) {
 function number(n: number) {
   return { type: 'number', number: n };
 }
-function title(text: string) {
-  return { type: 'title', title: [{ type: 'text', text: { content: text } }] };
+function title(content: string) {
+  return { type: 'title', title: [{ type: 'text', text: { content } }] };
 }
 
-function dayISO(offset: number, h = 0, m = 0): string {
+function dayISO(offset: number): string {
   const d = new Date();
   d.setDate(d.getDate() - offset);
-  d.setHours(h, m, 0, 0);
+  d.setHours(8, 0, 0, 0);
   return d.toISOString();
 }
 
 type Seed = {
-  name: string;
   offset: number;
-  morningMood: string;
-  mood: string;
-  motivation: number;
-  sleepiness: number;
-  tasks: number;
-  appetite: string;
-  onset: [number, number];
-  off: [number, number];
-  reflection: string;
+  morningMood?: number;
+  morningWord?: string;
+  feeling?: string;
+  energy?: number;
+  motivation?: number;
+  gratitudes?: [string, string, string] | [string, string] | [string];
+  intention?: string;
+  affirmation?: string;
+  dayMood?: number;
+  dayWord?: string;
+  highlight?: string;
+  lesson?: string;
+  freeEntry?: string;
 };
 
 const SEEDS: Seed[] = [
   {
-    name: 'A steady, productive day',
     offset: 0,
-    morningMood: 'Good',
-    mood: 'Good',
-    motivation: 8,
-    sleepiness: 3,
-    tasks: 4,
-    appetite: 'Normal',
-    onset: [8, 30],
-    off: [16, 0],
-    reflection:
-      'Woke up clear-headed. Medication kicked in fast and I got real work done before the afternoon dip. Grateful for the momentum.',
-  },
-  {
-    name: 'Best day this week',
-    offset: 1,
-    morningMood: 'Amazing',
-    mood: 'Amazing',
+    morningMood: 6,
+    morningWord: 'rested',
+    feeling: 'Calm and a little excited about the demo this afternoon.',
+    energy: 8,
     motivation: 9,
-    sleepiness: 2,
-    tasks: 6,
-    appetite: 'High',
-    onset: [8, 0],
-    off: [17, 0],
-    reflection: 'Everything clicked — deep focus for hours, good food, good mood. Want more days like this.',
+    gratitudes: [
+      'A slow coffee on the balcony before anyone was awake',
+      'Camille laughing at my terrible pun last night',
+      'That my back finally feels normal again',
+    ],
+    intention: 'One deep-work block on the launch page before opening messages.',
+    affirmation: 'I am allowed to do one thing at a time.',
+    // Evening not captured yet — today.
   },
   {
-    name: 'Foggy start, strong finish',
+    offset: 1,
+    morningMood: 4,
+    morningWord: 'foggy',
+    feeling: 'Slept badly, brain still booting.',
+    energy: 4,
+    motivation: 6,
+    gratitudes: [
+      'Rain on the window while working',
+      'The boulangerie was still open at 19:30',
+      'A friend checking in for no reason',
+    ],
+    intention: 'Keep the day small: ship the fix, walk at lunch.',
+    affirmation: 'I am steady even on slow days.',
+    dayMood: 6,
+    dayWord: 'redeemed',
+    highlight: 'The afternoon walk turned into an hour of ideas with Théo.',
+    lesson: 'A rough morning predicts nothing about the afternoon.',
+    freeEntry:
+      'Started the day convinced it was a write-off. By 16:00 the fix was shipped and the walk with Théo unknotted the roadmap question that has been bugging me for a week. Note to self: leave the house earlier.',
+  },
+  {
     offset: 2,
-    morningMood: 'Low',
-    mood: 'Neutral',
-    motivation: 5,
-    sleepiness: 6,
-    tasks: 2,
-    appetite: 'Low',
-    onset: [9, 15],
-    off: [15, 30],
-    reflection: 'Slow to get going and appetite was off, but the evening turned around once I got outside.',
+    morningMood: 7,
+    morningWord: 'sunny',
+    feeling: 'Woke up before the alarm, ready to go.',
+    energy: 9,
+    motivation: 9,
+    gratitudes: [
+      'Eight hours of sleep, finally',
+      'The new espresso beans',
+      'A clear calendar until noon',
+    ],
+    intention: 'Finish the investor update and actually send it.',
+    affirmation: 'I am building something worth the patience it takes.',
+    dayMood: 7,
+    dayWord: 'unstoppable',
+    highlight: 'Sent the update and got two warm replies within the hour.',
+    lesson: 'Momentum compounds when I front-load the scary task.',
   },
   {
-    name: 'Low energy, rested anyway',
     offset: 3,
-    morningMood: 'Rough',
-    mood: 'Low',
-    motivation: 3,
-    sleepiness: 8,
-    tasks: 1,
-    appetite: 'Normal',
-    onset: [10, 0],
-    off: [14, 0],
-    reflection: 'Short medication window and heavy eyes all day. Chose rest over pushing. That was the right call.',
+    morningMood: 3,
+    morningWord: 'heavy',
+    feeling: 'Anxious about the support backlog.',
+    energy: 3,
+    motivation: 4,
+    gratitudes: [
+      'Tea instead of a third coffee',
+      'The cat sleeping on my desk all morning',
+    ],
+    intention: 'Answer ten tickets, then stop counting.',
+    affirmation: 'I am more than my inbox.',
+    dayMood: 4,
+    dayWord: 'okay',
+    highlight: 'Closed the hardest ticket with an actual fix, not a workaround.',
+    lesson: 'Naming the dread out loud makes it about half as loud.',
   },
   {
-    name: 'Back on track',
     offset: 4,
-    morningMood: 'Neutral',
-    mood: 'Good',
+    morningMood: 5,
+    morningWord: 'curious',
+    feeling: 'Mildly under-slept but interested in the day.',
+    energy: 6,
     motivation: 7,
-    sleepiness: 4,
-    tasks: 3,
-    appetite: 'Normal',
-    onset: [8, 45],
-    off: [16, 30],
-    reflection: 'Solid, unremarkable in the best way. Consistent focus and a calm evening.',
+    gratitudes: [
+      'Morning light in the kitchen',
+      'A podcast that made the dishes disappear',
+      'Knowing exactly what today is for',
+    ],
+    intention: 'Prototype the stats page before lunch.',
+    affirmation: 'I am learning fast enough.',
+    dayMood: 6,
+    dayWord: 'satisfying',
+    highlight: 'The prototype clicked on the third try.',
+    lesson: 'The second draft is where the good ideas live.',
+    freeEntry: 'Quiet, focused day. The kind that does not make stories but makes progress.',
   },
 ];
 
 function buildDocuments() {
-  return SEEDS.map((s, i) => ({
-    id: `mock_${i}`,
-    title: s.name,
-    content_markdown: s.reflection,
-    created_time: dayISO(s.offset),
-    properties: {
-      Name: title(s.name),
-      Date: date(dayISO(s.offset)),
-      'Morning Mood': select(s.morningMood),
-      'General Mood': select(s.mood),
-      Motivation: number(s.motivation),
-      Sleepiness: number(s.sleepiness),
-      'Meaningful Tasks': number(s.tasks),
-      Appetite: select(s.appetite),
-      'Medication Onset': date(dayISO(s.offset, s.onset[0], s.onset[1])),
-      'Medication Wore Off': date(dayISO(s.offset, s.off[0], s.off[1])),
-    },
-  }));
+  return SEEDS.map((s, i) => {
+    const iso = dayISO(s.offset);
+    const properties: Record<string, unknown> = {
+      Name: title(`Journal — ${iso.slice(0, 10)}`),
+      Date: date(iso),
+    };
+    if (s.morningMood != null) properties['Morning Mood'] = number(s.morningMood);
+    if (s.morningWord) properties['Morning Mood Word'] = text(s.morningWord);
+    if (s.feeling) properties['Morning Feeling'] = text(s.feeling);
+    if (s.energy != null) properties['Energy'] = number(s.energy);
+    if (s.motivation != null) properties['Motivation'] = number(s.motivation);
+    (s.gratitudes ?? []).forEach((g, gi) => {
+      properties[`Gratitude ${gi + 1}`] = text(g);
+    });
+    if (s.intention) properties['Intention'] = text(s.intention);
+    if (s.affirmation) properties['Affirmation'] = text(s.affirmation);
+    if (s.dayMood != null) properties['Day Mood'] = number(s.dayMood);
+    if (s.dayWord) properties['Day Mood Word'] = text(s.dayWord);
+    if (s.highlight) properties['Highlight'] = text(s.highlight);
+    if (s.lesson) properties['Lesson'] = text(s.lesson);
+    return {
+      id: `mock_${i}`,
+      title: `Journal — ${iso.slice(0, 10)}`,
+      content_markdown: s.freeEntry ?? '',
+      created_time: iso,
+      properties,
+    };
+  });
 }
 
 export function installMockRuntime(): NotisRuntime {
   const documents = buildDocuments();
   return {
-    app: { id: 'mock', name: 'Journal', slug: 'notis-journal', icon: 'phosphor:notebook' } as never,
+    app: { id: 'mock', name: '5 Minutes Journal', slug: 'notis-journal', icon: 'phosphor:notebook' } as never,
     route: { path: '/', slug: 'journal', name: 'Journal' } as never,
     databases: [] as never,
     context: {},
@@ -143,24 +184,9 @@ export function installMockRuntime(): NotisRuntime {
     async listTools() {
       return [];
     },
-    async callTool(name: string, args?: Record<string, unknown>) {
+    async callTool(name: string) {
       if (name === 'LOCAL_NOTIS_DATABASE_QUERY') {
         return { documents } as never;
-      }
-      if (name === 'LOCAL_NOTIS_DATABASE_UPSERT_JOURNAL_ENTRIES') {
-        if (args?.operation === 'archive' && typeof args.document_id === 'string') {
-          const index = documents.findIndex((document) => document.id === args.document_id);
-          if (index < 0) {
-            return { status: 'error', message: 'Document not found' } as never;
-          }
-          const [document] = documents.splice(index, 1);
-          return { status: 'success', archived: true, document } as never;
-        }
-        return { document: { id: 'mock_new', title: String(args?.Name ?? 'Untitled'), properties: {} } } as never;
-      }
-      if (name === 'LOCAL_NOTIS_DATABASE_GET_DOCUMENT') {
-        const match = documents.find((doc) => doc.id === args?.document_id);
-        return (match ? { status: 'success', document: match } : { status: 'error', message: 'Document not found' }) as never;
       }
       return {} as never;
     },

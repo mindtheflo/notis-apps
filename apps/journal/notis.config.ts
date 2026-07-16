@@ -2,33 +2,64 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-journal',
-  title: 'Journal',
+  title: '5 Minutes Journal',
   description:
-    'A calm, structured daily journal that pairs your reflections with wellbeing and medication tracking — morning and overall mood, motivation, sleepiness, meaningful tasks, appetite, and how long your medication kept you switched on. Entries are captured by telling Notis about your day; the app is your place to browse and refine them.',
+    'A display-only five-minute journal built from your morning and evening check-ins with Notis. Browse daily mood, energy, motivation, gratitude, intentions, affirmations, highlights, lessons, and free-form reflections, then use Stats to see trends and ritual consistency over time.',
   icon: 'phosphor:notebook',
-  author: { name: 'Florian (Flo) Pariset' },
+  accent: 'amber',
+  author: { name: 'Notis' },
   categories: ['Personal', 'Productivity'],
-  tagline: 'Browse and refine the days you journal with Notis.',
+  tagline: 'Five intentional minutes with Notis, split between morning and evening.',
   versionNotes:
-    'Corrected the visible publisher attribution to Florian (Flo) Pariset, the authenticated Notis account that publishes Journal.',
+    'Journal is now 5 Minutes Journal. This release adds a clearer daily overview, a focused evening reflection, long-term Stats, and dedicated light and dark Store screenshots.',
   screenshots: [
     {
       path: 'metadata/screenshot-1.png',
-      alt: 'Journal timeline with five populated daily entries and a selected reflection.',
+      alt: '5 Minutes Journal timeline with a morning check-in: mood scale, energy and motivation, gratitudes, intention, and affirmation.',
       route: 'journal',
       scenario: 'journal-overview',
+      focus: '[data-store-screenshot="journal"]',
+      theme: 'light',
     },
     {
       path: 'metadata/screenshot-2.png',
-      alt: 'Journal entry editor showing mood, energy, tasks, medication, and reflection fields.',
+      alt: '5 Minutes Journal timeline in dark mode with a morning check-in, mood, energy, motivation, gratitudes, intention, and affirmation.',
       route: 'journal',
-      scenario: 'journal-entry-editor',
+      scenario: 'journal-overview',
+      focus: '[data-store-screenshot="journal"]',
+      theme: 'dark',
     },
     {
       path: 'metadata/screenshot-3.png',
-      alt: 'Journal insights dashboard with populated wellbeing and medication trends.',
+      alt: 'A completed day with both the morning ritual and the evening reflection, highlight, and lesson.',
+      route: 'journal',
+      scenario: 'journal-evening',
+      focus: '[data-store-screenshot="journal"]',
+      theme: 'light',
+    },
+    {
+      path: 'metadata/screenshot-4.png',
+      alt: 'A completed 5 Minutes Journal day in dark mode with both the morning ritual and evening reflection.',
+      route: 'journal',
+      scenario: 'journal-evening',
+      focus: '[data-store-screenshot="journal"]',
+      theme: 'dark',
+    },
+    {
+      path: 'metadata/screenshot-5.png',
+      alt: 'Stats page with mood trends, energy and motivation, ritual consistency, and the gratitude wall.',
       route: 'insights',
-      scenario: 'journal-insights',
+      scenario: 'journal-stats',
+      focus: '[data-store-screenshot="stats"]',
+      theme: 'light',
+    },
+    {
+      path: 'metadata/screenshot-6.png',
+      alt: '5 Minutes Journal Stats in dark mode with mood trends, ritual consistency, and recent gratitudes.',
+      route: 'insights',
+      scenario: 'journal-stats',
+      focus: '[data-store-screenshot="stats"]',
+      theme: 'dark',
     },
   ],
   databases: ['journal_entries'],
@@ -38,12 +69,12 @@ export default defineNotisApp({
       path: './skills/journal-onboarding/SKILL.md',
       name: 'journal-onboarding',
       description:
-        'Set up the Journal daily check-in routine and run its evening completeness check.',
+        'Set up the Journal morning and evening automations and run their check-ins.',
     },
   ],
   onboarding: {
     skill: 'journal-onboarding',
-    prompt: 'Help me set up my Journal reminders.',
+    prompt: 'Help me set up my Journal morning and evening check-ins.',
   },
   routes: [
     {
@@ -56,14 +87,9 @@ export default defineNotisApp({
     {
       path: '/insights',
       slug: 'insights',
-      name: 'Insights',
+      name: 'Stats',
       icon: 'phosphor:chart-line-up',
     },
   ],
-  tools: [
-    'LOCAL_NOTIS_DATABASE_QUERY',
-    'LOCAL_NOTIS_DATABASE_GET_DATABASE',
-    'LOCAL_NOTIS_DATABASE_GET_DOCUMENT',
-    'LOCAL_NOTIS_DATABASE_UPSERT_JOURNAL_ENTRIES',
-  ],
+  tools: ['LOCAL_NOTIS_DATABASE_QUERY'],
 });

@@ -85,6 +85,8 @@ export interface NotisAppScreenshotConfig {
   alt: string;
   route?: string;
   scenario?: string;
+  focus?: string;
+  theme?: 'light' | 'dark';
 }
 
 /**

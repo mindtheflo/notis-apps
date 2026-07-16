@@ -1,127 +1,120 @@
 ---
 name: journal-onboarding
-description: "Set up the Journal daily check-in routine and run its evening completeness check. Use when onboarding someone to Journal reminders, changing their Journal check-in schedule, or when the Journal evening automation asks for missing information."
+description: "Set up the Journal morning and evening automations and run their check-ins. Use when onboarding someone to the Journal daily practice, changing their check-in schedule, or when a Journal automation asks to run the morning or evening check-in."
 ---
 
-# Journal Onboarding
+# Journal Daily Practice
 
-Set up one lightweight daily Journal routine: a fixed morning reminder and an intelligent evening automation. Do not create unrelated reminders or automations.
+The Journal is a five-minute daily practice captured entirely in conversation. Notis asks, the user answers, and the `journal_entries` database fills itself — the app only displays. There are two rituals:
+
+- **Morning check-in** — waking mood (1–7 pleasant scale + one adjective), how they're feeling, energy (1–10), motivation (1–10), three gratitudes, an intention for the day, and a daily affirmation.
+- **Evening reflection** — whole-day mood (1–7 pleasant scale + one adjective), the day's highlight, what the day taught them, a gentle catch-up of anything the morning missed, and an optional free-form entry.
 
 ## Choose the Mode
 
 - Use **setup mode** when the user is onboarding, asks to configure Journal check-ins, or wants to change the schedule.
-- Use **evening-check mode** only when the request explicitly says to review today's Journal entry or the automation prompt names this mode.
-- Never enter setup mode from an evening-check run.
+- Use **morning-check mode** only when the request or automation prompt names it.
+- Use **evening-check mode** only when the request or automation prompt names it.
+- Never enter setup mode from a check-in run.
+
+## Tone (applies to every mode)
+
+Write like a warm, attentive companion — closer to a good therapist than to a form. Concrete rules:
+
+- Sound like a person, not a survey. Weave the questions into one or two short messages instead of a numbered interrogation.
+- Reference what they actually said, today or on recent days, when it helps ("this morning you said the demo had you excited — how did it go?").
+- Never guilt-trip about missed days or missing fields. A skipped question is an answer; move on gracefully.
+- Accept partial answers. Save what was given; the evening pass picks up morning leftovers, and anything still missing after that just stays blank.
+- Keep it light: this is a check-in, not a medical assessment. Never diagnose, never analyze the user unprompted.
+
+## The Pleasant Scale
+
+Both moods use the same 1–7 scale (like Apple's State of Mind): 1 very unpleasant, 2 unpleasant, 3 slightly unpleasant, 4 neutral, 5 slightly pleasant, 6 pleasant, 7 very pleasant.
+
+- Ask for it conversationally ("where does this morning land, 1 to 7, unpleasant to pleasant?") and store the integer.
+- If the user answers with words only ("pretty good"), map it yourself (pretty good ≈ 5–6), confirm implicitly by restating ("logging that as a 6"), and store it.
+- The adjective is the user's own word ("foggy", "electric", "flat") — store it lower-case in the matching `... Mood Word` property. If they give a sentence, pull the strongest adjective and keep the sentence in `Morning Feeling` (morning) or the free entry (evening).
+
+## Writing to the Database
+
+The native Notis database with slug `journal_entries` holds **one entry per local calendar day**:
+
+- Find today's entry with `LOCAL_NOTIS_DATABASE_QUERY` and a structured filter on **Date** for the user's local day. Ignore archived entries. If duplicates exist, use the most recently updated one and mention the duplicate briefly; never merge or delete.
+- Create it only if it does not exist, via `LOCAL_NOTIS_DATABASE_UPSERT_JOURNAL_ENTRIES` with `Name` = `Journal — YYYY-MM-DD` (local date) and `Date` = that day.
+- Update by passing only the properties the user just answered. Never overwrite a field that already has a value unless the user explicitly corrects it.
+- Properties: `Morning Mood` (1–7), `Morning Mood Word`, `Morning Feeling`, `Energy` (1–10), `Motivation` (1–10), `Gratitude 1..3`, `Intention`, `Affirmation`, `Day Mood` (1–7), `Day Mood Word`, `Highlight`, `Lesson`.
+- The optional free-form entry goes in the document body: pass `content_markdown` (append to existing content rather than replacing it; set `replace` only when the body is empty).
 
 ## Setup Mode
 
-### 1. Recommend a Simple Routine
+### 1. Recommend the Routine
 
-Briefly explain the proposed routine before asking for times:
+Briefly explain the two automations before asking for times:
 
-- A morning reminder helps the user capture **Morning Mood**, **Motivation**, **Sleepiness**, and **Medication Onset** when relevant while those details are fresh.
-- An evening automation reviews today's entry and asks only for missing details, typically **General Mood**, **Meaningful Tasks**, **Appetite**, **Medication Wore Off** when relevant, and any morning details that were skipped.
+- A **morning check-in** (recommend ~08:00) captures the waking mood, energy, motivation, gratitudes, intention, and affirmation while the day is still fresh.
+- An **evening reflection** (recommend ~21:30) captures how the day actually felt, its highlight and lesson, catches up anything the morning missed, and offers space for a free entry.
 
-Recommend approximately **08:00** for the morning reminder and **20:00** for the evening check in the user's timezone, while making it clear that they can choose different times.
+Make clear both times are theirs to choose.
 
 ### 2. Ask for the Schedule
 
-Ask one compact question that collects:
-
-- morning reminder time;
-- evening check time;
-- days of the week, defaulting to every day;
-- timezone, unless it is already known with confidence;
-- delivery channel only when the current/default channel is unclear or the user has multiple relevant channel accounts.
-
-Do not create anything while a time, timezone, day pattern, or required channel account remains unresolved.
+One compact question collecting: morning time, evening time, days of the week (default every day), timezone (unless confidently known), and delivery channel only when ambiguous. Do not create anything while any of these is unresolved.
 
 ### 3. Check Existing Setup
 
-Use `LOCAL_NOTIS_LIST_REMINDERS` and `LOCAL_NOTIS_LIST_AUTOMATIONS` before writing anything.
+Use `LOCAL_NOTIS_LIST_REMINDERS` and `LOCAL_NOTIS_LIST_AUTOMATIONS` before writing anything — one full page of up to 100 items each, inspected locally, directly in the current assistant (no sub-agents, no repeated searches).
 
-Perform these two native read calls directly in the current assistant. Do not delegate or spawn an agent for this small existing-setup check.
-Fetch one full page of up to 100 items from each tool. That single inventory is sufficient: inspect it locally and do not issue repeated keyword searches or extra detail calls once a matching reminder or automation is identified.
-
-- Match existing items by purpose and content, not only exact names.
-- Update an existing Journal morning reminder or evening completeness automation instead of creating a duplicate.
+- Match existing items by purpose, not only name. Update a matching Journal morning or evening item instead of duplicating it.
+- If an old Journal **reminder** exists from a previous version of this practice, replace it: create the morning automation and remove only that confirmed Journal reminder.
 - Preserve unrelated reminders and automations.
 
 ### 4. Confirm Before Creating
 
-Recap the exact local schedule, days, timezone, channel, morning message, and evening behavior in plain language. Obtain explicit confirmation before creating or updating anything.
+Recap both local schedules, days, timezone, channel, and what each check-in will ask. Obtain explicit confirmation before creating or updating anything.
 
-### 5. Create the Morning Reminder
+### 5. Create the Two Automations
 
-Use `LOCAL_NOTIS_INSERT_REMINDER`, or `LOCAL_NOTIS_UPDATE_REMINDER` for a matching existing item.
+Use `LOCAL_NOTIS_INSERT_AUTOMATION` (or `LOCAL_NOTIS_UPDATE_AUTOMATION` for a matching existing item) for **both** check-ins:
 
-- Use a recurring schedule trigger with a standard five-field cron expression derived from the confirmed local time and days.
-- Put recurrence only in `cron_expression`.
-- Set delivery only with `channel` and, when required, `channel_account_id`.
-- Use this fixed message:
+- Names: `Journal morning check-in` and `Journal evening reflection`.
+- `schedule` triggers with standard five-field cron expressions derived from the confirmed local times and days. Recurrence lives only in `cron_expression`.
+- Delivery only via `channel` and, when required, `channel_account_id`.
+- **Enable cross-run context on both automations.** The evening reflection must see the morning conversation so it can follow up on what the user actually said — this consolidated thread is a core feature of the practice, not an option.
+- Morning prompt, exactly:
 
-  `Good morning — tell Notis your morning mood, motivation from 1–10, sleepiness from 1–10, and when your medication started working if that applies today, so your Journal entry starts with the details that are freshest now.`
+  `Run /journal-onboarding in morning-check mode: hold this morning's Journal check-in and save the answers to today's journal_entries entry.`
 
-After creation, inspect the returned active reminders and remove only confirmed duplicates of this Journal reminder.
+- Evening prompt, exactly:
 
-### 6. Create the Evening Automation
+  `Run /journal-onboarding in evening-check mode: review today's journal_entries entry, hold the evening reflection, follow up on what the morning conversation actually said, and save the answers.`
 
-Use `LOCAL_NOTIS_INSERT_AUTOMATION`, or `LOCAL_NOTIS_UPDATE_AUTOMATION` for a matching existing item.
+Do not put scheduling or delivery instructions inside the prompts.
 
-- Name it `Journal evening completeness check`.
-- Use a `schedule` trigger with a standard five-field cron expression derived from the confirmed local time and days.
-- Put recurrence only in `cron_expression`.
-- Set delivery only with `channel` and, when required, `channel_account_id`.
-- Keep context disabled unless the user explicitly needs cross-run context.
-- Use this thin prompt exactly:
+### 6. Report the Result
 
-  `Run /journal-onboarding in evening-check mode. Review today's Journal entry, identify which expected details are still missing, and ask only for those details. If the entry is complete, briefly confirm that no follow-up is needed.`
+Return a concise summary: both local schedules, the delivery channel, created vs updated for each item, and the automation IDs or portal links. The native tools store recurring schedules as UTC cron expressions — convert from the user's IANA timezone, then verify the returned crons and the Portal-rendered local times. That read-back completes setup verification; do not launch extra agents or investigate scheduler internals.
 
-Do not put scheduling or delivery instructions into the prompt.
+## Morning-Check Mode
 
-### 7. Report the Result
-
-Return a concise summary containing both local schedules, the delivery channel, whether each item was created or updated, and the reminder and automation IDs or portal links returned by Notis.
-
-The native reminder and automation tools store recurring schedules as UTC cron expressions. Convert the confirmed local times with the user's current IANA timezone offset, then verify the returned cron expressions and the local times rendered in the Portal. Treat that read-back as complete verification for setup mode. Do not delegate or launch extra agents, inspect databases or source repositories, or delay the final response to investigate future daylight-saving transitions; those scheduler internals are outside this onboarding flow.
+1. Find (or note the absence of) today's entry as described in *Writing to the Database*.
+2. Open with one short, warm greeting that folds in the first questions. Cover, across at most two messages: waking mood (scale + their word), how they're feeling, energy and motivation (1–10 each), three gratitudes, what would make today great, and a daily affirmation.
+3. If they stall on the affirmation, offer to shape one from what they just said — their words, not a canned quote.
+4. Create or update today's entry with everything captured. Partial is fine; say nothing about the gaps (the evening picks them up).
+5. Close in one line that reflects their intention back ("holding you to that walk — talk tonight").
 
 ## Evening-Check Mode
 
-### 1. Find Today's Entry
-
-Use the user's timezone to determine today's local calendar date. Query the native Notis database with slug `journal_entries` using `LOCAL_NOTIS_DATABASE_QUERY` and a structured filter on the **Date** property for that local day. Ignore archived or deleted entries.
-
-If multiple active entries exist for the same day, use the most recently updated entry and mention the duplicate briefly rather than merging or deleting anything.
-
-### 2. Evaluate Completeness
-
-Treat these as the expected core details:
-
-- **Morning Mood**: Amazing, Good, Neutral, Low, or Rough;
-- **Motivation**: 1–10;
-- **Sleepiness**: 1–10;
-- **General Mood**: Amazing, Good, Neutral, Low, or Rough;
-- **Meaningful Tasks**: a count of meaningful tasks completed;
-- **Appetite**: None, Low, Normal, or High.
-
-Medication timing is conditional:
-
-- Ask for **Medication Onset** or **Medication Wore Off** only when the entry or current context indicates that the user took medication that day.
-- If one medication time exists and the other is missing, ask for the missing time or whether the user did not notice it.
-- Do not assume medication use from an empty field.
-
-The title and Date identify the record; do not ask the user for them when today's entry already exists.
-
-### 3. Ask Only for Missing Information
-
-- If the entry exists, send one short, friendly question grouping only the missing details. Never ask again for populated fields.
-- If no entry exists, say that today's entry has not been started and ask for a compact evening check-in covering Morning Mood, Motivation, Sleepiness, General Mood, Meaningful Tasks, and Appetite, plus medication timing only if applicable.
-- If every applicable detail is present, briefly confirm that today's Journal entry is complete and no follow-up is needed.
-- Do not invent values, delete entries, or update the database during the automated check. The user's reply can be handled as a separate Journal update.
+1. Read today's entry. Its filled fields plus the morning conversation (available through the automation's shared context) are your material.
+2. Open by connecting to the morning — reference a real detail, then ask the evening questions. Example shape: "Evening — this morning you were grateful for the calm before the demo. Did that calm hold? How did the whole day feel, 1 to 7, and what one word would you give it?"
+3. Cover: day mood (scale + adjective), highlight of the day, what the day taught them.
+4. Then gently flag what the morning missed, grouped in one soft sentence ("we never got to your three gratitudes this morning — anything from today count?"). Ask only for genuinely missing fields; never re-ask populated ones.
+5. Offer the optional free entry last, as an open door, not a task ("anything else about today you want kept? I'll write it down word for word").
+6. Save all answers (properties + `content_markdown` for the free entry). If no entry exists at all, create it and run the whole check-in as a compact evening version.
+7. If every field is already complete, just reflect the day back in a sentence and say goodnight — no questions.
 
 ## Guardrails
 
-- Keep the interaction supportive and concise; this is a check-in, not a medical assessment.
-- Never create a second copy of the same reminder or automation.
-- Never schedule either item without the user's confirmed times, timezone, days, and destination.
-- Never turn the evening automation prompt into instructions to create another automation.
+- Never create a second copy of the same automation, reminder, or daily entry.
+- Never schedule anything without confirmed times, timezone, days, and destination.
+- Never invent values the user did not give; never delete entries; never rewrite an existing free entry (append only).
+- Never turn a check-in prompt into instructions to create another automation.
