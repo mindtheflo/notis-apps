@@ -46,6 +46,24 @@ function sha256(data: Buffer | string): string {
   return hash.digest('hex');
 }
 
+function changelogForPublication(value: unknown, publishedDate: string): Record<string, unknown> | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const changelog = value as Record<string, unknown>;
+  if (changelog.source_path !== 'CHANGELOG.md' || !Array.isArray(changelog.entries)) {
+    return undefined;
+  }
+  return {
+    ...changelog,
+    entries: changelog.entries.map((value) => {
+      if (!value || typeof value !== 'object') return value;
+      const entry = value as Record<string, unknown>;
+      return entry.date === '{PR_MERGE_DATE}'
+        ? { ...entry, date: publishedDate }
+        : entry;
+    }),
+  };
+}
+
 function collectBundleFiles(distDir: string): string[] {
   const out: string[] = [];
   function walk(dir: string) {
@@ -144,7 +162,12 @@ const listing = JSON.parse(readFileSync(listingJsonPath, 'utf8')) as Record<stri
 const sourceApp = sourceManifest.app && typeof sourceManifest.app === 'object'
   ? sourceManifest.app as Record<string, unknown>
   : {};
+const sourceListing = sourceManifest.listing && typeof sourceManifest.listing === 'object'
+  ? sourceManifest.listing as Record<string, unknown>
+  : {};
 const author = listing.author ?? sourceApp.author ?? sourceManifest.author;
+const publishedAt = new Date().toISOString();
+const changelog = changelogForPublication(listing.changelog, publishedAt.slice(0, 10));
 const manifest = {
   ...sourceManifest,
   app: {
@@ -156,6 +179,10 @@ const manifest = {
     categories: sourceApp.categories ?? listing.categories ?? sourceManifest.categories,
     version_notes: sourceApp.version_notes ?? listing.version_notes ?? sourceManifest.version_notes,
     author,
+  },
+  listing: {
+    ...sourceListing,
+    ...(changelog ? { changelog } : {}),
   },
 };
 const canonical = canonicalJsonStringify(manifest);
@@ -237,12 +264,13 @@ const payload = {
   categories: listing.categories,
   category: listing.category,
   version_notes: listing.version_notes,
+  changelog,
   author,
   screenshots,
   submitted_by_notis_user_id: listing.submitted_by_notis_user_id,
   source_app_id: listing.source_app_id,
   source_version: listing.source_version,
-  published_at: new Date().toISOString(),
+  published_at: publishedAt,
   published_by: listing.submitted_by_notis_user_id ?? 'ci',
   timestamp: Math.floor(Date.now() / 1000),
   nonce: randomUUID(),
