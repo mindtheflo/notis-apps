@@ -1,0 +1,65 @@
+{
+  "author": {
+    "name": "Notis"
+  },
+  "categories": [
+    "Product & Engineering",
+    "Operations"
+  ],
+  "category": "Product & Engineering",
+  "changelog": {
+    "entries": [
+      {
+        "body": "- First Store release.",
+        "date": "{PR_MERGE_DATE}",
+        "title": "Initial Release"
+      }
+    ],
+    "source_path": "CHANGELOG.md"
+  },
+  "description": "A read-only catalog and schema explorer for every database in your Notis workspace. Browse databases grouped by the app that owns them, inspect each property with its type, select options, formats, and formulas, follow relations between databases, and page through the actual records stored in any of them.",
+  "install_snapshot": {
+    "bundled_automations": [],
+    "bundled_skills": [],
+    "databases": [],
+    "documents": []
+  },
+  "name": "Databases",
+  "screenshots": [
+    {
+      "alt": "Database catalog grouping databases by the app that owns them, with the Accounts schema open on its Properties tab.",
+      "path": "screenshots/01.png",
+      "source_path": "metadata/screenshot-1.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The same database catalog and Accounts property list in dark mode.",
+      "path": "screenshots/02.png",
+      "source_path": "metadata/screenshot-2.png",
+      "theme": "dark"
+    },
+    {
+      "alt": "Documents tab listing account records in a table with their tier, status, ARR, renewal date, and regions.",
+      "path": "screenshots/03.png",
+      "source_path": "metadata/screenshot-3.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The account records table in dark mode with every property column populated.",
+      "path": "screenshots/04.png",
+      "source_path": "metadata/screenshot-4.png",
+      "theme": "dark"
+    },
+    {
+      "alt": "Relations tab showing how the Accounts database links out to Contacts, Deals, and Meeting Notes.",
+      "path": "screenshots/05.png",
+      "source_path": "metadata/screenshot-5.png",
+      "theme": "light"
+    }
+  ],
+  "source_app_id": "bd97c4a6-600e-4b96-8826-2c95db1ee599",
+  "source_version": 2,
+  "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
+  "tagline": "Explore every database and schema in your Notis workspace.",
+  "version_notes": "- First Store release."
+}
