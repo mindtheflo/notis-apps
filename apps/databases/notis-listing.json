@@ -18,6 +18,12 @@
     "source_path": "CHANGELOG.md"
   },
   "description": "A read-only catalog and schema explorer for every database in your Notis workspace. Browse databases grouped by the app that owns them, inspect each property with its type, select options, formats, and formulas, follow relations between databases, and page through the actual records stored in any of them.",
+  "install_snapshot": {
+    "bundled_automations": [],
+    "bundled_skills": [],
+    "databases": [],
+    "documents": []
+  },
   "name": "Databases",
   "screenshots": [
     {
