@@ -1,0 +1,59 @@
+{
+  "author": {
+    "name": "Notis"
+  },
+  "categories": [
+    "Productivity",
+    "Personal"
+  ],
+  "category": "Productivity",
+  "changelog": {
+    "entries": [
+      {
+        "body": "- First Store release.",
+        "date": "{PR_MERGE_DATE}",
+        "title": "Initial Release"
+      }
+    ],
+    "source_path": "CHANGELOG.md"
+  },
+  "description": "A home for every note Notis captures. Organise them into a nested folder tree, then read them as a gallery of cards, as a sortable table of all their properties, or on a calendar laid out by due date or by when they were created. Rename, refile, and archive notes in bulk, and create a new one without leaving the view.",
+  "name": "Notis Notes",
+  "screenshots": [
+    {
+      "alt": "Notes gallery showing cards for each note with its folder, status, and a preview of the text.",
+      "path": "screenshots/01.png",
+      "source_path": "metadata/screenshot-1.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The same notes gallery in dark mode.",
+      "path": "screenshots/02.png",
+      "source_path": "metadata/screenshot-2.png",
+      "theme": "dark"
+    },
+    {
+      "alt": "Table view listing every note with its folder, status, and due date in sortable columns.",
+      "path": "screenshots/03.png",
+      "source_path": "metadata/screenshot-3.png",
+      "theme": "light"
+    },
+    {
+      "alt": "Calendar view placing notes on the month grid, with a picker to lay them out by created date or by any date property.",
+      "path": "screenshots/04.png",
+      "source_path": "metadata/screenshot-4.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The notes calendar in dark mode with notes spread across the month and today highlighted.",
+      "path": "screenshots/05.png",
+      "source_path": "metadata/screenshot-5.png",
+      "theme": "dark"
+    }
+  ],
+  "source_app_id": "e7e6cd21-6379-4585-8d9d-da117b5b1573",
+  "source_version": 2,
+  "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
+  "tagline": "Folder-based notes with gallery, table, and calendar views.",
+  "version_notes": "- First Store release."
+}
