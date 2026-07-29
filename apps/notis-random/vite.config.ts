@@ -1,16 +1,11 @@
 import { notisViteConfig } from '@notis/sdk/vite';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, type UserConfig } from 'vite';
 import appConfig from './notis.config';
 
-const base = notisViteConfig(appConfig);
+const libConfig = notisViteConfig(appConfig) as unknown as UserConfig;
 
 export default defineConfig({
-  ...base,
-  plugins: [react(), ...((base.plugins as never[]) ?? [])],
-  build: {
-    ...base.build,
-    outDir: 'dist',
-    emptyOutDir: true,
-  },
+  ...libConfig,
+  plugins: [react(), ...((libConfig.plugins as UserConfig['plugins']) ?? [])],
 });

@@ -1,83 +1,81 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNotis, useDatabase } from '@notis/sdk';
-import {
-  Dices,
-  Sparkles,
-  History,
-  ArrowRight,
-  Hash,
-  Percent,
-  Infinity as InfinityIcon,
-  RefreshCw,
-} from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
+import { useNotis, useNotisNavigation } from '@notis/sdk';
+import { DiceFiveIcon as Dices, SparkleIcon as Sparkles, ClockCounterClockwiseIcon as History, ArrowRightIcon as ArrowRight, HashIcon as Hash, PercentIcon as Percent, InfinityIcon, ArrowClockwiseIcon as RefreshCw, WarningCircleIcon as WarningCircle } from '@phosphor-icons/react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { cn, formatNumber, relativeTime } from '@/lib/utils';
-import { type Mode, type Roll, roll } from '@/lib/rng';
+import { DICE_SIDES, DEFAULT_DICE_SIDES, type DiceSides, type Mode, type Roll, checkBounds, parseBoundDraft, roll } from '@/lib/rng';
+import { normalizeRollRecord, sortRollRecordsDesc } from '@/lib/roll-record';
+import { usePersistRoll, useRollDocuments } from '@/lib/notis-tools';
 
 const MODES: Array<{ id: Mode; label: string; icon: typeof Hash; hint: string }> = [
   { id: 'integer', label: 'Integer', icon: Hash,        hint: 'Whole numbers only' },
   { id: 'decimal', label: 'Decimal', icon: Percent,     hint: 'Continuous range'   },
-  { id: 'dice',    label: 'Dice',    icon: Dices,       hint: 'Classic 1–N roll'   },
+  { id: 'dice',    label: 'Dice',    icon: Dices,       hint: 'Standard polyhedral dice' },
 ];
 
 export default function HomePage() {
-  const { app, ready, runtime } = useNotis();
-  const { documents, loading, refresh } = useDatabase('rolls');
+  const { app, ready } = useNotis();
+  const nav = useNotisNavigation();
+  const { documents, loading, refetch } = useRollDocuments(5);
+  const { persist: persistRoll } = usePersistRoll();
 
   const [mode, setMode] = useState<Mode>('integer');
-  const [min, setMin] = useState(1);
-  const [max, setMax] = useState(100);
+  const [minDraft, setMinDraft] = useState('1');
+  const [maxDraft, setMaxDraft] = useState('100');
+  const [sides, setSides] = useState<DiceSides>(DEFAULT_DICE_SIDES);
   const [current, setCurrent] = useState<Roll | null>(null);
   const [rolling, setRolling] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const recent = useMemo(
-    () => documents.slice(0, 5).map((doc) => ({
-      id: doc.id,
-      value: Number(doc.properties?.['Value'] ?? 0),
-      mode: String(doc.properties?.['Mode'] ?? 'integer') as Mode,
-      at: String(doc.properties?.['Rolled At'] ?? doc.createdAt ?? ''),
-    })),
+    () => documents
+      .map(normalizeRollRecord)
+      .sort(sortRollRecordsDesc)
+      .slice(0, 5),
     [documents],
   );
 
-  const persist = useCallback(async (next: Roll) => {
-    if (!runtime) return;
-    await runtime.upsertDocument({
-      databaseSlug: 'rolls',
-      title: formatNumber(next.value),
-      properties: {
-        Value: next.value,
-        Mode: next.mode,
-        Min: next.min,
-        Max: next.max,
-        'Rolled At': next.at,
-      },
-    });
-    await refresh?.();
-  }, [runtime, refresh]);
+  // Dice mode draws from 1..sides; the manual range inputs drive the other modes.
+  const bounds = useMemo(
+    () => (
+      mode === 'dice'
+        ? { min: 1, max: sides }
+        : {
+            min: parseBoundDraft(minDraft),
+            max: parseBoundDraft(maxDraft),
+          }
+    ),
+    [mode, sides, minDraft, maxDraft],
+  );
+  const check = useMemo(
+    () => checkBounds(bounds.min, bounds.max, mode),
+    [bounds.min, bounds.max, mode],
+  );
 
   const generate = useCallback(async () => {
-    if (rolling) return;
+    if (rolling || !check.ok) return;
     setRolling(true);
-    const next = roll(min, max, mode);
-    setCurrent(next);
+    setSaveError(null);
     try {
-      await persist(next);
+      // roll() throws on unusable bounds, and persist() can fail on the network.
+      // Both have to leave `rolling` false or the button would stay stuck.
+      const next = roll(bounds.min, bounds.max, mode);
+      setCurrent(next);
+      await persistRoll(next);
+      refetch();
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Could not save this roll.');
     } finally {
       setRolling(false);
     }
-  }, [rolling, min, max, mode, persist]);
-
-  useEffect(() => {
-    if (mode === 'dice') {
-      setMin(1);
-      setMax(6);
-    }
-  }, [mode]);
+  }, [rolling, check.ok, bounds.min, bounds.max, mode, persistRoll, refetch]);
 
   return (
-    <main className="notis-random-shell space-y-8">
+    <main data-store-screenshot="generator" className="notis-random-shell space-y-6">
       <header className="flex items-start justify-between gap-6">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -89,22 +87,26 @@ export default function HomePage() {
             Pick a mode, set the range, and press generate. Every roll is saved to the History view.
           </p>
         </div>
-        <button
+        <Button
           type="button"
-          onClick={() => refresh?.()}
-          className="inline-flex h-9 items-center gap-2 rounded-md border border-border px-3 text-sm text-muted-foreground hover:text-foreground hover:bg-accent transition"
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          className="gap-2 border-border text-muted-foreground hover:text-foreground"
         >
           <RefreshCw className={cn('h-3.5 w-3.5', loading && 'animate-spin')} />
           Refresh
-        </button>
+        </Button>
       </header>
 
-      <section className="rounded-2xl border border-border bg-card p-8">
-        <div className="flex flex-col items-center gap-6">
+      {/* The dial and the controls sit side by side so the whole generator —
+          result, mode, range, and recent rolls — stays above the fold. */}
+      <section className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+        <Card className="flex flex-col items-center justify-center gap-5 rounded-2xl p-6">
           <div
             className={cn(
               'flex items-center justify-center rounded-full border border-border bg-background',
-              'h-48 w-48 transition-transform',
+              'h-40 w-40 transition-transform',
               rolling && 'animate-pulse',
             )}
           >
@@ -116,38 +118,49 @@ export default function HomePage() {
               <InfinityIcon className="h-10 w-10 text-muted-foreground" strokeWidth={1.2} />
             )}
           </div>
-          <button
+          <Button
             type="button"
+            size="lg"
+            data-action="generate"
             onClick={generate}
-            disabled={rolling}
-            className={cn(
-              'inline-flex h-11 items-center gap-2 rounded-full px-6 text-sm font-medium',
-              'bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50 transition',
-            )}
+            disabled={rolling || !check.ok}
+            className="gap-2 rounded-full px-6"
           >
             <Dices className="h-4 w-4" />
             {rolling ? 'Rolling…' : current ? 'Roll again' : 'Generate'}
-          </button>
-          {current && (
+          </Button>
+          {check.issue ? (
+            <p className="flex items-center gap-1.5 text-xs text-destructive">
+              <WarningCircle className="h-3.5 w-3.5 shrink-0" />
+              {check.issue.message}
+            </p>
+          ) : current ? (
             <p className="text-xs text-muted-foreground">
               <span className="font-mono">[{formatNumber(current.min)}, {formatNumber(current.max)}]</span>
               {' · '}{current.mode}
             </p>
+          ) : null}
+          {saveError && (
+            <p className="flex items-center gap-1.5 text-xs text-destructive">
+              <WarningCircle className="h-3.5 w-3.5 shrink-0" />
+              {saveError}
+            </p>
           )}
-        </div>
-      </section>
+        </Card>
 
-      <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+        <Card className="p-5">
           <h2 className="mb-3 text-sm font-medium text-foreground">Mode</h2>
           <div className="grid gap-2">
             {MODES.map(({ id, label, icon: Icon, hint }) => (
-              <button
+              <Button
                 key={id}
                 type="button"
+                variant="outline"
+                data-mode={id}
                 onClick={() => setMode(id)}
                 className={cn(
-                  'flex items-center gap-3 rounded-md border px-3 py-2.5 text-left transition',
+                  'h-auto w-full justify-start gap-3 px-3 py-2.5 text-left whitespace-normal',
                   mode === id
                     ? 'border-foreground bg-accent text-accent-foreground'
                     : 'border-border hover:bg-accent/50',
@@ -158,35 +171,72 @@ export default function HomePage() {
                   <div className="text-sm font-medium">{label}</div>
                   <div className="text-xs text-muted-foreground">{hint}</div>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-xl border border-border bg-card p-5 space-y-4">
-          <h2 className="text-sm font-medium text-foreground">Range</h2>
-          <div className="grid grid-cols-2 gap-3">
-            <RangeInput label="Minimum" value={min} onChange={setMin} disabled={mode === 'dice'} />
-            <RangeInput label="Maximum" value={max} onChange={setMax} disabled={mode === 'dice'} />
-          </div>
-          {mode === 'dice' && (
-            <p className="text-xs text-muted-foreground">Dice mode locks to 1–6.</p>
+        <Card className="space-y-4 p-5">
+          <h2 className="text-sm font-medium text-foreground">
+            {mode === 'dice' ? 'Die' : 'Range'}
+          </h2>
+          {mode === 'dice' ? (
+            <>
+              <div className="flex flex-wrap gap-2">
+                {DICE_SIDES.map((n) => (
+                  <Button
+                    key={n}
+                    type="button"
+                    variant="outline"
+                    data-die={n}
+                    onClick={() => setSides(n)}
+                    className={cn(
+                      'h-10 min-w-[3.25rem] px-3 font-mono',
+                      sides === n
+                        ? 'border-foreground bg-accent text-accent-foreground'
+                        : 'border-border hover:bg-accent/50',
+                    )}
+                  >
+                    d{n}
+                  </Button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Rolls a whole number from 1 to {sides}, each equally likely.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <RangeInput label="Minimum" name="min" value={minDraft} onChange={setMinDraft} />
+                <RangeInput label="Maximum" name="max" value={maxDraft} onChange={setMaxDraft} />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {mode === 'decimal'
+                  ? 'Decimal draws include the minimum but never reach the maximum.'
+                  : 'Integer draws include both ends of the range.'}
+              </p>
+            </>
           )}
+        </Card>
         </div>
       </section>
 
-      <section className="rounded-xl border border-border bg-card p-5">
+      <Card className="p-5">
         <header className="mb-4 flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 text-sm font-medium text-foreground">
             <History className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
             Recent rolls
           </h2>
-          <a
-            href="/history"
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => nav.toRoute('/history')}
+            className="h-auto gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
           >
             View all <ArrowRight className="h-3 w-3" />
-          </a>
+          </Button>
         </header>
         {loading && recent.length === 0 ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
@@ -207,34 +257,32 @@ export default function HomePage() {
             ))}
           </ul>
         )}
-      </section>
+      </Card>
     </main>
   );
 }
 
 function RangeInput({
   label,
+  name,
   value,
   onChange,
-  disabled,
 }: {
   label: string;
-  value: number;
-  onChange: (v: number) => void;
-  disabled?: boolean;
+  name: string;
+  value: string;
+  onChange: (v: string) => void;
 }) {
   return (
-    <label className={cn('block space-y-1.5', disabled && 'opacity-50')}>
+    <label className="block space-y-1.5">
       <span className="text-xs font-medium text-muted-foreground">{label}</span>
-      <input
-        type="number"
+      <Input
+        type="text"
+        inputMode="decimal"
+        data-bound={name}
         value={value}
-        disabled={disabled}
-        onChange={(e) => {
-          const parsed = Number(e.target.value);
-          if (Number.isFinite(parsed)) onChange(parsed);
-        }}
-        className="h-10 w-full rounded-md border border-border bg-background px-3 font-mono text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+        onChange={(e) => onChange(e.target.value)}
+        className="border-border font-mono"
       />
     </label>
   );

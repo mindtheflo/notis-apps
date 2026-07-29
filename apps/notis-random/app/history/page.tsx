@@ -1,10 +1,12 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useDatabase } from '@notis/sdk';
-import { Dices, History, Hash, Percent } from 'lucide-react';
+import { DiceFiveIcon as Dices, ClockCounterClockwiseIcon as History, HashIcon as Hash, PercentIcon as Percent } from '@phosphor-icons/react';
+import { Card } from '@/components/ui/card';
 import { formatNumber, relativeTime } from '@/lib/utils';
 import type { Mode } from '@/lib/rng';
+import { normalizeRollRecord, sortRollRecordsDesc } from '@/lib/roll-record';
+import { useRollDocuments } from '@/lib/notis-tools';
 
 const MODE_ICONS: Record<Mode, typeof Hash> = {
   integer: Hash,
@@ -13,22 +15,17 @@ const MODE_ICONS: Record<Mode, typeof Hash> = {
 };
 
 export default function HistoryPage() {
-  const { documents, loading } = useDatabase('rolls');
+  const { documents, loading } = useRollDocuments(100, true);
 
   const rows = useMemo(
-    () => documents.map((doc) => ({
-      id: doc.id,
-      value: Number(doc.properties?.['Value'] ?? 0),
-      mode: String(doc.properties?.['Mode'] ?? 'integer') as Mode,
-      min: Number(doc.properties?.['Min'] ?? 0),
-      max: Number(doc.properties?.['Max'] ?? 0),
-      at: String(doc.properties?.['Rolled At'] ?? doc.createdAt ?? ''),
-    })),
+    () => documents
+      .map(normalizeRollRecord)
+      .sort(sortRollRecordsDesc),
     [documents],
   );
 
   return (
-    <main className="notis-random-shell space-y-6">
+    <main data-store-screenshot="history" className="notis-random-shell space-y-6">
       <header className="flex items-center gap-2 text-sm text-muted-foreground">
         <History className="h-4 w-4" strokeWidth={1.5} />
         <span>Roll history</span>
@@ -44,7 +41,7 @@ export default function HistoryPage() {
           Nothing rolled yet. Head back to the generator and press Generate.
         </div>
       ) : (
-        <div className="divide-y divide-border rounded-xl border border-border bg-card">
+        <Card className="divide-y divide-border">
           {rows.map((row) => {
             const Icon = MODE_ICONS[row.mode] ?? Hash;
             return (
@@ -52,14 +49,18 @@ export default function HistoryPage() {
                 <Icon className="h-4 w-4 text-muted-foreground shrink-0" strokeWidth={1.5} />
                 <span className="font-mono text-lg tabular-nums text-foreground">{formatNumber(row.value)}</span>
                 <div className="flex-1 min-w-0 text-xs text-muted-foreground">
-                  <span className="font-mono">[{formatNumber(row.min)}, {formatNumber(row.max)}]</span>
+                  {row.min != null && row.max != null ? (
+                    <span className="font-mono">[{formatNumber(row.min)}, {formatNumber(row.max)}]</span>
+                  ) : (
+                    <span>Legacy roll</span>
+                  )}
                   {' · '}{row.mode}
                 </div>
                 <span className="text-xs text-muted-foreground shrink-0">{relativeTime(row.at)}</span>
               </div>
             );
           })}
-        </div>
+        </Card>
       )}
     </main>
   );

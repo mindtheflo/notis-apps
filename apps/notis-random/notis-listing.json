@@ -1,0 +1,107 @@
+{
+  "author": {
+    "name": "Notis"
+  },
+  "categories": [
+    "Personal",
+    "Productivity"
+  ],
+  "category": "Personal",
+  "changelog": {
+    "entries": [
+      {
+        "body": "- Keeps empty and negative range drafts intact until they form a valid number.",
+        "date": "2026-07-29",
+        "title": "Reliable Range Editing"
+      },
+      {
+        "body": "- Added integer, decimal, and d4\u2013d20 dice modes with live bounds validation.\n- Added a complete roll history with reliable saving and in-app navigation.\n- Refreshed the generator with native Notis controls and light and dark Store media.",
+        "date": "2026-07-29",
+        "title": "Generator modes and history"
+      },
+      {
+        "body": "- Generated random numbers with configurable bounds and saved recent rolls.",
+        "date": "2026-04-23",
+        "title": "Initial Release"
+      }
+    ],
+    "source_path": "CHANGELOG.md"
+  },
+  "description": "Draw a fair random number and keep every result. Pick whole numbers over any range, a continuous decimal range, or a standard polyhedral die from d4 to d20. Each draw uses the browser crypto source with rejection sampling, so every outcome is equally likely, and every roll is saved with the bounds it used so you can look back at the full history.",
+  "install_snapshot": {
+    "bundled_automations": [],
+    "bundled_skills": [],
+    "databases": [
+      {
+        "content_type": "markdown",
+        "id": "050bbf94-8457-4091-a312-9b6b3e75d9b7",
+        "name": "Rolls",
+        "original_fields": {
+          "coercion_version": 1,
+          "properties": {
+            "value": {
+              "config": {},
+              "description": "",
+              "id": "value",
+              "kind": "title",
+              "name": "Value",
+              "order": 0,
+              "storage_family": "textish",
+              "type": "title"
+            }
+          },
+          "property_order": [
+            "value"
+          ],
+          "schema_version": 1,
+          "title_property_id": "value",
+          "value_encoding_version": 1
+        },
+        "slug": "rolls",
+        "sort_order": 0,
+        "successful_documents": 0,
+        "total_documents": 0,
+        "upsert": true
+      }
+    ],
+    "documents": []
+  },
+  "name": "Random Number Generator",
+  "screenshots": [
+    {
+      "alt": "Random number generator showing the result dial, mode picker for integer, decimal, and dice, the range inputs, and recent rolls.",
+      "path": "screenshots/01.png",
+      "source_path": "metadata/screenshot-1.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The generator in dark mode with the integer range set from 1 to 100 and a list of recent rolls.",
+      "path": "screenshots/02.png",
+      "source_path": "metadata/screenshot-2.png",
+      "theme": "dark"
+    },
+    {
+      "alt": "Dice mode selected with a twenty-sided die chosen and a fresh roll shown on the dial.",
+      "path": "screenshots/03.png",
+      "source_path": "metadata/screenshot-3.png",
+      "theme": "light"
+    },
+    {
+      "alt": "Roll history listing every past draw with its value, mode, bounds, and how long ago it was rolled.",
+      "path": "screenshots/04.png",
+      "source_path": "metadata/screenshot-4.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The same roll history in dark mode.",
+      "path": "screenshots/05.png",
+      "source_path": "metadata/screenshot-5.png",
+      "theme": "dark"
+    }
+  ],
+  "source_app_id": "201c5b62-a75b-46cb-aa24-723bc8e83f3b",
+  "source_version": 3,
+  "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
+  "tagline": "Fair random numbers, with every roll kept.",
+  "version_notes": "- Keeps empty and negative range drafts intact until they form a valid number."
+}
