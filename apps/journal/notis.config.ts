@@ -10,8 +10,6 @@ export default defineNotisApp({
   author: { name: 'Florian (Flo) Pariset' },
   categories: ['Personal', 'Productivity'],
   tagline: 'Five intentional minutes with Notis, split between morning and evening.',
-  versionNotes:
-    'Restores the Store publisher attribution to Florian (Flo) Pariset while retaining the corrected light and dark screenshots.',
   screenshots: [
     {
       path: 'metadata/screenshot-1.png',

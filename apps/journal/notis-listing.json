@@ -7,6 +7,41 @@
     "Productivity"
   ],
   "category": "Personal",
+  "changelog": {
+    "entries": [
+      {
+        "body": "- Announces the selected journal day to assistive technology while preserving the visual timeline.",
+        "date": "2026-07-29",
+        "title": "Accessible Timeline Selection"
+      },
+      {
+        "body": "- Added complete package release history to App Details.\n- Refreshed the light and dark Store screenshots for the latest release.",
+        "date": "2026-07-17",
+        "title": "Package Details and History"
+      },
+      {
+        "body": "- Shows Florian (Flo) Pariset as the Store publisher.",
+        "date": "2026-07-16",
+        "title": "Publisher Attribution"
+      },
+      {
+        "body": "- Added matching light and dark screenshots with the shared deep-blue background.\n- Removed the screenshot shadow and white edge artifacts.",
+        "date": "2026-07-16",
+        "title": "Theme-Aware Store Screenshots"
+      },
+      {
+        "body": "- Renamed Journal to 5 Minutes Journal.\n- Added focused morning and evening check-in views plus mood, energy, motivation, ritual-consistency, and gratitude statistics.\n- Added guided onboarding for the morning and evening check-in routine.",
+        "date": "2026-07-16",
+        "title": "5 Minutes Journal Redesign"
+      },
+      {
+        "body": "- Added a browse-first Journal experience powered by entries created through conversations with Notis.",
+        "date": "2026-07-14",
+        "title": "Initial Journal"
+      }
+    ],
+    "source_path": "CHANGELOG.md"
+  },
   "description": "A display-only five-minute journal built from your morning and evening check-ins with Notis. Browse daily mood, energy, motivation, gratitude, intentions, affirmations, highlights, lessons, and free-form reflections, then use Stats to see trends and ritual consistency over time.",
   "name": "5 Minutes Journal",
   "screenshots": [
@@ -48,8 +83,8 @@
     }
   ],
   "source_app_id": "4f86c9aa-8dc8-42bb-8e0a-8eaeba9ec4dd",
-  "source_version": 13,
+  "source_version": 18,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "Five intentional minutes with Notis, split between morning and evening.",
-  "version_notes": "Restores the Store publisher attribution to Florian (Flo) Pariset while retaining the corrected light and dark screenshots."
+  "version_notes": "- Announces the selected journal day to assistive technology while preserving the visual timeline."
 }
