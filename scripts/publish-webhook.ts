@@ -270,6 +270,7 @@ const payload = {
   submitted_by_notis_user_id: listing.submitted_by_notis_user_id,
   source_app_id: listing.source_app_id,
   source_version: listing.source_version,
+  install_snapshot: listing.install_snapshot,
   published_at: publishedAt,
   published_by: listing.submitted_by_notis_user_id ?? 'ci',
   timestamp: Math.floor(Date.now() / 1000),
