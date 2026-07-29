@@ -18,6 +18,88 @@
     "source_path": "CHANGELOG.md"
   },
   "description": "A home for every note Notis captures. Organise them into a nested folder tree, then read them as a gallery of cards, as a sortable table of all their properties, or on a calendar laid out by due date or by when they were created. Rename, refile, and archive notes in bulk, and create a new one without leaving the view.",
+  "install_snapshot": {
+    "bundled_automations": [],
+    "bundled_skills": [],
+    "databases": [
+      {
+        "content_type": "markdown",
+        "id": "cb55c6ff-3d78-4680-bd8b-e56f73bc80e1",
+        "name": "Note Folders",
+        "original_fields": {
+          "coercion_version": 1,
+          "properties": {
+            "name": {
+              "config": {},
+              "description": "",
+              "id": "name",
+              "kind": "title",
+              "name": "Name",
+              "order": 0,
+              "storage_family": "textish",
+              "type": "title"
+            },
+            "parent": {
+              "config": {
+                "database_id": "cb55c6ff-3d78-4680-bd8b-e56f73bc80e1"
+              },
+              "description": "",
+              "id": "parent",
+              "kind": "relation",
+              "name": "Parent",
+              "order": 1,
+              "storage_family": "refs",
+              "type": "relation"
+            }
+          },
+          "property_order": [
+            "name",
+            "parent"
+          ],
+          "schema_version": 1,
+          "title_property_id": "name",
+          "value_encoding_version": 1
+        },
+        "slug": "note_folders",
+        "sort_order": 0,
+        "successful_documents": 0,
+        "total_documents": 0,
+        "upsert": true
+      },
+      {
+        "content_type": "markdown",
+        "id": "5a61b91b-2eae-4968-b33e-c924bc552543",
+        "name": "Notes",
+        "original_fields": {
+          "coercion_version": 1,
+          "properties": {
+            "title": {
+              "config": {},
+              "description": "",
+              "id": "title",
+              "kind": "title",
+              "name": "Title",
+              "order": 0,
+              "storage_family": "textish",
+              "type": "title"
+            }
+          },
+          "property_order": [
+            "title"
+          ],
+          "schema_version": 1,
+          "title_property_id": "title",
+          "value_encoding_version": 1
+        },
+        "slug": "notes",
+        "sort_order": 1,
+        "successful_documents": 0,
+        "total_documents": 0,
+        "upsert": true
+      }
+    ],
+    "documents": []
+  },
   "name": "Notis Notes",
   "screenshots": [
     {
