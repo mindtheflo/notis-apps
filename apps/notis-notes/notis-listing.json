@@ -1,0 +1,141 @@
+{
+  "author": {
+    "name": "Notis"
+  },
+  "categories": [
+    "Productivity",
+    "Personal"
+  ],
+  "category": "Productivity",
+  "changelog": {
+    "entries": [
+      {
+        "body": "- First Store release.",
+        "date": "{PR_MERGE_DATE}",
+        "title": "Initial Release"
+      }
+    ],
+    "source_path": "CHANGELOG.md"
+  },
+  "description": "A home for every note Notis captures. Organise them into a nested folder tree, then read them as a gallery of cards, as a sortable table of all their properties, or on a calendar laid out by due date or by when they were created. Rename, refile, and archive notes in bulk, and create a new one without leaving the view.",
+  "install_snapshot": {
+    "bundled_automations": [],
+    "bundled_skills": [],
+    "databases": [
+      {
+        "content_type": "markdown",
+        "id": "cb55c6ff-3d78-4680-bd8b-e56f73bc80e1",
+        "name": "Note Folders",
+        "original_fields": {
+          "coercion_version": 1,
+          "properties": {
+            "name": {
+              "config": {},
+              "description": "",
+              "id": "name",
+              "kind": "title",
+              "name": "Name",
+              "order": 0,
+              "storage_family": "textish",
+              "type": "title"
+            },
+            "parent": {
+              "config": {
+                "database_id": "cb55c6ff-3d78-4680-bd8b-e56f73bc80e1"
+              },
+              "description": "",
+              "id": "parent",
+              "kind": "relation",
+              "name": "Parent",
+              "order": 1,
+              "storage_family": "refs",
+              "type": "relation"
+            }
+          },
+          "property_order": [
+            "name",
+            "parent"
+          ],
+          "schema_version": 1,
+          "title_property_id": "name",
+          "value_encoding_version": 1
+        },
+        "slug": "note_folders",
+        "sort_order": 0,
+        "successful_documents": 0,
+        "total_documents": 0,
+        "upsert": true
+      },
+      {
+        "content_type": "markdown",
+        "id": "5a61b91b-2eae-4968-b33e-c924bc552543",
+        "name": "Notes",
+        "original_fields": {
+          "coercion_version": 1,
+          "properties": {
+            "title": {
+              "config": {},
+              "description": "",
+              "id": "title",
+              "kind": "title",
+              "name": "Title",
+              "order": 0,
+              "storage_family": "textish",
+              "type": "title"
+            }
+          },
+          "property_order": [
+            "title"
+          ],
+          "schema_version": 1,
+          "title_property_id": "title",
+          "value_encoding_version": 1
+        },
+        "slug": "notes",
+        "sort_order": 1,
+        "successful_documents": 0,
+        "total_documents": 0,
+        "upsert": true
+      }
+    ],
+    "documents": []
+  },
+  "name": "Notis Notes",
+  "screenshots": [
+    {
+      "alt": "Notes gallery showing cards for each note with its folder, status, and a preview of the text.",
+      "path": "screenshots/01.png",
+      "source_path": "metadata/screenshot-1.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The same notes gallery in dark mode.",
+      "path": "screenshots/02.png",
+      "source_path": "metadata/screenshot-2.png",
+      "theme": "dark"
+    },
+    {
+      "alt": "Table view listing every note with its folder, status, and due date in sortable columns.",
+      "path": "screenshots/03.png",
+      "source_path": "metadata/screenshot-3.png",
+      "theme": "light"
+    },
+    {
+      "alt": "Calendar view placing notes on the month grid, with a picker to lay them out by created date or by any date property.",
+      "path": "screenshots/04.png",
+      "source_path": "metadata/screenshot-4.png",
+      "theme": "light"
+    },
+    {
+      "alt": "The notes calendar in dark mode with notes spread across the month and today highlighted.",
+      "path": "screenshots/05.png",
+      "source_path": "metadata/screenshot-5.png",
+      "theme": "dark"
+    }
+  ],
+  "source_app_id": "e7e6cd21-6379-4585-8d9d-da117b5b1573",
+  "source_version": 2,
+  "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
+  "tagline": "Folder-based notes with gallery, table, and calendar views.",
+  "version_notes": "- First Store release."
+}
