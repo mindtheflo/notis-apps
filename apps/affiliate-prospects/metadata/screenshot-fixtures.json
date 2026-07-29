@@ -1,0 +1,187 @@
+{
+  "tools": {
+    "LOCAL_NOTIS_DATABASE_QUERY": {
+      "documents": [
+        {
+          "id": "demo-alex",
+          "title": "Alex Morgan",
+          "properties": {
+            "Name": "Alex Morgan",
+            "Company": "FlowNorth",
+            "Segment": "Automation Agency",
+            "Status": "Interested",
+            "Priority": "P0",
+            "Fit Score": 94,
+            "Email": "alex@flownorth.example",
+            "LinkedIn": "https://linkedin.com/in/alex-morgan",
+            "Source": "Zapier Solution Partner Directory",
+            "Audience Size": 8200,
+            "Monthly Traffic": 14000,
+            "Next Action": "Send partner economics one-pager",
+            "Next Action Date": "2026-07-24"
+          }
+        },
+        {
+          "id": "demo-maya",
+          "title": "Maya Chen",
+          "properties": {
+            "Name": "Maya Chen",
+            "Company": "Agent Ops Weekly",
+            "Segment": "AI Creator",
+            "Status": "Replied",
+            "Priority": "P0",
+            "Fit Score": 91,
+            "Email": "maya@agentopsweekly.example",
+            "LinkedIn": "https://linkedin.com/in/maya-chen",
+            "Source": "Newsletter discovery",
+            "Audience Size": 38000,
+            "Monthly Traffic": 22000,
+            "Next Action": "Share creator demo kit",
+            "Next Action Date": "2026-07-24"
+          }
+        },
+        {
+          "id": "demo-noah",
+          "title": "Noah Williams",
+          "properties": {
+            "Name": "Noah Williams",
+            "Company": "Automate Better",
+            "Segment": "SEO Publisher",
+            "Status": "Ready for Outreach",
+            "Priority": "P1",
+            "Fit Score": 88,
+            "Email": "noah@automatebetter.example",
+            "Website": "https://automatebetter.example",
+            "Source": "DataForSEO: Zapier alternatives",
+            "Monthly Traffic": 76000,
+            "Next Action": "Approve comparison-page pitch",
+            "Next Action Date": "2026-07-25"
+          }
+        },
+        {
+          "id": "demo-sofia",
+          "title": "Sofia Rossi",
+          "properties": {
+            "Name": "Sofia Rossi",
+            "Company": "RevOps Circle",
+            "Segment": "Community Educator",
+            "Status": "Qualified",
+            "Priority": "P1",
+            "Fit Score": 86,
+            "LinkedIn": "https://linkedin.com/in/sofia-rossi",
+            "Source": "Community operator list",
+            "Audience Size": 14500,
+            "Next Action": "Enrich sponsor history",
+            "Next Action Date": "2026-07-25"
+          }
+        },
+        {
+          "id": "demo-theo",
+          "title": "Theo Martin",
+          "properties": {
+            "Name": "Theo Martin",
+            "Company": "Notis customer",
+            "Segment": "Customer Advocate",
+            "Status": "Activated",
+            "Priority": "P0",
+            "Fit Score": 97,
+            "Source": "Rewardful + product usage",
+            "Referred Signups": 19,
+            "Activated Referrals": 7,
+            "Attributed MRR": 1680
+          }
+        },
+        {
+          "id": "demo-lena",
+          "title": "Lena Fischer",
+          "properties": {
+            "Name": "Lena Fischer",
+            "Company": "StackPilot",
+            "Segment": "Integration Partner",
+            "Status": "Applied",
+            "Priority": "P0",
+            "Fit Score": 92,
+            "Email": "lena@stackpilot.example",
+            "LinkedIn": "https://linkedin.com/in/lena-fischer",
+            "Source": "Integration overlap analysis",
+            "Audience Size": 21000,
+            "Monthly Traffic": 41000,
+            "Next Action": "Confirm co-marketing launch date",
+            "Next Action Date": "2026-07-28"
+          }
+        },
+        {
+          "id": "demo-sam",
+          "title": "Sam Patel",
+          "properties": {
+            "Name": "Sam Patel",
+            "Company": "SaaS Growth Lab",
+            "Segment": "Affiliate Marketplace",
+            "Status": "Contacted",
+            "Priority": "P1",
+            "Fit Score": 82,
+            "Email": "sam@saasgrowthlab.example",
+            "Source": "PartnerStack marketplace",
+            "Audience Size": 18000,
+            "Monthly Traffic": 33000,
+            "Next Action": "Follow up with use-case proof",
+            "Next Action Date": "2026-07-27"
+          }
+        },
+        {
+          "id": "demo-jordan",
+          "title": "Jordan Lee",
+          "properties": {
+            "Name": "Jordan Lee",
+            "Company": "OpsCraft",
+            "Segment": "Automation Agency",
+            "Status": "Qualified",
+            "Priority": "P1",
+            "Fit Score": 84,
+            "Email": "jordan@opscraft.example",
+            "LinkedIn": "https://linkedin.com/in/jordan-lee",
+            "Source": "Make Partner Directory",
+            "Audience Size": 5400,
+            "Next Action": "Review recent client verticals",
+            "Next Action Date": "2026-07-25"
+          }
+        },
+        {
+          "id": "demo-camille",
+          "title": "Camille Laurent",
+          "properties": {
+            "Name": "Camille Laurent",
+            "Company": "Productive AI",
+            "Segment": "SEO Publisher",
+            "Status": "Activated",
+            "Priority": "P0",
+            "Fit Score": 90,
+            "Email": "camille@productiveai.example",
+            "Website": "https://productiveai.example",
+            "Source": "DataForSEO: AI automation tools",
+            "Monthly Traffic": 92000,
+            "Referred Signups": 31,
+            "Activated Referrals": 11,
+            "Attributed MRR": 2940
+          }
+        },
+        {
+          "id": "demo-owen",
+          "title": "Owen King",
+          "properties": {
+            "Name": "Owen King",
+            "Company": "Notis customer",
+            "Segment": "Customer Advocate",
+            "Status": "Contacted",
+            "Priority": "P1",
+            "Fit Score": 80,
+            "Email": "owen@example.com",
+            "Source": "Product usage: 25 successful workflows",
+            "Next Action": "Invite to advocate cohort",
+            "Next Action Date": "2026-07-26"
+          }
+        }
+      ]
+    }
+  }
+}

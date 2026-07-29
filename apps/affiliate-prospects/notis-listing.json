@@ -1,0 +1,47 @@
+{
+  "author": {
+    "name": "Florian (Flo) Pariset"
+  },
+  "categories": [
+    "Sales & Marketing",
+    "Operations"
+  ],
+  "category": "Sales & Marketing",
+  "changelog": {
+    "entries": [
+      {
+        "body": "- Added the campaign dashboard, measurable affiliate pipeline, and priority queue.\n- Added responsive prospect and segment views.\n- Added local fixtures for every recruiting segment so the app can be tested before installation.",
+        "date": "2026-07-23",
+        "title": "Affiliate recruiting control center"
+      }
+    ],
+    "source_path": "CHANGELOG.md"
+  },
+  "description": "A campaign control center for sourcing, qualifying, contacting, and activating high-fit Notis affiliates.",
+  "name": "Affiliate Prospects",
+  "screenshots": [
+    {
+      "alt": "Affiliate campaign dashboard with pipeline, priority queue, and segment performance.",
+      "path": "screenshots/01.png",
+      "source_path": "metadata/screenshot-1.png",
+      "theme": "light"
+    },
+    {
+      "alt": "Affiliate prospect list with status, segment, fit score, source, and next action.",
+      "path": "screenshots/02.png",
+      "source_path": "metadata/screenshot-2.png",
+      "theme": "light"
+    },
+    {
+      "alt": "Affiliate segment scorecards showing campaign progress and sourcing playbooks.",
+      "path": "screenshots/03.png",
+      "source_path": "metadata/screenshot-3.png",
+      "theme": "dark"
+    }
+  ],
+  "source_app_id": "9f763b15-d015-43ec-9230-42594c6157ae",
+  "source_version": 3,
+  "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
+  "tagline": "Turn affiliate recruiting into a measurable, repeatable pipeline.",
+  "version_notes": "- Added the campaign dashboard, measurable affiliate pipeline, and priority queue.\n- Added responsive prospect and segment views.\n- Added local fixtures for every recruiting segment so the app can be tested before installation."
+}

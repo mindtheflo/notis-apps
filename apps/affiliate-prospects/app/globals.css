@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.affiliate-app-shell {
+  container-type: inline-size;
+  padding: clamp(1rem, 2.5cqi, 2rem);
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.affiliate-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+}
+
+.affiliate-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@container (min-width: 940px) {
+  .affiliate-dashboard-grid {
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
+  }
+}
+
+.affiliate-data-table {
+  min-width: 900px;
+}
+
+@media (max-width: 767px) {
+  .affiliate-desktop-table {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .affiliate-mobile-cards {
+    display: none;
+  }
+}
