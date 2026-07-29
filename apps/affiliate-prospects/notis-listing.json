@@ -18,6 +18,606 @@
     "source_path": "CHANGELOG.md"
   },
   "description": "A campaign control center for sourcing, qualifying, contacting, and activating high-fit Notis affiliates.",
+  "install_snapshot": {
+    "bundled_automations": [],
+    "bundled_skills": [],
+    "databases": [
+      {
+        "content_type": "markdown",
+        "description": "Qualified affiliate recruiting leads, suppression decisions, outreach state, and attributed outcomes.",
+        "icon": "\ud83c\udfaf",
+        "id": "9612125f-617f-493d-b1bf-9d4f253ace30",
+        "name": "Affiliate Prospects",
+        "original_fields": {
+          "coercion_version": 1,
+          "properties": {
+            "prop_01d15ba1e9ff": {
+              "config": {},
+              "description": "",
+              "id": "prop_01d15ba1e9ff",
+              "kind": "checkbox",
+              "name": "Notis User Match",
+              "order": 28,
+              "storage_family": "boolean"
+            },
+            "prop_0f755d86c0e1": {
+              "config": {},
+              "description": "",
+              "id": "prop_0f755d86c0e1",
+              "kind": "url",
+              "name": "LinkedIn",
+              "order": 7,
+              "storage_family": "textish"
+            },
+            "prop_11cc78ad1ce1": {
+              "config": {
+                "format": "dollar"
+              },
+              "description": "",
+              "id": "prop_11cc78ad1ce1",
+              "kind": "number",
+              "name": "Attributed MRR",
+              "order": 25,
+              "storage_family": "textish"
+            },
+            "prop_12b063007c4d": {
+              "config": {},
+              "description": "",
+              "id": "prop_12b063007c4d",
+              "kind": "number",
+              "name": "Monthly Traffic",
+              "order": 14,
+              "storage_family": "textish"
+            },
+            "prop_198fb6734329": {
+              "config": {},
+              "description": "",
+              "id": "prop_198fb6734329",
+              "kind": "rich_text",
+              "name": "Notes",
+              "order": 26,
+              "storage_family": "textish"
+            },
+            "prop_19dbba00497f": {
+              "config": {},
+              "description": "",
+              "id": "prop_19dbba00497f",
+              "kind": "number",
+              "name": "Fit Score",
+              "order": 5,
+              "storage_family": "textish"
+            },
+            "prop_26a3de285371": {
+              "config": {},
+              "description": "",
+              "id": "prop_26a3de285371",
+              "kind": "number",
+              "name": "Audience Size",
+              "order": 13,
+              "storage_family": "textish"
+            },
+            "prop_271a1ebc0015": {
+              "config": {},
+              "description": "",
+              "id": "prop_271a1ebc0015",
+              "kind": "rich_text",
+              "name": "Country",
+              "order": 9,
+              "storage_family": "textish"
+            },
+            "prop_28d267738074": {
+              "config": {},
+              "description": "",
+              "id": "prop_28d267738074",
+              "kind": "date",
+              "name": "Next Action Date",
+              "order": 19,
+              "storage_family": "date_range"
+            },
+            "prop_293ac72cfe8c": {
+              "config": {},
+              "description": "",
+              "id": "prop_293ac72cfe8c",
+              "kind": "rich_text",
+              "name": "Rewardful Affiliate ID",
+              "order": 22,
+              "storage_family": "textish"
+            },
+            "prop_2c00620b463e": {
+              "config": {},
+              "description": "",
+              "id": "prop_2c00620b463e",
+              "kind": "rich_text",
+              "name": "Exclusion Reason",
+              "order": 30,
+              "storage_family": "textish"
+            },
+            "prop_3827daedfee2": {
+              "config": {
+                "option_order": [
+                  "opt_fc9742eb382d",
+                  "opt_2059a738efb5",
+                  "opt_f427301c3d1f",
+                  "opt_398614d05075",
+                  "opt_4f7e56ef4bec",
+                  "opt_126e17dcaced",
+                  "opt_6e0d450c698e"
+                ],
+                "options": {
+                  "opt_126e17dcaced": {
+                    "color": "default",
+                    "id": "opt_126e17dcaced",
+                    "label": "Community educators",
+                    "order": 5
+                  },
+                  "opt_2059a738efb5": {
+                    "color": "default",
+                    "id": "opt_2059a738efb5",
+                    "label": "Automation agencies",
+                    "order": 1
+                  },
+                  "opt_398614d05075": {
+                    "color": "default",
+                    "id": "opt_398614d05075",
+                    "label": "SEO publishers",
+                    "order": 3
+                  },
+                  "opt_4f7e56ef4bec": {
+                    "color": "default",
+                    "id": "opt_4f7e56ef4bec",
+                    "label": "Integration partners",
+                    "order": 4
+                  },
+                  "opt_6e0d450c698e": {
+                    "color": "default",
+                    "id": "opt_6e0d450c698e",
+                    "label": "Affiliate marketplaces",
+                    "order": 6
+                  },
+                  "opt_f427301c3d1f": {
+                    "color": "default",
+                    "id": "opt_f427301c3d1f",
+                    "label": "AI creators",
+                    "order": 2
+                  },
+                  "opt_fc9742eb382d": {
+                    "color": "default",
+                    "id": "opt_fc9742eb382d",
+                    "label": "Customer advocates",
+                    "order": 0
+                  }
+                }
+              },
+              "description": "",
+              "id": "prop_3827daedfee2",
+              "kind": "select",
+              "name": "Segment",
+              "order": 2,
+              "storage_family": "choice_set"
+            },
+            "prop_3f33271040f5": {
+              "config": {},
+              "description": "",
+              "id": "prop_3f33271040f5",
+              "kind": "number",
+              "name": "Referred Signups",
+              "order": 23,
+              "storage_family": "textish"
+            },
+            "prop_44bafdc8204e": {
+              "config": {},
+              "description": "",
+              "id": "prop_44bafdc8204e",
+              "kind": "rich_text",
+              "name": "Superhuman Thread ID",
+              "order": 21,
+              "storage_family": "textish"
+            },
+            "prop_54c662dcc878": {
+              "config": {},
+              "description": "",
+              "id": "prop_54c662dcc878",
+              "kind": "date",
+              "name": "Last Touch Date",
+              "order": 17,
+              "storage_family": "date_range"
+            },
+            "prop_5c11d2d2db37": {
+              "config": {},
+              "description": "",
+              "id": "prop_5c11d2d2db37",
+              "kind": "number",
+              "name": "Activated Referrals",
+              "order": 24,
+              "storage_family": "textish"
+            },
+            "prop_65044e770830": {
+              "config": {},
+              "description": "",
+              "id": "prop_65044e770830",
+              "kind": "url",
+              "name": "Source URL",
+              "order": 12,
+              "storage_family": "textish"
+            },
+            "prop_6ae999552a0d": {
+              "config": {},
+              "description": "",
+              "id": "prop_6ae999552a0d",
+              "kind": "title",
+              "name": "Name",
+              "order": 0,
+              "storage_family": "textish"
+            },
+            "prop_713c3f048d7a": {
+              "config": {},
+              "description": "",
+              "id": "prop_713c3f048d7a",
+              "kind": "checkbox",
+              "name": "Opted Out",
+              "order": 27,
+              "storage_family": "boolean"
+            },
+            "prop_756e2f51d720": {
+              "config": {},
+              "description": "",
+              "id": "prop_756e2f51d720",
+              "kind": "rich_text",
+              "name": "Dedupe Key",
+              "order": 31,
+              "storage_family": "textish"
+            },
+            "prop_75c10b2a32ac": {
+              "config": {},
+              "description": "",
+              "id": "prop_75c10b2a32ac",
+              "kind": "rich_text",
+              "name": "HeyReach Campaign ID",
+              "order": 20,
+              "storage_family": "textish"
+            },
+            "prop_7d9fda7a260a": {
+              "config": {},
+              "description": "",
+              "id": "prop_7d9fda7a260a",
+              "kind": "url",
+              "name": "Website",
+              "order": 8,
+              "storage_family": "textish"
+            },
+            "prop_8f01adfb4b50": {
+              "config": {
+                "option_order": [
+                  "opt_dc541f5413a1",
+                  "opt_0a262a152726",
+                  "opt_8c253fb79ce8",
+                  "opt_a38bd490b02c"
+                ],
+                "options": {
+                  "opt_0a262a152726": {
+                    "color": "default",
+                    "id": "opt_0a262a152726",
+                    "label": "P1",
+                    "order": 1
+                  },
+                  "opt_8c253fb79ce8": {
+                    "color": "default",
+                    "id": "opt_8c253fb79ce8",
+                    "label": "P2",
+                    "order": 2
+                  },
+                  "opt_a38bd490b02c": {
+                    "color": "default",
+                    "id": "opt_a38bd490b02c",
+                    "label": "P3",
+                    "order": 3
+                  },
+                  "opt_dc541f5413a1": {
+                    "color": "default",
+                    "id": "opt_dc541f5413a1",
+                    "label": "P0",
+                    "order": 0
+                  }
+                }
+              },
+              "description": "",
+              "id": "prop_8f01adfb4b50",
+              "kind": "select",
+              "name": "Priority",
+              "order": 4,
+              "storage_family": "choice_set"
+            },
+            "prop_937c5fd049c4": {
+              "config": {},
+              "description": "",
+              "id": "prop_937c5fd049c4",
+              "kind": "rich_text",
+              "name": "Next Action",
+              "order": 18,
+              "storage_family": "textish"
+            },
+            "prop_957cfc822727": {
+              "config": {},
+              "description": "",
+              "id": "prop_957cfc822727",
+              "kind": "checkbox",
+              "name": "Automation Excluded",
+              "order": 29,
+              "storage_family": "boolean"
+            },
+            "prop_9758e634642b": {
+              "config": {
+                "option_order": [
+                  "opt_9887842f0c07",
+                  "opt_b87a3e8eb101",
+                  "opt_cf1b92ed7d9e",
+                  "opt_f785a3c2018e",
+                  "opt_69abcd95dd2e"
+                ],
+                "options": {
+                  "opt_69abcd95dd2e": {
+                    "color": "default",
+                    "id": "opt_69abcd95dd2e",
+                    "label": "Unavailable",
+                    "order": 4
+                  },
+                  "opt_9887842f0c07": {
+                    "color": "default",
+                    "id": "opt_9887842f0c07",
+                    "label": "Not started",
+                    "order": 0
+                  },
+                  "opt_b87a3e8eb101": {
+                    "color": "default",
+                    "id": "opt_b87a3e8eb101",
+                    "label": "Pending",
+                    "order": 1
+                  },
+                  "opt_cf1b92ed7d9e": {
+                    "color": "default",
+                    "id": "opt_cf1b92ed7d9e",
+                    "label": "Verified",
+                    "order": 2
+                  },
+                  "opt_f785a3c2018e": {
+                    "color": "default",
+                    "id": "opt_f785a3c2018e",
+                    "label": "Risky",
+                    "order": 3
+                  }
+                }
+              },
+              "description": "",
+              "id": "prop_9758e634642b",
+              "kind": "select",
+              "name": "Enrichment Status",
+              "order": 15,
+              "storage_family": "choice_set"
+            },
+            "prop_ae300b0db896": {
+              "config": {},
+              "description": "",
+              "id": "prop_ae300b0db896",
+              "kind": "rich_text",
+              "name": "Language",
+              "order": 10,
+              "storage_family": "textish"
+            },
+            "prop_b6b874d63c2f": {
+              "config": {
+                "option_order": [
+                  "opt_5fa028f9491b",
+                  "opt_cfbd36e06473",
+                  "opt_63534a666d66",
+                  "opt_bdb160f3c206",
+                  "opt_201c6d6b09eb"
+                ],
+                "options": {
+                  "opt_201c6d6b09eb": {
+                    "color": "default",
+                    "id": "opt_201c6d6b09eb",
+                    "label": "Partner",
+                    "order": 4
+                  },
+                  "opt_5fa028f9491b": {
+                    "color": "default",
+                    "id": "opt_5fa028f9491b",
+                    "label": "Email",
+                    "order": 0
+                  },
+                  "opt_63534a666d66": {
+                    "color": "default",
+                    "id": "opt_63534a666d66",
+                    "label": "Warm intro",
+                    "order": 2
+                  },
+                  "opt_bdb160f3c206": {
+                    "color": "default",
+                    "id": "opt_bdb160f3c206",
+                    "label": "Community",
+                    "order": 3
+                  },
+                  "opt_cfbd36e06473": {
+                    "color": "default",
+                    "id": "opt_cfbd36e06473",
+                    "label": "LinkedIn",
+                    "order": 1
+                  }
+                }
+              },
+              "description": "",
+              "id": "prop_b6b874d63c2f",
+              "kind": "multi_select",
+              "name": "Outreach Channel",
+              "order": 16,
+              "storage_family": "choice_set"
+            },
+            "prop_b759111ab130": {
+              "config": {},
+              "description": "",
+              "id": "prop_b759111ab130",
+              "kind": "email",
+              "name": "Email",
+              "order": 6,
+              "storage_family": "textish"
+            },
+            "prop_bb53ba699185": {
+              "config": {},
+              "description": "",
+              "id": "prop_bb53ba699185",
+              "kind": "rich_text",
+              "name": "Company",
+              "order": 1,
+              "storage_family": "textish"
+            },
+            "prop_d8f8b5885ea2": {
+              "config": {},
+              "description": "",
+              "id": "prop_d8f8b5885ea2",
+              "kind": "rich_text",
+              "name": "Source",
+              "order": 11,
+              "storage_family": "textish"
+            },
+            "prop_fb74acb1f762": {
+              "config": {
+                "option_order": [
+                  "opt_d3d01286d8e4",
+                  "opt_4eafb9795d97",
+                  "opt_336d5da35a44",
+                  "opt_db3e6041e742",
+                  "opt_c163c830d157",
+                  "opt_01c6f59e6cbe",
+                  "opt_a0f5022bb67e",
+                  "opt_983defa0b313",
+                  "opt_4138a85c3d2a",
+                  "opt_f1d5be81f69e",
+                  "opt_856c7c90d164"
+                ],
+                "options": {
+                  "opt_01c6f59e6cbe": {
+                    "color": "default",
+                    "id": "opt_01c6f59e6cbe",
+                    "label": "Replied",
+                    "order": 5
+                  },
+                  "opt_336d5da35a44": {
+                    "color": "default",
+                    "id": "opt_336d5da35a44",
+                    "label": "Qualified",
+                    "order": 2
+                  },
+                  "opt_4138a85c3d2a": {
+                    "color": "default",
+                    "id": "opt_4138a85c3d2a",
+                    "label": "Activated",
+                    "order": 8
+                  },
+                  "opt_4eafb9795d97": {
+                    "color": "default",
+                    "id": "opt_4eafb9795d97",
+                    "label": "Researching",
+                    "order": 1
+                  },
+                  "opt_856c7c90d164": {
+                    "color": "default",
+                    "id": "opt_856c7c90d164",
+                    "label": "Disqualified",
+                    "order": 10
+                  },
+                  "opt_983defa0b313": {
+                    "color": "default",
+                    "id": "opt_983defa0b313",
+                    "label": "Applied",
+                    "order": 7
+                  },
+                  "opt_a0f5022bb67e": {
+                    "color": "default",
+                    "id": "opt_a0f5022bb67e",
+                    "label": "Interested",
+                    "order": 6
+                  },
+                  "opt_c163c830d157": {
+                    "color": "default",
+                    "id": "opt_c163c830d157",
+                    "label": "Contacted",
+                    "order": 4
+                  },
+                  "opt_d3d01286d8e4": {
+                    "color": "default",
+                    "id": "opt_d3d01286d8e4",
+                    "label": "New",
+                    "order": 0
+                  },
+                  "opt_db3e6041e742": {
+                    "color": "default",
+                    "id": "opt_db3e6041e742",
+                    "label": "Ready for Outreach",
+                    "order": 3
+                  },
+                  "opt_f1d5be81f69e": {
+                    "color": "default",
+                    "id": "opt_f1d5be81f69e",
+                    "label": "Nurture",
+                    "order": 9
+                  }
+                }
+              },
+              "description": "",
+              "id": "prop_fb74acb1f762",
+              "kind": "status",
+              "name": "Status",
+              "order": 3,
+              "storage_family": "choice_set"
+            }
+          },
+          "property_order": [
+            "prop_6ae999552a0d",
+            "prop_bb53ba699185",
+            "prop_3827daedfee2",
+            "prop_fb74acb1f762",
+            "prop_8f01adfb4b50",
+            "prop_19dbba00497f",
+            "prop_b759111ab130",
+            "prop_0f755d86c0e1",
+            "prop_7d9fda7a260a",
+            "prop_271a1ebc0015",
+            "prop_ae300b0db896",
+            "prop_d8f8b5885ea2",
+            "prop_65044e770830",
+            "prop_26a3de285371",
+            "prop_12b063007c4d",
+            "prop_9758e634642b",
+            "prop_b6b874d63c2f",
+            "prop_54c662dcc878",
+            "prop_937c5fd049c4",
+            "prop_28d267738074",
+            "prop_75c10b2a32ac",
+            "prop_44bafdc8204e",
+            "prop_293ac72cfe8c",
+            "prop_3f33271040f5",
+            "prop_5c11d2d2db37",
+            "prop_11cc78ad1ce1",
+            "prop_198fb6734329",
+            "prop_713c3f048d7a",
+            "prop_01d15ba1e9ff",
+            "prop_957cfc822727",
+            "prop_2c00620b463e",
+            "prop_756e2f51d720"
+          ],
+          "schema_version": 1,
+          "title_property_id": "prop_6ae999552a0d",
+          "value_encoding_version": 1
+        },
+        "slug": "affiliate_prospects_1",
+        "sort_order": 2,
+        "successful_documents": 0,
+        "total_documents": 0,
+        "upsert": true
+      }
+    ],
+    "documents": []
+  },
   "name": "Affiliate Prospects",
   "screenshots": [
     {
