@@ -10,7 +10,7 @@
  *   any=<"true"|"false">
  */
 import { execSync } from 'node:child_process';
-import { readdirSync, appendFileSync, statSync } from 'node:fs';
+import { readdirSync, appendFileSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 function parseArgs(argv: string[]) {
@@ -47,6 +47,10 @@ function listAllApps(): string[] {
   }
 }
 
+function appStillExists(slug: string): boolean {
+  return existsSync(join(process.cwd(), 'apps', slug, 'package.json'));
+}
+
 function changedAppsBetween(baseRef: string, headRef: string): string[] {
   const diff = execSync(`git diff --name-only ${baseRef} ${headRef} -- apps/`, {
     encoding: 'utf8',
@@ -56,7 +60,18 @@ function changedAppsBetween(baseRef: string, headRef: string): string[] {
     const match = /^apps\/([^/]+)\//.exec(line.trim());
     if (match && match[1]) slugs.add(match[1]);
   }
-  return [...slugs].sort();
+  // A removed app shows up in the diff but has nothing left to validate,
+  // build, or publish. Without this guard CI schedules a matrix job for a
+  // directory that no longer exists and fails on the install step.
+  const removed: string[] = [];
+  const present: string[] = [];
+  for (const slug of [...slugs].sort()) {
+    (appStillExists(slug) ? present : removed).push(slug);
+  }
+  if (removed.length > 0) {
+    console.error(`detect-changed-apps: skipping removed app(s): ${removed.join(', ')}`);
+  }
+  return present;
 }
 
 function writeOutput(outPath: string, apps: string[]) {
