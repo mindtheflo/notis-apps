@@ -56,8 +56,18 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/${{ matrix.app }}/package-lock.json
 
-      - run: npm ci
+      # Root install provides tsx for scripts/. Each app installs its own
+      # dependency tree; apps are independent and share no lockfile.
+      - name: Install repo tooling
+        run: npm ci
+
+      - name: Install app dependencies
+        run: npm ci
+        working-directory: apps/${{ matrix.app }}
 
       - name: Validate manifest
         run: npm run -s validate -- apps/${{ matrix.app }}
@@ -68,10 +78,12 @@ jobs:
           npm run -s check-semver -- apps/${{ matrix.app }} --base "$BASE_SHA"
 
       - name: Typecheck
-        run: npm run -s typecheck --workspace apps/${{ matrix.app }}
+        run: npm run -s typecheck
+        working-directory: apps/${{ matrix.app }}
 
       - name: Build bundle
-        run: npm run -s build --workspace apps/${{ matrix.app }}
+        run: npm run -s build
+        working-directory: apps/${{ matrix.app }}
 
       - name: Bundle size cap
         run: |
