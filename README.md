@@ -9,13 +9,14 @@ This repo works the same way Raycast's `raycast/extensions` repo does: merge to 
 ```
 notis-apps/
   apps/
-    <app-slug>/           # one folder per app
+    <app-slug>/           # one folder per app, fully self-contained
       package.json        # must declare "notisAppVersion": "x.y.z" (semver)
+      package-lock.json   # each app owns its dependency tree
+      packages/sdk/       # vendored @notis/sdk until it publishes to npm
       notis.config.ts     # app manifest
+      notis-listing.json  # Store listing (3-6 screenshots, each with alt text)
       src/
       README.md
-  packages/
-    notis-sdk/            # vendored @notis/sdk until it publishes to npm
   scripts/                # CI helpers (TypeScript, run via tsx)
   .github/
     CODEOWNERS
@@ -23,6 +24,11 @@ notis-apps/
       pr-validate.yml     # runs on PRs: typecheck, manifest validation, build, size cap
       merge-publish.yml   # runs on merge to main: builds, uploads bundle, fires webhook
 ```
+
+Apps are **independent packages**, not npm workspaces. Each one has its own
+lockfile and its own vendored copy of `@notis/sdk`, so a change to one app can
+never break the install of another. The root `package.json` exists only to
+provide `tsx` for `scripts/`.
 
 ## Submitting an app
 
@@ -38,11 +44,18 @@ notis-apps/
 
 ## Local development
 
+Install the repo tooling once, then work inside the app you are changing.
+
 ```bash
-npm install
-npm run typecheck:all
-npm run build:all
-npm run validate -- apps/<slug>
+npm ci                            # repo root: tsx for scripts/
+
+cd apps/<slug>
+npm ci
+npm run typecheck
+npm run build
+
+cd ../..
+npm run validate -- apps/<slug>    # manifest + Store listing checks
 ```
 
 ## Secrets
@@ -68,5 +81,5 @@ rm .hmac-secret.txt
 
 ## Still pending
 
-- `@notis/sdk` is vendored in `packages/notis-sdk/` until it is published to npm.
-- `POST /api/registry/publish` endpoint on the Notis server must exist before `merge-publish.yml` has somewhere to POST to. Until then the workflow runs in dry-run mode (if `NOTIS_REGISTRY_WEBHOOK_URL` is unset).
+- `@notis/sdk` is vendored per app in `apps/<slug>/packages/sdk/` until it is published to npm. The canonical source is `packages/sdk/` in the Notis monorepo.
+- A failure in `merge-publish.yml` is currently silent. Add a `if: failure()` notification step.

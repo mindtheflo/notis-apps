@@ -1,10 +1,9 @@
 # Any change to an app requires store-reviewer sign-off.
 /apps/**                  @mindtheflo
 
-# Infrastructure (workflows, scripts, vendored SDK) needs tighter control.
+# Infrastructure (workflows, scripts) needs tighter control.
 /.github/**               @mindtheflo
 /scripts/**               @mindtheflo
-/packages/notis-sdk/**    @mindtheflo
 
 # Root configs
 /package.json             @mindtheflo
