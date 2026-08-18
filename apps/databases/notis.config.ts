@@ -2,6 +2,7 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-database',
+  devSlug: 'notis-database',
   title: 'Databases',
   description:
     'A read-only catalog and schema explorer for every database in your Notis workspace. Browse databases grouped by the app that owns them, inspect each property with its type, select options, formats, and formulas, follow relations between databases, and page through the actual records stored in any of them.',
