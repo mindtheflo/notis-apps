@@ -1,5 +1,9 @@
 # 5 Minutes Journal Changelog
 
+## [0.1.9] - {PR_MERGE_DATE}
+
+- SDK refresh release: updated the bundled @notis/sdk (new cloud computer, database subscription, and handover hooks) and adopted the stable dev slug identity.
+
 ## [Accessible Timeline Selection] - 2026-07-29
 
 - Announces the selected journal day to assistive technology while preserving the visual timeline.
