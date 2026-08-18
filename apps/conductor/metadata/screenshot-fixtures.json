@@ -1,0 +1,910 @@
+{
+  "tools": {
+    "LOCAL_NOTIS_DATABASE_QUERY#database_slug=repositories": {
+      "status": "success",
+      "documents": [
+        {
+          "id": "repo-notis",
+          "title": "notis",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis"
+                  }
+                }
+              ]
+            },
+            "Git URL": {
+              "type": "url",
+              "url": "https://github.com/mindtheflo/notis"
+            },
+            "Owner": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "mindtheflo"
+                  }
+                }
+              ]
+            },
+            "Repo": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis"
+                  }
+                }
+              ]
+            },
+            "Default branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "beta"
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/repositories/notis"
+                  }
+                }
+              ]
+            },
+            "Setup command": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "./setup.sh"
+                  }
+                }
+              ]
+            },
+            "Dev command": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "./dev.sh"
+                  }
+                }
+              ]
+            },
+            "Archive command": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "./archive.sh"
+                  }
+                }
+              ]
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Ready",
+                "name": "Ready"
+              }
+            },
+            "Environment files": {
+              "type": "secret",
+              "present": true,
+              "reference": "/vercel/sandbox/.notis/workspaces/secrets/notis",
+              "status": "Verified",
+              "metadata": {
+                "files": [
+                  "electron/.env",
+                  "portal/.env",
+                  "server/.env",
+                  "website/.env"
+                ]
+              }
+            },
+            "Setup verified at": {
+              "type": "date",
+              "date": {
+                "start": "2026-08-15T18:40:00Z",
+                "end": null
+              }
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        },
+        {
+          "id": "repo-website",
+          "title": "notis-website",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis-website"
+                  }
+                }
+              ]
+            },
+            "Git URL": {
+              "type": "url",
+              "url": "https://github.com/mindtheflo/notis-website"
+            },
+            "Owner": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "mindtheflo"
+                  }
+                }
+              ]
+            },
+            "Repo": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis-website"
+                  }
+                }
+              ]
+            },
+            "Default branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "main"
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/repositories/notis-website"
+                  }
+                }
+              ]
+            },
+            "Setup command": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "npm install"
+                  }
+                }
+              ]
+            },
+            "Dev command": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "npm run dev"
+                  }
+                }
+              ]
+            },
+            "Archive command": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Configuring",
+                "name": "Configuring"
+              }
+            },
+            "Environment files": {
+              "type": "secret",
+              "present": true,
+              "reference": "/vercel/sandbox/.notis/workspaces/secrets/notis-website",
+              "status": "Staged",
+              "metadata": {
+                "files": [
+                  ".env.local"
+                ]
+              }
+            },
+            "Setup verified at": {
+              "type": "date",
+              "date": null
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        }
+      ],
+      "has_more": false
+    },
+    "LOCAL_NOTIS_DATABASE_QUERY#database_slug=workspaces": {
+      "status": "success",
+      "documents": [
+        {
+          "id": "ws-reminders",
+          "title": "fix-duplicate-reminders-on-lapsed-accounts",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "fix-duplicate-reminders-on-lapsed-accounts"
+                  }
+                }
+              ]
+            },
+            "Repository": {
+              "type": "relation",
+              "relation": [
+                {
+                  "id": "repo-notis"
+                }
+              ]
+            },
+            "Branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis/fix-duplicate-reminders-on-lapsed-accounts"
+                  }
+                }
+              ]
+            },
+            "Base": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "beta"
+                  }
+                }
+              ]
+            },
+            "Task": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "Fix duplicate reminders firing for lapsed accounts after the paywall wind-down."
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/workspaces/notis/fix-duplicate-reminders-on-lapsed-accounts"
+                  }
+                }
+              ]
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Working",
+                "name": "Working"
+              }
+            },
+            "PR state": {
+              "type": "select",
+              "select": {
+                "id": "opt-Open",
+                "name": "Open"
+              }
+            },
+            "PR number": {
+              "type": "number",
+              "number": 1873
+            },
+            "PR URL": {
+              "type": "url",
+              "url": "https://github.com/mindtheflo/notis/pull/1873"
+            },
+            "Checks": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "3 success, 1 pending"
+                  }
+                }
+              ]
+            },
+            "Ahead": {
+              "type": "number",
+              "number": 4
+            },
+            "Dirty files": {
+              "type": "number",
+              "number": 0
+            },
+            "Thread": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Last synced": {
+              "type": "date",
+              "date": {
+                "start": "2026-08-15T18:52:00Z",
+                "end": null
+              }
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        },
+        {
+          "id": "ws-slack",
+          "title": "review-the-slack-retry-patch",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "review-the-slack-retry-patch"
+                  }
+                }
+              ]
+            },
+            "Repository": {
+              "type": "relation",
+              "relation": [
+                {
+                  "id": "repo-notis"
+                }
+              ]
+            },
+            "Branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis/review-the-slack-retry-patch"
+                  }
+                }
+              ]
+            },
+            "Base": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "pull request #1829"
+                  }
+                }
+              ]
+            },
+            "Task": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "Review the Slack retry patch and add a regression test for the gating path."
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/workspaces/notis/review-the-slack-retry-patch"
+                  }
+                }
+              ]
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Working",
+                "name": "Working"
+              }
+            },
+            "PR state": {
+              "type": "select",
+              "select": {
+                "id": "opt-Draft",
+                "name": "Draft"
+              }
+            },
+            "PR number": {
+              "type": "number",
+              "number": 1876
+            },
+            "PR URL": {
+              "type": "url",
+              "url": "https://github.com/mindtheflo/notis/pull/1876"
+            },
+            "Checks": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "1 pending"
+                  }
+                }
+              ]
+            },
+            "Ahead": {
+              "type": "number",
+              "number": 1
+            },
+            "Dirty files": {
+              "type": "number",
+              "number": 3
+            },
+            "Thread": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Last synced": {
+              "type": "date",
+              "date": {
+                "start": "2026-08-15T18:31:00Z",
+                "end": null
+              }
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        },
+        {
+          "id": "ws-kpis",
+          "title": "weekly-report-kpi-trends",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "weekly-report-kpi-trends"
+                  }
+                }
+              ]
+            },
+            "Repository": {
+              "type": "relation",
+              "relation": [
+                {
+                  "id": "repo-notis"
+                }
+              ]
+            },
+            "Branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis/weekly-report-kpi-trends"
+                  }
+                }
+              ]
+            },
+            "Base": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "beta"
+                  }
+                }
+              ]
+            },
+            "Task": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "Add conversation-first KPI trends to the weekly report."
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/workspaces/notis/weekly-report-kpi-trends"
+                  }
+                }
+              ]
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Ready",
+                "name": "Ready"
+              }
+            },
+            "PR state": {
+              "type": "select",
+              "select": {
+                "id": "opt-None",
+                "name": "None"
+              }
+            },
+            "PR number": {
+              "type": "number",
+              "number": null
+            },
+            "PR URL": {
+              "type": "url",
+              "url": null
+            },
+            "Checks": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Ahead": {
+              "type": "number",
+              "number": 0
+            },
+            "Dirty files": {
+              "type": "number",
+              "number": 0
+            },
+            "Thread": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Last synced": {
+              "type": "date",
+              "date": {
+                "start": "2026-08-15T17:05:00Z",
+                "end": null
+              }
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        },
+        {
+          "id": "ws-egress",
+          "title": "egress-proxy-transport-notes",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "egress-proxy-transport-notes"
+                  }
+                }
+              ]
+            },
+            "Repository": {
+              "type": "relation",
+              "relation": [
+                {
+                  "id": "repo-notis"
+                }
+              ]
+            },
+            "Branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis/egress-proxy-transport-notes"
+                  }
+                }
+              ]
+            },
+            "Base": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "beta"
+                  }
+                }
+              ]
+            },
+            "Task": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "Record why chisel replaced wstunnel for the sandbox egress relay."
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/workspaces/notis/egress-proxy-transport-notes"
+                  }
+                }
+              ]
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Archived",
+                "name": "Archived"
+              }
+            },
+            "PR state": {
+              "type": "select",
+              "select": {
+                "id": "opt-Merged",
+                "name": "Merged"
+              }
+            },
+            "PR number": {
+              "type": "number",
+              "number": 1868
+            },
+            "PR URL": {
+              "type": "url",
+              "url": "https://github.com/mindtheflo/notis/pull/1868"
+            },
+            "Checks": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "5 success"
+                  }
+                }
+              ]
+            },
+            "Ahead": {
+              "type": "number",
+              "number": 0
+            },
+            "Dirty files": {
+              "type": "number",
+              "number": 0
+            },
+            "Thread": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Last synced": {
+              "type": "date",
+              "date": {
+                "start": "2026-08-15T12:10:00Z",
+                "end": null
+              }
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        },
+        {
+          "id": "ws-site",
+          "title": "pricing-page-copy-pass",
+          "url": null,
+          "properties": {
+            "Name": {
+              "type": "title",
+              "title": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "pricing-page-copy-pass"
+                  }
+                }
+              ]
+            },
+            "Repository": {
+              "type": "relation",
+              "relation": [
+                {
+                  "id": "repo-website"
+                }
+              ]
+            },
+            "Branch": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "notis/pricing-page-copy-pass"
+                  }
+                }
+              ]
+            },
+            "Base": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "main"
+                  }
+                }
+              ]
+            },
+            "Task": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "Shorten the pricing hero to one sentence."
+                  }
+                }
+              ]
+            },
+            "Path": {
+              "type": "rich_text",
+              "rich_text": [
+                {
+                  "type": "text",
+                  "text": {
+                    "content": "/vercel/sandbox/workspaces/notis-website/pricing-page-copy-pass"
+                  }
+                }
+              ]
+            },
+            "Status": {
+              "type": "select",
+              "select": {
+                "id": "opt-Setting up",
+                "name": "Setting up"
+              }
+            },
+            "PR state": {
+              "type": "select",
+              "select": {
+                "id": "opt-None",
+                "name": "None"
+              }
+            },
+            "PR number": {
+              "type": "number",
+              "number": null
+            },
+            "PR URL": {
+              "type": "url",
+              "url": null
+            },
+            "Checks": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Ahead": {
+              "type": "number",
+              "number": 0
+            },
+            "Dirty files": {
+              "type": "number",
+              "number": 0
+            },
+            "Thread": {
+              "type": "rich_text",
+              "rich_text": null
+            },
+            "Last synced": {
+              "type": "date",
+              "date": {
+                "start": "2026-08-15T18:58:00Z",
+                "end": null
+              }
+            },
+            "Notes": {
+              "type": "rich_text",
+              "rich_text": null
+            }
+          }
+        }
+      ],
+      "has_more": false
+    },
+    "LOCAL_NOTIS_RUN_SANDBOX_SHELL": {
+      "status": "success",
+      "exit_code": 0,
+      "stdout": "{\"logged_in\": true, \"account\": \"mindtheflo\"}",
+      "stderr": ""
+    }
+  },
+  "requests": {},
+  "scenarios": {
+    "onboarding-empty": {
+      "tools": {
+        "LOCAL_NOTIS_RUN_SANDBOX_SHELL": {
+          "status": "success",
+          "exit_code": 0,
+          "stdout": "{\"logged_in\": false, \"account\": null}",
+          "stderr": ""
+        },
+        "LOCAL_NOTIS_DATABASE_QUERY#database_slug=repositories": {
+          "status": "success",
+          "documents": [],
+          "has_more": false
+        },
+        "LOCAL_NOTIS_DATABASE_QUERY#database_slug=workspaces": {
+          "status": "success",
+          "documents": [],
+          "has_more": false
+        }
+      }
+    }
+  }
+}
