@@ -134,7 +134,7 @@
     }
   ],
   "source_app_id": "e7e6cd21-6379-4585-8d9d-da117b5b1573",
-  "source_version": 2,
+  "source_version": 3,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "Folder-based notes with gallery, table, and calendar views.",
   "version_notes": "- First Store release."

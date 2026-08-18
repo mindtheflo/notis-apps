@@ -2,6 +2,7 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-notes',
+  devSlug: 'notis-notes',
   title: 'Notis Notes',
   description:
     'A home for every note Notis captures. Organise them into a nested folder tree, then read them as a gallery of cards, as a sortable table of all their properties, or on a calendar laid out by due date or by when they were created. Rename, refile, and archive notes in bulk, and create a new one without leaving the view.',

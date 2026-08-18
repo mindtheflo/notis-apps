@@ -1,7 +1,7 @@
 {
   "name": "@notis-apps/notis-notes",
   "version": "0.1.0",
-  "notisAppVersion": "0.1.1",
+  "notisAppVersion": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
