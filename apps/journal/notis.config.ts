@@ -2,6 +2,7 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-journal',
+  devSlug: 'notis-journal',
   title: '5 Minutes Journal',
   description:
     'A display-only five-minute journal built from your morning and evening check-ins with Notis. Browse daily mood, energy, motivation, gratitude, intentions, affirmations, highlights, lessons, and free-form reflections, then use Stats to see trends and ritual consistency over time.',
