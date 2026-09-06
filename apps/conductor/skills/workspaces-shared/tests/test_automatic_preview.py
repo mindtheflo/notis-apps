@@ -58,6 +58,47 @@ class ReadinessTests(unittest.TestCase):
 
 
 class GithubTests(unittest.TestCase):
+    def test_review_comment_created_before_readiness_is_enriched_and_reused(self):
+        comments = []
+        writes = []
+        pr_body = ['Original PR text']
+        def gh(target, *args):
+            if args[:2] == ('pr', 'view'):
+                return json.dumps({'number': 3, 'state': 'OPEN', 'body': pr_body[0]})
+            if '--slurp' in args:
+                return json.dumps([comments])
+            if args == ('api', 'user'):
+                return '{"login":"me"}'
+            if args[:2] == ('pr', 'edit'):
+                pr_body[0] = Path(args[-1]).read_text()
+                return ''
+            body = json.loads(Path(args[-1]).read_text())['body']
+            writes.append(args)
+            if 'POST' in args:
+                comments.append({'id': 7, 'body': body, 'user': {'login': 'me'}})
+            else:
+                comments[0]['body'] = body
+            return json.dumps(comments[0])
+        with tempfile.TemporaryDirectory() as root:
+            target = Path(root)
+            body = target / 'review.md';body.write_text('Review in progress.')
+            with patch.object(github, 'gh', side_effect=gh):
+                with patch.object(preview, 'run', side_effect=RuntimeError('pending')):
+                    github.comment(target, body)
+                self.assertNotIn(URL, comments[0]['body'])
+                with patch.object(preview, 'run', return_value=URL):
+                    github.sync(target)
+                    body.write_text('Tested: all checks passed.\nFixed: preview startup.')
+                    github.comment(target, body)
+                    first = comments[0]['body']
+                    github.comment(target, body)
+                    github.sync(target)
+                self.assertEqual(comments[0]['body'], first)
+                self.assertEqual(len(comments), 1)
+                self.assertEqual(sum('POST' in args for args in writes), 1)
+                self.assertEqual(comments[0]['body'].count(URL), 1)
+                self.assertEqual(pr_body[0].count(URL), 1)
+
     def test_body_preserved_and_repeated_updates_identical(self):
         original = 'Fix login.\n\n- [ ] review\nLiteral `$(secret)` stays literal.'
         updated = github.merge(original, URL)
@@ -105,6 +146,27 @@ class GithubTests(unittest.TestCase):
 
 
 class PreparationTests(unittest.TestCase):
+    def test_complete_command_distinguishes_pending_failed_and_verified_response(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = Path(root)
+            for state, code in [('starting', 2), ('failed', 1), ('ready', 0)]:
+                value = {'preview_state': state, 'preview_url': URL, 'error': 'Setup failed.'}
+                preview.save(target / '.context/workspace-completion.json', value)
+                output = io.StringIO()
+                with patch.object(workflow, 'command', return_value=subprocess.CompletedProcess([], 0, stdout='running')), contextlib.redirect_stdout(output):
+                    result = workflow.wait('repo', 'task', target, timeout=0, require_complete=True)
+                self.assertEqual(result, code)
+                response = json.loads(output.getvalue())
+                self.assertEqual(response['complete'], state != 'starting')
+                if state == 'ready':
+                    self.assertIn(URL, response['user_response'])
+                elif state == 'starting':
+                    self.assertIsNone(response['user_response'])
+                    self.assertNotIn('preview_url', response)
+                else:
+                    self.assertNotIn('preview_url', response)
+                    self.assertNotIn(URL, response['user_response'])
+
     def test_abandoned_job_reports_failure_instead_of_waiting_forever(self):
         with tempfile.TemporaryDirectory() as root:
             target = Path(root)

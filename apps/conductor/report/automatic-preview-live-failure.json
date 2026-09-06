@@ -1,0 +1,14 @@
+{
+  "kind": "live-workspace-completion-failure",
+  "exit_code": 1,
+  "result": {
+    "preview_state": "failed",
+    "error": "Repository setup could not start. Inspect the saved Setup command and setup job log.",
+    "retry_command": "bash /vercel/sandbox/workspaces/notis-apps/automatic-workspace-previews/apps/conductor/skills/workspaces-shared/scripts/workspace.sh prepare notis-apps automatic-workspace-previews",
+    "complete": true,
+    "user_response": "Workspace notis-apps/automatic-workspace-previews was created, but its preview is unavailable. Repository setup could not start. Inspect the saved Setup command and setup job log."
+  },
+  "configured_repository": "notis-apps",
+  "setup_command_present": false,
+  "dev_command_present": false
+}

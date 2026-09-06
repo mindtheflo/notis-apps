@@ -108,21 +108,19 @@ work is visible, so it has to say both that the review started and how it ended.
 **Claim it before you read a single file.** One comment, posted once:
 
 ```bash
-gh api repos/{owner}/{repo}/issues/<pr>/comments \
-  -f body='👀 <!-- notis-review -->'
+printf '%s\n' 'Review in progress. <!-- notis-review -->' > .context/review.md
+bash $S/workspace.sh comment <repo> <name> --body-file .context/review.md
 ```
 
-The eyes say a review is under way, the way a person reacting to a pull request
-does. The HTML comment is invisible when rendered and is how you find this
-comment again — never search for the emoji, which anyone may have used.
+The opening text says a review is under way. The HTML comment is invisible
+when rendered and is how this flow finds its own comment again. The marker and current GitHub author identify the comment; its visible wording does not.
 
-**Then edit that same comment when the review ends.** Find it by its marker and
-patch it in place:
+**Then edit that same comment when the review ends.** Write the final body to
+`.context/review.md` and use the same command; it finds the marker and author
+before updating in place, and includes the verified preview automatically:
 
 ```bash
-id=$(gh api repos/{owner}/{repo}/issues/<pr>/comments --paginate \
-  --jq '[.[] | select(.body | contains("<!-- notis-review -->"))] | last | .id')
-gh api -X PATCH repos/{owner}/{repo}/issues/comments/$id -F body=@review.md
+bash $S/workspace.sh comment <repo> <name> --body-file .context/review.md
 ```
 
 Editing rather than replying is the whole point: the pull request keeps one
@@ -132,7 +130,7 @@ again — never stack a second one. Do not use `gh pr comment --edit-last`: it
 edits whatever you posted last, which is the artifact comment if you posted
 one.
 
-The closing body replaces the eyes and answers three questions, in this order:
+The closing body replaces the opening text and answers three questions, in this order:
 
 - **Tested** — what you actually ran, and the result. A suite that was not run
   is not a suite that passed; if you skipped it, say which and why.
@@ -227,7 +225,7 @@ comment never crosses that boundary, so whatever you wrote is what ships.
 ## Before returning to the user
 
 **Never end a turn with work sitting uncommitted in the worktree.** Every time
-you hand control back — finished, blocked, or asking a question — do all four:
+you hand control back — finished, blocked, or asking a question — do all five:
 
 1. `git -C <path> status` — env files here mean the ignore rules are wrong, not
    that they should be committed.
@@ -236,6 +234,12 @@ you hand control back — finished, blocked, or asking a question — do all fou
    does not exist yet, otherwise `git -C <path> push`.
 4. `bash $S/workspace.sh sync <repo> <name>` so the row and the pull request
    match the tree.
+5. `bash $S/workspace.sh complete <repo> <name>` before the final response.
+   Exit 2 / `complete: false` is still pending: follow `next_command`, then call
+   `complete` again. Never describe pending preparation as finished. Exit 0
+   returns the verified `preview_url` and `user_response`; include that response
+   with the branch/PR. Exit 1 returns an explicit failure `user_response` without
+   a usable link; report it and its retry command. Do not invent a URL.
 
 Uncommitted work is unreviewable, invisible in the app, and one
 `workspace.sh remove` away from being gone. If something genuinely cannot be
@@ -275,7 +279,7 @@ lost and getting an answer.
 ## Automatic development preview completion
 
 `workspace.sh new` starts the saved Setup command and then the saved Dev command
-in a tracked background job. It returns `preview_state` and a `next_command`
+in a tracked background job. It returns `preview_state`, `complete: false`, and a `next_command`
 while work continues. Follow that command until readiness or a recorded failure;
 do not stop at the workspace path when preparation is still running. The job
 survives the initiating shell and exposes its log via `job.sh log preview-<repo>-<name>`.
@@ -294,7 +298,10 @@ serve HTTP using `PORT`.
 `workspace.sh pr` and `sync` maintain one marked preview section in an open PR's
 existing description, including PRs created after setup completes. They also
 refresh existing preview-marked comments authored by the current GitHub identity.
-When this flow creates another associated description or comment, first write
+The review-comment examples above use `workspace.sh comment`, which upserts
+one author-owned `notis-review` comment, including before readiness; later sync
+adds the verified link when it becomes available. When preparing another
+associated description, first write
 its exact body to a file and run `python3 $S/preview_github.py <workspace-path>
 --body-file <file>` to include the same section. Do not create a preview-only
 comment. Preserve all unrelated prose and never use a localhost or token URL.

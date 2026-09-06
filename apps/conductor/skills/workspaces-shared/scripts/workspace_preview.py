@@ -51,11 +51,13 @@ def prepare(repo, name, target):
             # Never copy raw shell logs: they can contain env or sign-in URLs.
             raise RuntimeError('Preview startup or external readiness failed. Inspect dev-status and .context/preview-start.log; fix the Dev command and retry prepare.')
         url = preview.run('url', target)
-        preview.save(record, {'preview_state': 'ready', 'preview_url': url})
-        github = command('python3', str(HERE / 'preview_github.py'), str(target))
-        if github.returncode:
-            preview.save(record, {'preview_state': 'ready', 'preview_url': url,
-                                  'github_state': 'pending_sync'})
+        try:
+            github = command('python3', str(HERE / 'preview_github.py'), str(target))
+            github_pending = github.returncode != 0
+        except (OSError, subprocess.TimeoutExpired):
+            github_pending = True
+        preview.save(record, {'preview_state': 'ready', 'preview_url': url,
+                              'github_state': 'pending_sync' if github_pending else 'synced'})
         print(json.dumps(completion(target)))
         return 0
     except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
@@ -66,13 +68,30 @@ def prepare(repo, name, target):
         return 1
 
 
-def wait(repo, name, target, timeout=40):
+def response(result, repo, name):
+    state = result['preview_state']
+    complete = state in ('ready', 'failed')
+    value = {**result, 'complete': complete, 'user_response': None}
+    if state != 'ready':
+        value.pop('preview_url', None)
+    if state == 'ready':
+        url = preview.validate_test_url(result['preview_url'])
+        value['user_response'] = f'Workspace {repo}/{name} is ready. [Development preview]({url}) (sign in as the workspace owner).'
+        if result.get('github_state') == 'pending_sync':
+            value['user_response'] += ' GitHub preview propagation is pending; retry workspace sync.'
+    elif state == 'failed':
+        value.pop('preview_url', None)
+        value['user_response'] = f"Workspace {repo}/{name} was created, but its preview is unavailable. {result.get('error', 'Preparation failed.')}"
+    return value
+
+
+def wait(repo, name, target, timeout=40, require_complete=False):
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         result = completion(target)
         if result['preview_state'] in ('ready', 'failed'):
-            print(json.dumps(result))
-            return 0  # The workspace exists even if its preview failed.
+            print(json.dumps(response(result, repo, name)))
+            return 1 if require_complete and result['preview_state'] == 'failed' else 0
         time.sleep(1)
     result = completion(target)
     job = command('bash', str(HERE / 'job.sh'), 'status', f'preview-{repo}-{name}')
@@ -81,13 +100,15 @@ def wait(repo, name, target, timeout=40):
                   'retry_command': f'bash {HERE}/workspace.sh prepare {repo} {name}'}
         preview.save(target / '.context/workspace-completion.json', result)
     result['next_command'] = f'bash {HERE}/workspace.sh preview-wait {repo} {name}'
-    print(json.dumps(result))
+    print(json.dumps(response(result, repo, name)))
+    if require_complete:
+        return 1 if result['preview_state'] == 'failed' else 0 if result['preview_state'] == 'ready' else 2
     return 0
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', choices=['prepare', 'wait', 'reset'])
+    parser.add_argument('action', choices=['prepare', 'wait', 'reset', 'complete'])
     parser.add_argument('repo')
     parser.add_argument('name')
     parser.add_argument('target', type=Path)
@@ -95,4 +116,6 @@ if __name__ == '__main__':
     if args.action == 'reset':
         preview.save(args.target / '.context/workspace-completion.json', {'preview_state': 'starting'})
         raise SystemExit(0)
+    if args.action == 'complete':
+        raise SystemExit(wait(args.repo, args.name, args.target, require_complete=True))
     raise SystemExit((prepare if args.action == 'prepare' else wait)(args.repo, args.name, args.target))

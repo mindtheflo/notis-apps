@@ -1,0 +1,52 @@
+{
+  "app_id": "2abc054d-8d9f-497a-844f-676e185d32a5",
+  "version": 27,
+  "expected_updated_at": "2026-09-06T01:16:10.485794+00:00",
+  "files": [
+    {
+      "path": "skills/new-workspace/SKILL.md",
+      "before_sha256": "294382b22c34eee46877c449a622a4ac405cc53ae515eeb5d48cc59a61f88fcd",
+      "after_sha256": "6f7e282663ce2a2e5d0b72edff818dc75dcc202f005dd7803d9434f8bdbf3219"
+    },
+    {
+      "path": "skills/workspaces-shared/scripts/workspace.sh",
+      "before_sha256": "46d91c69a1b1d4d891e2ef1e3753dd29cb83e13ec99bb350a4c53af620aa7b97",
+      "after_sha256": "52dfee7a4c7cb248e369ba9d30fcf2f285c7cfbc00282369c297964566a43242"
+    },
+    {
+      "path": "skills/workspaces-shared/scripts/preview.py",
+      "before_sha256": "dbbfba2bcd616a371cd52ee62ee558e9b0046536ebc28ce068b99e39fdfeafd8",
+      "after_sha256": "421b5e8eefa881af104fa8a0deb56d1a457ce0a61ace2b3674d9714c38ff0cc7"
+    },
+    {
+      "path": "skills/workspaces-shared/scripts/workspace_preview.py",
+      "before_sha256": null,
+      "after_sha256": "dd69f2e619c21896c6b51d5013c73ad9cc08be9309ec8d2bd0b03828b5c74e4c"
+    },
+    {
+      "path": "skills/workspaces-shared/scripts/preview_github.py",
+      "before_sha256": null,
+      "after_sha256": "752639f708946d96dfc7ee7372dd01ec852bb98854a064c9ca2209933110a499"
+    },
+    {
+      "path": "skills/workspaces-shared/.gitignore",
+      "before_sha256": null,
+      "after_sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+    },
+    {
+      "path": "skills/workspaces-shared/tests/test_preview.py",
+      "before_sha256": "b28e9955286a9eeaa617292d43135e0e3596211e40c9e1de3da805372950386b",
+      "after_sha256": "9739cc404f7479c4810b7d6e1a741f3aa14c2cfa74282c80f7b86dc8b18c9280"
+    },
+    {
+      "path": "skills/workspaces-shared/tests/test_automatic_preview.py",
+      "before_sha256": null,
+      "after_sha256": "a8c28424bb9f7a904733735a46b301369b60bfd09fb3f7abc824c0deca185667"
+    },
+    {
+      "path": "skills/workspaces-shared/tests/test_workspace_flow.py",
+      "before_sha256": null,
+      "after_sha256": "676ef157230deda53878eb145d1c92a23b189bcdd241fdcb82e1ed73945dab26"
+    }
+  ]
+}

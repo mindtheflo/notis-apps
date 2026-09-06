@@ -13,6 +13,12 @@ URL = 'https://beta.notis.ai/sandbox-preview/00000000-0000-4000-8000-00000000000
 
 class ShellFlowTests(unittest.TestCase):
     def test_new_prepares_then_later_pr_receives_one_preview(self):
+        self.flow(setup_success=True)
+
+    def test_new_with_failed_setup_returns_explicit_failure_without_url(self):
+        self.flow(setup_success=False)
+
+    def flow(self, setup_success):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
             scripts = root / 'scripts'
@@ -41,6 +47,9 @@ if sys.argv[1]=='get':
  print(json.dumps({'document_id':'repo-id','Default branch':'main','Setup command':'printf ready > setup-proof','Dev command':'serve'}))
 else: print('{}')
 ''')
+            if not setup_success:
+                p = root / 'rows.py'
+                p.write_text(p.read_text().replace('printf ready > setup-proof', 'exit 9'))
             # The service boundary is deterministic; run the actual wait_ready
             # helper, persistence, setup orchestration and detached job scripts.
             with (scripts / 'preview.py').open('a') as file:
@@ -70,9 +79,23 @@ elif a[0]=='api':print('[[]]')
 ''')
             gh.chmod(0o755)
             output = run('bash', str(scripts / 'workspace.sh'), 'new', 'demo', '--task', 'automatic preview', '--name', 'task')
+            if not setup_success:
+                self.assertIn('"preview_state": "failed"', output)
+                self.assertNotIn(URL, output)
+                final = subprocess.run(['bash', str(scripts / 'workspace.sh'), 'complete', 'demo', 'task'], env=env, capture_output=True, text=True, timeout=10)
+                self.assertEqual(final.returncode, 1)
+                response = json.loads(final.stdout)
+                self.assertTrue(response['complete'])
+                self.assertNotIn('preview_url', response)
+                self.assertTrue(response['user_response'])
+                return
             self.assertIn('"preview_state": "ready"', output)
             self.assertIn(URL, output)
+            self.assertIn('"complete": true', output)
             target = root / 'trees/demo/task'
+            final = json.loads(run('bash', str(scripts / 'workspace.sh'), 'complete', 'demo', 'task'))
+            self.assertTrue(final['complete'])
+            self.assertIn(URL, final['user_response'])
             self.assertEqual((target / 'setup-proof').read_text(), 'ready')
             self.assertTrue((root / 'state/jobs/preview-demo-task/status').exists())
             self.assertNotIn('.context', run('git', 'status', '--porcelain', cwd=target))
@@ -86,6 +109,9 @@ elif a[0]=='api':print('[[]]')
             self.assertEqual(first, second)
             self.assertIn(body.read_text(), second)
             self.assertEqual(second.count(URL), 1)
+            # v27 archive behavior must remain idempotent after reconciliation.
+            run('bash', str(scripts / 'workspace.sh'), 'remove', 'demo', 'task')
+            run('bash', str(scripts / 'workspace.sh'), 'remove', 'demo', 'task')
 
 
 if __name__ == '__main__':

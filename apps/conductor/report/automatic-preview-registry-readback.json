@@ -1,0 +1,38 @@
+{
+  "kind": "read-only-live-service-diagnostic",
+  "all_preview_ports_reserved": true,
+  "rows": [
+    {
+      "port": 3030,
+      "state": "starting",
+      "active_until": "2026-09-06 12:50:33.243556+00",
+      "claim_expires_at": null,
+      "matches_current_binding": true,
+      "canonical_binding_present": true
+    },
+    {
+      "port": 3020,
+      "state": "starting",
+      "active_until": "2026-09-06 12:47:46.059311+00",
+      "claim_expires_at": null,
+      "matches_current_binding": true,
+      "canonical_binding_present": true
+    },
+    {
+      "port": 3000,
+      "state": "ready",
+      "active_until": "2026-09-06 12:47:40.481185+00",
+      "claim_expires_at": "2026-09-06 12:17:40.481185+00",
+      "matches_current_binding": true,
+      "canonical_binding_present": true
+    },
+    {
+      "port": 3010,
+      "state": "starting",
+      "active_until": "2026-09-06 12:38:15.599959+00",
+      "claim_expires_at": null,
+      "matches_current_binding": true,
+      "canonical_binding_present": true
+    }
+  ]
+}

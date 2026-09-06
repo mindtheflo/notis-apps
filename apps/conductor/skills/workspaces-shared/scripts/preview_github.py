@@ -13,6 +13,7 @@ import preview
 
 START = '<!-- notis-workspace-preview -->'
 END = '<!-- /notis-workspace-preview -->'
+REVIEW = '<!-- notis-review -->'
 
 
 def merge(body, url):
@@ -41,6 +42,38 @@ def gh(target, *args):
     return result.stdout
 
 
+def comment(target, body_file):
+    """Upsert this flow's one review comment, even before a preview is ready."""
+    raw = gh(target, 'pr', 'view', '--json', 'number,state')
+    if raw is None:
+        raise RuntimeError('No associated pull request.')
+    pr = json.loads(raw)
+    if pr['state'] != 'OPEN':
+        raise RuntimeError('The associated pull request is not open.')
+    body = body_file.read_text()
+    if REVIEW not in body:
+        body += '\n\n' + REVIEW
+    try:
+        body = merge(body, preview.run('url', target))
+    except (OSError, ValueError, KeyError, RuntimeError):
+        pass  # The marker lets later sync attach the verified URL.
+    pages = json.loads(gh(target, 'api', f'repos/{{owner}}/{{repo}}/issues/{pr["number"]}/comments', '--paginate', '--slurp'))
+    viewer = json.loads(gh(target, 'api', 'user'))['login']
+    matches = [c for page in pages for c in page if REVIEW in (c.get('body') or '') and c['user']['login'] == viewer]
+    if len(matches) > 1:
+        raise RuntimeError('Multiple existing review comments; do not create another.')
+    if matches and matches[0]['body'] == body:
+        return
+    route = (f'repos/{{owner}}/{{repo}}/issues/comments/{matches[0]["id"]}' if matches else
+             f'repos/{{owner}}/{{repo}}/issues/{pr["number"]}/comments')
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json') as file:
+        json.dump({'body': body}, file)
+        file.flush()
+        # An uncertain POST is never automatically retried. A subsequent call
+        # lists the marked comment first and reuses it if GitHub committed it.
+        gh(target, 'api', '--method', 'PATCH' if matches else 'POST', route, '--input', file.name)
+
+
 def sync(target, body_file=None):
     try:
         url = preview.run('url', target)
@@ -66,7 +99,8 @@ def sync(target, body_file=None):
     # this GitHub identity. No new comments and no unrelated comment edits.
     comments = gh(target, 'api', f'repos/{{owner}}/{{repo}}/issues/{pr["number"]}/comments', '--paginate', '--slurp')
     pages = json.loads(comments or '[]')
-    candidates = [c for page in pages for c in page if START in (c.get('body') or '')]
+    candidates = [c for page in pages for c in page
+                  if START in (c.get('body') or '') or REVIEW in (c.get('body') or '')]
     if not candidates:
         return
     viewer = json.loads(gh(target, 'api', 'user'))['login']
@@ -85,8 +119,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('target', type=Path)
     parser.add_argument('--body-file', type=Path)
+    parser.add_argument('--comment-file', type=Path)
     args = parser.parse_args()
     try:
-        sync(args.target, args.body_file)
+        if args.comment_file:
+            comment(args.target, args.comment_file)
+        else:
+            sync(args.target, args.body_file)
     except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
         parser.exit(1, 'error: GitHub preview sync failed; retry workspace sync.\n')

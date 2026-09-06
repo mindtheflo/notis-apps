@@ -256,7 +256,7 @@ new)
     printf 'workspace=%s\nbranch=%s\nbase=%s\npath=%s\n' "$name" "$branch" "$base_label" "$target"
     ;;
 
-prepare|preview-wait)
+prepare|preview-wait|complete)
     action="$1"; repo="$2"; name="$3"
     validate_segment "repository slug" "$repo"
     validate_segment "workspace name" "$name"
@@ -270,7 +270,11 @@ prepare|preview-wait)
             }
         fi
     fi
-    python3 "$HERE/workspace_preview.py" wait "$repo" "$name" "$target"
+    if [ "$action" = complete ]; then
+        python3 "$HERE/workspace_preview.py" complete "$repo" "$name" "$target"
+    else
+        python3 "$HERE/workspace_preview.py" wait "$repo" "$name" "$target"
+    fi
     ;;
 
 setup)
@@ -420,6 +424,16 @@ else:
     printf 'branch=%s ahead=%s dirty=%s pr=%s %s\n' "$branch" "$ahead" "$dirty" "$pr_state" "$pr_url"
     ;;
 
+comment)
+    repo="$2"; name="$3"; shift 3
+    validate_segment "repository slug" "$repo"
+    validate_segment "workspace name" "$name"
+    [ "$#" = 2 ] && [ "$1" = --body-file ] || die "comment requires --body-file"
+    target="$(tree_path "$repo" "$name")"
+    [ -d "$target" ] || die "no workspace at $target"
+    python3 "$HERE/preview_github.py" "$target" --comment-file "$2"
+    ;;
+
 pr)
     repo="$2"; name="$3"; shift 3
     validate_segment "repository slug" "$repo"
@@ -490,13 +504,18 @@ remove)
     validate_segment "workspace name" "$name"
     target="$(tree_path "$repo" "$name")"
     source_repo="$(repo_path "$repo")"
-    [ -d "$target" ] || die "no workspace at $target"
     repo_row="$($ROWS get repositories --name "$repo" \
         | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("document_id") or "")')"
     [ -n "$repo_row" ] || die "repository '$repo' has no database row"
     # Leave the branch alone: it may already be pushed and reviewed. Only the
-    # local tree goes.
-    git -C "$source_repo" worktree remove --force "$target"
+    # local tree goes. A row can outlive its checkout after a prior cleanup or
+    # interrupted run; treating that state as success makes archive idempotent
+    # and lets the UI clean up stale rows instead of failing forever.
+    registered="$(git -C "$source_repo" worktree list --porcelain 2>/dev/null \
+        | awk -v target="$target" '$1 == "worktree" && substr($0, 10) == target { print "yes"; exit }')"
+    if [ -d "$target" ] || [ -n "$registered" ]; then
+        git -C "$source_repo" worktree remove --force "$target"
+    fi
     $ROWS set workspaces --name "$name" \
         --match-json-field "Repository=[\"$repo_row\"]" \
         --field "Status=Archived" >/dev/null
