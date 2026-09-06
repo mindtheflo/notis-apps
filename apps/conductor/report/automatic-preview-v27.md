@@ -34,6 +34,8 @@ Do not deploy the older registry package wholesale over the installed app. Apply
 - Backend companion: **24 preview tests passed**, including canonical binding lookup for trimmed/stale CLI users, no waking on Stop, missing binding rejection, status versus heartbeat readiness, port collisions and no restart after process failure.
 - Real CLI preparation/complete on the registry workspace produced an explicit missing-Setup-command failure with exit 1 and no preview URL. See [actual completion readback](automatic-preview-live-failure.json). The Notis repository separately has the expected `./setup.sh` and `./dev.sh --with-portal --no-crons` configuration.
 
+The actual `workspace.sh comment` helper was run twice against [PR #32](https://github.com/mindtheflo/notis-apps/pull/32). GitHub readback confirmed [exactly one review comment](https://github.com/mindtheflo/notis-apps/pull/32#issuecomment-5559263426), matching the generated body byte-for-byte and containing no unverified preview section. See [live GitHub readback](automatic-preview-github-readback.json).
+
 Success-path PR/comment propagation is tested with deterministic GitHub readbacks, including a comment created before readiness, a PR created later, changed descriptions and repeated updates without duplicates. This is not a claim of a live Manager conversation or successful real-GitHub verified-link propagation.
 
 ## Live-service boundary
