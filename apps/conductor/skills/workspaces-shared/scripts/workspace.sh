@@ -33,7 +33,7 @@ STATE_ROOT="${NOTIS_WORKSPACES_STATE:-/vercel/sandbox/.notis/workspaces}"
 REPOS_ROOT="${NOTIS_REPOS_ROOT:-/vercel/sandbox/repositories}"
 TREES_ROOT="${NOTIS_TREES_ROOT:-/vercel/sandbox/workspaces}"
 JOB="bash $HERE/job.sh"
-ROWS="python3 $HERE/notis_rows.py"
+ROWS="${NOTIS_ROWS_COMMAND:-python3 $HERE/notis_rows.py}"
 REPO="bash $HERE/repo.sh"
 
 die() { echo "error: $*" >&2; exit 1; }
@@ -89,6 +89,31 @@ row_field() {
 }
 
 case "${1:-}" in
+
+dev|dev-status|dev-url|dev-stop)
+    action="$1"; repo="${2:?repository required}"; name="${3:?workspace required}"; shift 3
+    validate_segment "repository slug" "$repo"
+    validate_segment "workspace name" "$name"
+    target="$(tree_path "$repo" "$name")"
+    [ -d "$target" ] || die "no workspace at $target"
+    case "$action" in
+        dev)
+            dev_cmd="$(row_field "$repo" 'Dev command')"
+            [ -n "$dev_cmd" ] || die "repository '$repo' has no dev command recorded"
+            [ "$#" -eq 0 ] || { [ "$#" -eq 1 ] && [ "$1" = "--entry-artifact" ]; } || die "unknown dev option"
+            # Notis's saved command explicitly opts into its Portal artifact.
+            if [[ "$dev_cmd" == *"--with-portal"* ]] && [ -f "$target/scripts/conductor_dev_port_lease.py" ]; then
+                set -- --entry-artifact
+            fi
+            python3 "$HERE/preview.py" open "$target" --command "$dev_cmd" "$@"
+            ;;
+        *)
+            [ "$#" -eq 0 ] || die "unexpected argument"
+            case "$action" in dev-status) verb=status ;; dev-url) verb=url ;; dev-stop) verb=stop ;; esac
+            python3 "$HERE/preview.py" "$verb" "$target"
+            ;;
+    esac
+    ;;
 
 new)
     repo="$2"; shift 2
@@ -197,6 +222,11 @@ new)
         git -C "$source_repo" worktree add -b "$branch" "$target" "$start_ref"
     fi
 
+    # Runtime records are workspace-private artifacts, including for repositories
+    # which have not added .context to their own ignore rules yet.
+    exclude="$(git -C "$target" rev-parse --path-format=absolute --git-path info/exclude)"
+    mkdir -p "$(dirname "$exclude")"
+    grep -qxF '/.context/' "$exclude" 2>/dev/null || printf '\n/.context/\n' >> "$exclude"
     if [ -d "$STATE_ROOT/secrets/$repo" ]; then
         $REPO secrets-apply "$repo" "$target"
     else
@@ -220,7 +250,27 @@ new)
     row_committed=1
     trap - EXIT
 
+    # Setup and preview outlive the initiating tool call. A retry of prepare
+    # reuses the workspace and a running setup job instead of creating another.
+    bash "$0" prepare "$repo" "$name"
     printf 'workspace=%s\nbranch=%s\nbase=%s\npath=%s\n' "$name" "$branch" "$base_label" "$target"
+    ;;
+
+prepare|preview-wait)
+    action="$1"; repo="$2"; name="$3"
+    validate_segment "repository slug" "$repo"
+    validate_segment "workspace name" "$name"
+    target="$(tree_path "$repo" "$name")"
+    [ -d "$target" ] || die "no workspace at $target"
+    if [ "$action" = prepare ]; then
+        if ! $JOB running "preview-$repo-$name"; then
+            python3 "$HERE/workspace_preview.py" reset "$repo" "$name" "$target"
+            $JOB start "preview-$repo-$name" python3 "$HERE/workspace_preview.py" prepare "$repo" "$name" "$target" || {
+                code=$?; [ "$code" = 3 ] || exit "$code"
+            }
+        fi
+    fi
+    python3 "$HERE/workspace_preview.py" wait "$repo" "$name" "$target"
     ;;
 
 setup)
@@ -366,6 +416,7 @@ else:
         echo "warning: pull request state unavailable ($pr_lookup); kept previous PR fields" >&2
     fi
 
+    python3 "$HERE/preview_github.py" "$target" || echo "warning: preview GitHub sync failed; retry workspace sync" >&2
     printf 'branch=%s ahead=%s dirty=%s pr=%s %s\n' "$branch" "$ahead" "$dirty" "$pr_state" "$pr_url"
     ;;
 
@@ -373,15 +424,17 @@ pr)
     repo="$2"; name="$3"; shift 3
     validate_segment "repository slug" "$repo"
     validate_segment "workspace name" "$name"
-    title=""; body=""; draft=""
+    title=""; body=""; body_file=""; draft=""
     while [ $# -gt 0 ]; do
         case "$1" in
             --title) title="$2"; shift 2 ;;
             --body) body="$2"; shift 2 ;;
+            --body-file) body_file="$2"; shift 2 ;;
             --draft) draft="--draft"; shift ;;
             *) die "unknown option $1" ;;
         esac
     done
+    [ -z "$body_file" ] || body="$(cat -- "$body_file")"
     target="$(tree_path "$repo" "$name")"
     [ -d "$target" ] || die "no workspace at $target"
     [ -n "$title" ] || die "--title is required"
@@ -410,8 +463,12 @@ print(data.get("url", "") if (data.get("state") or "").upper() == "OPEN" else ""
         printf 'pull request already open: %s\n' "$existing_url"
     else
         # shellcheck disable=SC2086
+        pr_body="$(mktemp)"
+        printf '%s' "${body:-Opened from a Notis workspace.}" > "$pr_body"
+        python3 "$HERE/preview_github.py" "$target" --body-file "$pr_body"
         (cd "$target" && gh pr create --base "$base" --head "$branch" \
-            --title "$title" --body "${body:-Opened from a Notis workspace.}" $draft)
+            --title "$title" --body-file "$pr_body" $draft)
+        rm -f "$pr_body"
     fi
 
     bash "$0" sync "$repo" "$name"

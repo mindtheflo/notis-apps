@@ -152,9 +152,11 @@ path explicitly. Running a build or a test from the canonical checkout is the
 one mistake that makes a workspace pointless — it pollutes the shared tree and
 proves nothing about the branch.
 
-Dependencies are not shared between worktrees. Run `workspace.sh setup` and wait
-for the job before running or testing anything, unless the repository builds
-without an install step.
+Dependencies are not shared between worktrees. Creation now starts setup and preview as the tracked `preview-<repo>-<name>` job.
+Use `workspace.sh preview-wait <repo> <name>` until its structured completion
+is `ready` or `failed`; do not run a second setup or unmanaged dev server.
+If setup or preview failed, fix the saved repository command or missing
+prerequisite, then retry `workspace.sh prepare <repo> <name>` in the same tree.
 
 ## Opening the draft pull request
 
@@ -268,3 +270,36 @@ remote and may still be referenced.
 
 Do not remove a workspace with uncommitted changes without saying what would be
 lost and getting an answer.
+
+
+## Automatic development preview completion
+
+`workspace.sh new` starts the saved Setup command and then the saved Dev command
+in a tracked background job. It returns `preview_state` and a `next_command`
+while work continues. Follow that command until readiness or a recorded failure;
+do not stop at the workspace path when preparation is still running. The job
+survives the initiating shell and exposes its log via `job.sh log preview-<repo>-<name>`.
+Return `preview_url` as a clickable **Development preview** link in the completion
+response alongside the branch and PR. Only `ready` means externally verified.
+When failed, report the recorded failure and retry command, not a usable URL.
+A missing Setup or Dev command is a configuration failure; do not invent one.
+
+The preview uses the service's detached process, leased port and bounded lifetime.
+Opening the stable link wakes this same workspace and requires the owner to sign
+in. Never copy the provider target or Portal sign-in artifact into responses or
+GitHub. For Notis, save `./dev.sh --with-portal --no-crons`; the launcher detects
+that explicit Portal option and uses its entry artifact. Ordinary projects must
+serve HTTP using `PORT`.
+
+`workspace.sh pr` and `sync` maintain one marked preview section in an open PR's
+existing description, including PRs created after setup completes. They also
+refresh existing preview-marked comments authored by the current GitHub identity.
+When this flow creates another associated description or comment, first write
+its exact body to a file and run `python3 $S/preview_github.py <workspace-path>
+--body-file <file>` to include the same section. Do not create a preview-only
+comment. Preserve all unrelated prose and never use a localhost or token URL.
+
+`workspace.sh dev-status` inspects without waking; `dev-stop` must confirm stopped.
+`dev-url` only returns a previously externally verified, durable owner link.
+The preview identity and verification are persisted in `.context/notis-preview.json`;
+`.context/workspace-completion.json` records preparation success/failure and retry.

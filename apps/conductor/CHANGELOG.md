@@ -1,3 +1,7 @@
+## Automatic workspace previews - {PR_MERGE_DATE}
+
+New workspaces automatically prepare the project and start its configured development server. Verified previews are returned with the workspace and kept in associated pull request descriptions, including pull requests opened later. Failed setup or startup can be retried in the same workspace.
+
 # Conductor Changelog
 
 ## [Initial Release] - {PR_MERGE_DATE}
