@@ -105,6 +105,13 @@ class GithubTests(unittest.TestCase):
 
 
 class PreparationTests(unittest.TestCase):
+    def test_abandoned_job_reports_failure_instead_of_waiting_forever(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = Path(root)
+            with patch.object(workflow, 'command', return_value=subprocess.CompletedProcess([], 0, stdout='abandoned')), contextlib.redirect_stdout(io.StringIO()):
+                workflow.wait('repo', 'task', target, timeout=0)
+                self.assertEqual(workflow.completion(target)['preview_state'], 'failed')
+
     def test_setup_failure_persisted_and_dev_never_started(self):
         with tempfile.TemporaryDirectory() as root:
             target = Path(root)

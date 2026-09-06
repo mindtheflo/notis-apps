@@ -43,8 +43,13 @@ def prepare(repo, name, target):
             raise RuntimeError('Repository setup failed or is still running. Inspect the setup job log, then retry prepare.')
         result = command('bash', str(HERE / 'workspace.sh'), 'dev', repo, name, timeout=660)
         if result.returncode:
+            log = target / '.context/preview-start.log'
+            with open(log, 'w', opener=lambda path, flags: os.open(path, flags, 0o600)) as file:
+                os.chmod(log, 0o600)
+                file.write(result.stdout or '')
+                file.write(result.stderr or '')
             # Never copy raw shell logs: they can contain env or sign-in URLs.
-            raise RuntimeError('Preview startup or external readiness failed. Inspect dev-status and the private preview job log; fix the Dev command and retry prepare.')
+            raise RuntimeError('Preview startup or external readiness failed. Inspect dev-status and .context/preview-start.log; fix the Dev command and retry prepare.')
         url = preview.run('url', target)
         preview.save(record, {'preview_state': 'ready', 'preview_url': url})
         github = command('python3', str(HERE / 'preview_github.py'), str(target))
@@ -70,6 +75,11 @@ def wait(repo, name, target, timeout=40):
             return 0  # The workspace exists even if its preview failed.
         time.sleep(1)
     result = completion(target)
+    job = command('bash', str(HERE / 'job.sh'), 'status', f'preview-{repo}-{name}')
+    if result['preview_state'] == 'starting' and not job.stdout.startswith('running'):
+        result = {'preview_state': 'failed', 'error': 'Preparation job exited without a completion result.',
+                  'retry_command': f'bash {HERE}/workspace.sh prepare {repo} {name}'}
+        preview.save(target / '.context/workspace-completion.json', result)
     result['next_command'] = f'bash {HERE}/workspace.sh preview-wait {repo} {name}'
     print(json.dumps(result))
     return 0
