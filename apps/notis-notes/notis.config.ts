@@ -2,8 +2,7 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-notes',
-  devSlug: 'notis-notes',
-  title: 'Notis Notes',
+  title: 'Notes',
   description:
     'A home for every note Notis captures. Organise them into a nested folder tree, then read them as a gallery of cards, as a sortable table of all their properties, or on a calendar laid out by due date or by when they were created. Rename, refile, and archive notes in bulk, and create a new one without leaving the view.',
   icon: 'phosphor:note-pencil',
@@ -53,8 +52,12 @@ export default defineNotisApp({
       theme: 'dark',
     },
   ],
-  // The starter folder tree ships with the app; the notes themselves never do.
-  databases: [{ slug: 'note_folders', seedDocuments: true }, 'notes'],
+  // Owner folders and notes are always private; onboarding offers fictional examples.
+  databases: ['note_folders', 'notes'],
+  skills: [
+    { key: 'notes-onboarding', path: './skills/notes-onboarding/', name: 'notes-onboarding', description: 'Set up Notes with optional fictional examples.' },
+  ],
+  onboarding: { skill: 'notes-onboarding', prompt: 'Help me set up Notes.' },
   routes: [
     {
       path: '/',
