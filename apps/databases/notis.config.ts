@@ -2,7 +2,6 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-database',
-  devSlug: 'notis-database',
   title: 'Databases',
   description:
     'A read-only catalog and schema explorer for every database in your Notis workspace. Browse databases grouped by the app that owns them, inspect each property with its type, select options, formats, and formulas, follow relations between databases, and page through the actual records stored in any of them.',
@@ -17,7 +16,6 @@ export default defineNotisApp({
       alt: 'Database catalog grouping databases by the app that owns them, with the Accounts schema open on its Properties tab.',
       route: 'catalog',
       scenario: 'catalog-properties',
-      focus: '[data-store-screenshot="catalog"]',
       theme: 'light',
     },
     {
@@ -25,7 +23,6 @@ export default defineNotisApp({
       alt: 'The same database catalog and Accounts property list in dark mode.',
       route: 'catalog',
       scenario: 'catalog-properties',
-      focus: '[data-store-screenshot="catalog"]',
       theme: 'dark',
     },
     {
@@ -33,7 +30,6 @@ export default defineNotisApp({
       alt: 'Documents tab listing account records in a table with their tier, status, ARR, renewal date, and regions.',
       route: 'catalog',
       scenario: 'catalog-documents',
-      focus: '[data-store-screenshot="catalog"]',
       theme: 'light',
     },
     {
@@ -41,7 +37,6 @@ export default defineNotisApp({
       alt: 'The account records table in dark mode with every property column populated.',
       route: 'catalog',
       scenario: 'catalog-documents',
-      focus: '[data-store-screenshot="catalog"]',
       theme: 'dark',
     },
     {
@@ -49,7 +44,6 @@ export default defineNotisApp({
       alt: 'Relations tab showing how the Accounts database links out to Contacts, Deals, and Meeting Notes.',
       route: 'catalog',
       scenario: 'catalog-relations',
-      focus: '[data-store-screenshot="catalog"]',
       theme: 'light',
     },
   ],
@@ -57,6 +51,10 @@ export default defineNotisApp({
   // This app owns no databases: it reads the whole workspace catalog, which an
   // app runtime is sandboxed away from by default.
   capabilities: { workspaceDatabases: 'read' },
+  skills: [
+    { key: 'databases-onboarding', path: './skills/databases-onboarding/', name: 'databases-onboarding', description: 'Set up Databases with optional fictional examples.' },
+  ],
+  onboarding: { skill: 'databases-onboarding', prompt: 'Help me set up Databases.' },
   routes: [
     {
       path: '/',
@@ -64,6 +62,7 @@ export default defineNotisApp({
       name: 'Databases',
       icon: 'phosphor:database',
       default: true,
+      resourceDeepLinks: true,
     },
   ],
   tools: [

@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "demo_accounts",
+    "title": "Demo Accounts",
+    "description": "Entirely fictional optional demonstration database.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Tier",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Starter"
+          },
+          {
+            "name": "Growth"
+          }
+        ]
+      },
+      {
+        "name": "Website",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Seats",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Status",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "ARR",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Renewal",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Owner",
+        "type": "email",
+        "action": "add"
+      },
+      {
+        "name": "Regions",
+        "type": "multi_select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Europe"
+          }
+        ]
+      },
+      {
+        "name": "Strategic",
+        "type": "checkbox",
+        "action": "add"
+      },
+      {
+        "name": "Health score",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Account notes",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  }
+]
