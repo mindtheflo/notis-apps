@@ -1,9 +1,12 @@
-# Database Changelog
+# Changelog
 
-## [0.1.1] - {PR_MERGE_DATE}
+## [Store package validation] - 2026-09-22
 
-- SDK refresh release: updated the bundled @notis/sdk (new cloud computer, database subscription, and handover hooks) and adopted the stable dev slug identity.
+- Include the complete SDK source in the Store package.
 
-## [Initial Release] - {PR_MERGE_DATE}
+## [Portable onboarding and fictional examples] - 2026-09-22
 
-- First Store release.
+- Add portable setup through any Notis-connected assistant.
+- Bundle complete workflows and explicitly fictional demonstration data.
+- Refresh Store media and consistent app naming.
+- Preserve private account data and require installer choices for optional automations.
