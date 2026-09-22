@@ -1,0 +1,120 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Opt-in only. Deduplicate by demo key/title. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates may be shifted together relative to installer today.",
+  "databases": {
+    "repositories": [
+      {
+        "id": "demo-repository",
+        "title": "Demo \u00b7 Lumen Board",
+        "properties": {
+          "Name": "Demo \u00b7 Lumen Board",
+          "Git URL": "https://example.com/demo/lumen-board",
+          "Owner": "demo-studio",
+          "Repo": "lumen-board",
+          "Default branch": "main",
+          "Path": "/demo/repositories/lumen-board",
+          "Setup command": "npm install",
+          "Dev command": "npm run dev",
+          "Status": "Ready",
+          "Environment files": {
+            "status": "Not configured",
+            "files": []
+          },
+          "Notes": "Fictional repository. Do not clone or execute this demo path.",
+          "Demo": true
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "workspaces": [
+      {
+        "id": "demo-workspace-0",
+        "title": "Improve keyboard navigation",
+        "properties": {
+          "Name": "Improve keyboard navigation",
+          "Repository": [
+            "demo-repository"
+          ],
+          "Branch": "demo/keyboard-navigation",
+          "Base": "main",
+          "Task": "Make board navigation accessible.",
+          "Path": "/demo/workspaces/keyboard-navigation",
+          "Status": "Working",
+          "PR state": "Open",
+          "PR number": 1,
+          "PR URL": "https://example.com/demo/pull/1",
+          "Checks": "2 successful checks",
+          "Ahead": 1,
+          "Dirty files": 0,
+          "Last synced": "2026-09-22T08:00:00Z",
+          "Notes": "Fictional, non-executable workspace.",
+          "Demo": true
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-workspace-1",
+        "title": "Add reusable templates",
+        "properties": {
+          "Name": "Add reusable templates",
+          "Repository": [
+            "demo-repository"
+          ],
+          "Branch": "demo/reusable-templates",
+          "Base": "main",
+          "Task": "Create starter board templates.",
+          "Path": "/demo/workspaces/reusable-templates",
+          "Status": "Working",
+          "PR state": "Draft",
+          "PR number": 2,
+          "PR URL": "https://example.com/demo/pull/2",
+          "Checks": "Checks pending",
+          "Ahead": 2,
+          "Dirty files": 0,
+          "Last synced": "2026-09-22T08:00:00Z",
+          "Notes": "Fictional, non-executable workspace.",
+          "Demo": true
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-workspace-2",
+        "title": "Clarify activity filters",
+        "properties": {
+          "Name": "Clarify activity filters",
+          "Repository": [
+            "demo-repository"
+          ],
+          "Branch": "demo/activity-filters",
+          "Base": "main",
+          "Task": "Make the activity feed easier to scan.",
+          "Path": "/demo/workspaces/activity-filters",
+          "Status": "Ready",
+          "PR state": "Merged",
+          "PR number": 3,
+          "PR URL": "https://example.com/demo/pull/3",
+          "Checks": "2 successful checks",
+          "Ahead": 3,
+          "Dirty files": 0,
+          "Last synced": "2026-09-22T08:00:00Z",
+          "Notes": "Fictional, non-executable workspace.",
+          "Demo": true
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ]
+  }
+}

@@ -173,7 +173,7 @@ export function SecretsUpload({
     <div>
       <div className="flex flex-wrap items-center gap-3">
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           disabled={outcome.kind === 'sending'}
           onClick={() => inputRef.current?.click()}
@@ -191,13 +191,13 @@ export function SecretsUpload({
         </Button>
 
         {outcome.kind === 'sent' && (
-          <span className="inline-flex items-center gap-1.5 text-sm text-emerald-700 dark:text-emerald-400">
+          <span className="inline-flex items-center gap-1.5 text-sm text-primary">
             <CheckCircleIcon weight="fill" className="h-4 w-4" />
             Sent {outcome.files.length} file{outcome.files.length === 1 ? '' : 's'}
           </span>
         )}
         {outcome.kind === 'failed' && (
-          <span className="inline-flex items-center gap-1.5 text-sm text-red-700 dark:text-red-400">
+          <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
             <WarningCircleIcon className="h-4 w-4" />
             {outcome.message}
           </span>

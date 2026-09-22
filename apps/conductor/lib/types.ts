@@ -5,6 +5,7 @@ export type SecretsStatus = 'Missing' | 'Staged' | 'Verified';
 
 export type Repository = {
   id: string;
+  demo?: boolean;
   name: string;
   gitUrl: string | null;
   owner: string | null;
@@ -41,6 +42,7 @@ export type PullRequestState = 'None' | 'Draft' | 'Open' | 'Merged' | 'Closed';
 
 export type Workspace = {
   id: string;
+  demo?: boolean;
   name: string;
   repositoryId: string | null;
   branch: string | null;
@@ -54,6 +56,8 @@ export type Workspace = {
   checks: string | null;
   ahead: number | null;
   dirtyFiles: number | null;
+  /** Size of the worktree on the cloud computer, written by `workspace.sh sync`. */
+  diskMb: number | null;
   thread: string | null;
   lastSynced: string | null;
   notes: string | null;
