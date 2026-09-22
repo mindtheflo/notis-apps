@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useNotisNavigation } from '@notis/sdk';
+import { Skeleton, ViewSkeleton, useNotisNavigation } from '@notis/sdk';
 import {
   ChartLineUpIcon,
   FlameIcon,
@@ -14,6 +14,7 @@ import {
 } from '@phosphor-icons/react';
 
 import { Button } from '@/components/ui/button';
+import { PageHeading } from '@/components/page-heading';
 import { cn } from '@/lib/utils';
 import {
   DAY_MOOD_COLOR,
@@ -34,10 +35,10 @@ import {
   useJournalEntries,
   type JournalEntry,
 } from '../journal-core';
-import { EmptyState, LoadingState, SectionCard, StatTile } from '../journal-ui';
+import { EmptyState, SectionCard, StatTile } from '../journal-ui';
 
 export default function StatsPage() {
-  const { entries, loading, error } = useJournalEntries();
+  const { entries, hasData, error, refresh } = useJournalEntries();
   const navigation = useNotisNavigation();
 
   const chrono = useMemo(() => [...entries].reverse(), [entries]); // oldest -> newest
@@ -58,39 +59,82 @@ export default function StatsPage() {
   const words = useMemo(() => topMoodWords(entries), [entries]);
   const gratitudes = useMemo(() => recentGratitudes(entries, 12), [entries]);
 
-  if (loading && !entries.length) {
-    return (
-      <div data-store-screenshot="stats" className="mx-auto w-full max-w-6xl px-5 py-6 sm:px-8">
-        <LoadingState label="Reading back through your days…" />
-      </div>
-    );
-  }
-
   return (
     <div data-store-screenshot="stats" className="mx-auto w-full max-w-6xl px-5 py-6 sm:px-8">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-            <ChartLineUpIcon size={14} weight="bold" />
-            5 Minutes Journal
-          </div>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">Stats</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            What {entries.length} {entries.length === 1 ? 'day' : 'days'} of checking in with
-            yourself add up to.
-          </p>
-        </div>
-        <Button variant="outline" onClick={() => navigation.toRoute('/')} className="gap-1.5">
-          <NotebookIcon size={16} weight="bold" />
-          Back to journal
-        </Button>
-      </header>
+      <PageHeading
+        title="Stats"
+        description={
+          hasData
+            ? `What ${entries.length} ${entries.length === 1 ? 'day' : 'days'} of checking in with yourself add up to.`
+            : 'What checking in with yourself adds up to.'
+        }
+        actions={
+          <Button variant="outline" onClick={() => navigation.toRoute('/')} className="gap-1.5">
+            <NotebookIcon size={16} weight="bold" />
+            Back to journal
+          </Button>
+        }
+      />
 
       {error ? (
-        <p className="mt-6 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>
+        <div className="mt-6 flex items-center justify-between gap-3 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <span>{error}</span>
+          <Button variant="ghost" size="sm" onClick={() => refresh()}>
+            Retry
+          </Button>
+        </div>
       ) : null}
 
-      {entries.length === 0 ? (
+      {!hasData ? (
+        <>
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {Array.from({ length: 6 }, (_, index) => (
+              <div key={index} className="rounded-2xl bg-muted p-5">
+                <Skeleton style={{ width: '60%', height: 12 }} />
+                <Skeleton style={{ width: '40%', height: 28, marginTop: 10 }} />
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <SectionCard
+              title="Mood, morning to evening"
+              description="How you woke up next to how the day ended, on the pleasant scale"
+              icon={SunHorizonIcon}
+              className="lg:col-span-2"
+            >
+              <ViewSkeleton variant="graph" />
+            </SectionCard>
+            <SectionCard
+              title="Energy & motivation"
+              description="Morning levels day by day"
+              icon={LightningIcon}
+              className="lg:col-span-2"
+            >
+              <ViewSkeleton variant="graph" />
+            </SectionCard>
+            <SectionCard title="How your days feel" description="Where the whole-day mood lands on the scale" icon={MoonStarsIcon}>
+              <ViewSkeleton variant="table" rows={3} />
+            </SectionCard>
+            <SectionCard title="How you wake up" description="Where the waking mood lands on the scale" icon={SunHorizonIcon}>
+              <ViewSkeleton variant="table" rows={3} />
+            </SectionCard>
+            <SectionCard title="The ritual" description="Check-ins completed over the last 30 days" icon={FlameIcon}>
+              <ViewSkeleton variant="table" rows={2} />
+            </SectionCard>
+            <SectionCard title="Words you reach for" description="The adjectives you use most for your moods" icon={ChartLineUpIcon}>
+              <ViewSkeleton variant="cards" rows={3} />
+            </SectionCard>
+            <SectionCard
+              title="Gratitude wall"
+              description="The latest things you said thank you for"
+              icon={SparkleIcon}
+              className="lg:col-span-2"
+            >
+              <ViewSkeleton variant="cards" rows={3} />
+            </SectionCard>
+          </div>
+        </>
+      ) : entries.length === 0 ? (
         <div className="mt-8">
           <EmptyState
             icon={ChartLineUpIcon}
@@ -112,7 +156,7 @@ export default function StatsPage() {
               value={streak}
               suffix={streak === 1 ? 'day' : 'days'}
               icon={FlameIcon}
-              accent="#f59e0b"
+              accent="hsl(var(--primary))"
             />
             <StatTile label="Days journaled" value={entries.length} icon={NotebookIcon} />
             <StatTile
@@ -155,13 +199,16 @@ export default function StatsPage() {
               className="lg:col-span-2"
             >
               <MoodTrend entries={recent} />
-              <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-foreground">
+              <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-sm bg-foreground/70" />
                   Waking mood
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-sm border-[1.5px] border-foreground/70 bg-foreground/20" />
+                  <span
+                    className="h-2 w-2 rounded-sm bg-foreground/20"
+                    style={{ boxShadow: 'inset 0 0 0 1.5px hsl(var(--foreground) / 0.7)' }}
+                  />
                   Whole-day mood
                 </span>
                 <span>Bars take the color of the mood itself.</span>
@@ -186,7 +233,7 @@ export default function StatsPage() {
               className="lg:col-span-2"
             >
               <LevelTrend entries={recent} />
-              <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-foreground">
+              <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
                 <LegendSwatch color={ENERGY_COLOR} label="Energy" />
                 <LegendSwatch color={MOTIVATION_COLOR} label="Motivation" />
                 <span className="ml-auto">Scale 1–10</span>
@@ -243,7 +290,7 @@ export default function StatsPage() {
                       className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium capitalize"
                     >
                       {word}
-                      <span className="text-[10px] tabular-nums text-muted-foreground">{count}</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">{count}</span>
                     </span>
                   ))}
                 </div>
@@ -261,12 +308,9 @@ export default function StatsPage() {
               {gratitudes.length ? (
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {gratitudes.map((item, index) => (
-                    <div
-                      key={`${item.text}-${index}`}
-                      className="rounded-xl border border-border/70 bg-muted/30 px-3.5 py-3"
-                    >
+                    <div key={`${item.text}-${index}`} className="rounded-xl bg-background px-3.5 py-3">
                       <p className="text-sm leading-snug">{item.text}</p>
-                      <p className="mt-1.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                      <p className="mt-1.5 text-xs font-medium text-muted-foreground">
                         {formatDay(item.date)}
                       </p>
                     </div>
@@ -317,7 +361,7 @@ function MoodTrend({ entries }: { entries: JournalEntry[] }) {
               hollow
             />
           </div>
-          <span className="text-[9px] text-muted-foreground">{shortDay(entry.date)}</span>
+          <span className="text-xs text-muted-foreground">{shortDay(entry.date)}</span>
         </div>
       ))}
     </div>
@@ -349,7 +393,7 @@ function LevelTrend({ entries }: { entries: JournalEntry[] }) {
               title={`Motivation ${entry.motivation ?? '—'}`}
             />
           </div>
-          <span className="text-[9px] text-muted-foreground">{shortDay(entry.date)}</span>
+          <span className="text-xs text-muted-foreground">{shortDay(entry.date)}</span>
         </div>
       ))}
     </div>
@@ -374,7 +418,7 @@ function Bar({
         className="w-full rounded-t-sm transition-all"
         style={{
           height: `${Math.max(pct, fraction > 0 ? 4 : 0)}%`,
-          backgroundColor: hollow ? `${color}55` : color,
+          backgroundColor: hollow ? 'transparent' : color,
           boxShadow: hollow ? `inset 0 0 0 1.5px ${color}` : undefined,
         }}
       />
@@ -420,7 +464,7 @@ function MoodDistribution({
                 style={{ width: `${(count / max) * 100}%`, backgroundColor: step.color }}
               />
             </div>
-            <span className="w-14 shrink-0 text-right text-[11px] tabular-nums text-muted-foreground">
+            <span className="w-14 shrink-0 text-right text-xs tabular-nums text-muted-foreground">
               {count} · {pct}%
             </span>
           </div>

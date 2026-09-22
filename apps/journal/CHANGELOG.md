@@ -1,33 +1,13 @@
-# 5 Minutes Journal Changelog
+# Changelog
 
-## [0.1.9] - {PR_MERGE_DATE}
+## [Manual setup and compact mobile timeline] - 2026-09-22
 
-- SDK refresh release: updated the bundled @notis/sdk (new cloud computer, database subscription, and handover hooks) and adopted the stable dev slug identity.
+- Offer manual check-ins without requiring an automation plan.
+- Keep the selected journal entry close to its scrollable mobile timeline.
 
-## [Accessible Timeline Selection] - 2026-07-29
+## [Portable onboarding and fictional examples] - 2026-09-22
 
-- Announces the selected journal day to assistive technology while preserving the visual timeline.
-
-## [Package Details and History] - 2026-07-17
-
-- Added complete package release history to App Details.
-- Refreshed the light and dark Store screenshots for the latest release.
-
-## [Publisher Attribution] - 2026-07-16
-
-- Shows Florian (Flo) Pariset as the Store publisher.
-
-## [Theme-Aware Store Screenshots] - 2026-07-16
-
-- Added matching light and dark screenshots with the shared deep-blue background.
-- Removed the screenshot shadow and white edge artifacts.
-
-## [5 Minutes Journal Redesign] - 2026-07-16
-
-- Renamed Journal to 5 Minutes Journal.
-- Added focused morning and evening check-in views plus mood, energy, motivation, ritual-consistency, and gratitude statistics.
-- Added guided onboarding for the morning and evening check-in routine.
-
-## [Initial Journal] - 2026-07-14
-
-- Added a browse-first Journal experience powered by entries created through conversations with Notis.
+- Add portable setup through any Notis-connected assistant.
+- Bundle complete workflows and explicitly fictional demonstration data.
+- Refresh Store media and consistent app naming.
+- Preserve private account data and require installer choices for optional automations.

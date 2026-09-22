@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* Flat list rows: hover and selection are carried by background tint only. */
+  .list-row {
+    @apply rounded-xl bg-muted px-4 py-3 transition-colors lg:bg-transparent lg:hover:bg-muted/60;
+  }
+
+  .list-row-selected {
+    @apply bg-primary/[0.06] lg:bg-primary/[0.06] lg:hover:bg-primary/[0.06];
+  }
+}
+
 /* The portal mounts the app inside [data-notis-app-root]; let it fill the width. */
 [data-notis-app-root] {
   width: 100%;
