@@ -1,0 +1,281 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Opt-in only. Deduplicate by demo key/title. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates may be shifted together relative to installer today.",
+  "databases": {
+    "macro_goals": [
+      {
+        "id": "demo-macro-goal",
+        "title": "Demo \u00b7 Illustrative goals",
+        "properties": {
+          "Name": "Demo \u00b7 Illustrative goals",
+          "Effective Date": "2026-09-01",
+          "Calories Goal": 2200,
+          "Protein Goal": 110,
+          "Carbs Goal": 275,
+          "Fat Goal": 73,
+          "Goal": "Maintain",
+          "Active": true
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "macro_meals": [
+      {
+        "id": "demo-meal-0-0",
+        "title": "Berry oat bowl",
+        "properties": {
+          "Name": "Berry oat bowl",
+          "Date": "2026-09-22T08:00:00Z",
+          "Meal Type": "Breakfast",
+          "Calories": 460,
+          "Protein": 18,
+          "Carbs": 67,
+          "Fat": 14,
+          "Ingredients": "Oats, berries, yogurt and walnuts",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-0-1",
+        "title": "Chickpea grain salad",
+        "properties": {
+          "Name": "Chickpea grain salad",
+          "Date": "2026-09-22T12:00:00Z",
+          "Meal Type": "Lunch",
+          "Calories": 610,
+          "Protein": 24,
+          "Carbs": 79,
+          "Fat": 22,
+          "Ingredients": "Chickpeas, quinoa, cucumber and olive oil",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-0-2",
+        "title": "Tofu vegetable noodles",
+        "properties": {
+          "Name": "Tofu vegetable noodles",
+          "Date": "2026-09-22T19:00:00Z",
+          "Meal Type": "Dinner",
+          "Calories": 690,
+          "Protein": 32,
+          "Carbs": 91,
+          "Fat": 21,
+          "Ingredients": "Tofu, rice noodles and mixed vegetables",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-0-3",
+        "title": "Apple and yogurt",
+        "properties": {
+          "Name": "Apple and yogurt",
+          "Date": "2026-09-22T16:00:00Z",
+          "Meal Type": "Snack",
+          "Calories": 230,
+          "Protein": 13,
+          "Carbs": 34,
+          "Fat": 5,
+          "Ingredients": "Apple and plain yogurt",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-1-0",
+        "title": "Berry oat bowl",
+        "properties": {
+          "Name": "Berry oat bowl",
+          "Date": "2026-09-21T08:00:00Z",
+          "Meal Type": "Breakfast",
+          "Calories": 470,
+          "Protein": 18,
+          "Carbs": 67,
+          "Fat": 14,
+          "Ingredients": "Oats, berries, yogurt and walnuts",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-1-1",
+        "title": "Chickpea grain salad",
+        "properties": {
+          "Name": "Chickpea grain salad",
+          "Date": "2026-09-21T12:00:00Z",
+          "Meal Type": "Lunch",
+          "Calories": 620,
+          "Protein": 24,
+          "Carbs": 79,
+          "Fat": 22,
+          "Ingredients": "Chickpeas, quinoa, cucumber and olive oil",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-1-2",
+        "title": "Tofu vegetable noodles",
+        "properties": {
+          "Name": "Tofu vegetable noodles",
+          "Date": "2026-09-21T19:00:00Z",
+          "Meal Type": "Dinner",
+          "Calories": 700,
+          "Protein": 32,
+          "Carbs": 91,
+          "Fat": 21,
+          "Ingredients": "Tofu, rice noodles and mixed vegetables",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-1-3",
+        "title": "Apple and yogurt",
+        "properties": {
+          "Name": "Apple and yogurt",
+          "Date": "2026-09-21T16:00:00Z",
+          "Meal Type": "Snack",
+          "Calories": 240,
+          "Protein": 13,
+          "Carbs": 34,
+          "Fat": 5,
+          "Ingredients": "Apple and plain yogurt",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-2-0",
+        "title": "Berry oat bowl",
+        "properties": {
+          "Name": "Berry oat bowl",
+          "Date": "2026-09-20T08:00:00Z",
+          "Meal Type": "Breakfast",
+          "Calories": 480,
+          "Protein": 18,
+          "Carbs": 67,
+          "Fat": 14,
+          "Ingredients": "Oats, berries, yogurt and walnuts",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-2-1",
+        "title": "Chickpea grain salad",
+        "properties": {
+          "Name": "Chickpea grain salad",
+          "Date": "2026-09-20T12:00:00Z",
+          "Meal Type": "Lunch",
+          "Calories": 630,
+          "Protein": 24,
+          "Carbs": 79,
+          "Fat": 22,
+          "Ingredients": "Chickpeas, quinoa, cucumber and olive oil",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-2-2",
+        "title": "Tofu vegetable noodles",
+        "properties": {
+          "Name": "Tofu vegetable noodles",
+          "Date": "2026-09-20T19:00:00Z",
+          "Meal Type": "Dinner",
+          "Calories": 710,
+          "Protein": 32,
+          "Carbs": 91,
+          "Fat": 21,
+          "Ingredients": "Tofu, rice noodles and mixed vegetables",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-meal-2-3",
+        "title": "Apple and yogurt",
+        "properties": {
+          "Name": "Apple and yogurt",
+          "Date": "2026-09-20T16:00:00Z",
+          "Meal Type": "Snack",
+          "Calories": 250,
+          "Protein": 13,
+          "Carbs": 34,
+          "Fat": 5,
+          "Ingredients": "Apple and plain yogurt",
+          "Notes": "Wholly fictional food log; illustrative estimates, not a personal recommendation.",
+          "Confidence": "Medium",
+          "Source": "Manual"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ]
+  }
+}
