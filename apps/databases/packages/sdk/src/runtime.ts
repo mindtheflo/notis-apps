@@ -1,3 +1,4 @@
+import type { AgentContextContent, AgentContextItem, AgentContextSource } from './agentContext';
 /**
  * NotisRuntime is the bridge between app code running in the browser and the
  * Notis platform. The portal owns the runtime and injects it through
@@ -8,6 +9,7 @@
  */
 
 import type { ComponentType } from 'react';
+import type { NotisQueryClient } from './queryCache';
 
 // ---------------------------------------------------------------------------
 // Database types
@@ -71,7 +73,7 @@ export interface DatabaseDescriptor {
  * (pdf, xlsx, pptx, ...). Future content types (canvas, ...) extend this
  * union without changing the component contracts.
  */
-export type DocumentContentType = 'markdown' | 'file';
+export type DocumentContentType = 'markdown' | 'file' | 'view';
 
 export interface DocumentRecord {
   id: string;
@@ -86,6 +88,9 @@ export interface DocumentRecord {
   contentBlocknote?: Array<Record<string, unknown>> | null;
   contentMarkdown?: string | null;
   plainText?: string | null;
+  viewType?: string | null;
+  viewState?: Record<string, unknown> | null;
+  viewRevision?: number | null;
   createdAt?: string | null;
   lastEditedTime?: string | null;
 }
@@ -102,6 +107,16 @@ export interface ToolDescriptor {
   inputSchema?: ToolInputSchema;
 }
 
+export interface ToolCallOptions {
+  /** Explicitly identifies an idempotent read; never set on a mutation. */
+  readOnly?: boolean;
+  /**
+   * Coalesce an identical in-flight call. Only opt in for idempotent reads;
+   * mutations must execute once per invocation.
+   */
+  dedupe?: boolean;
+}
+
 // ---------------------------------------------------------------------------
 // Route types
 // ---------------------------------------------------------------------------
@@ -113,6 +128,7 @@ export interface RouteDescriptor {
   icon?: string | null;
   parentSlug?: string | null;
   default?: boolean;
+  resourceDeepLinks?: boolean;
   collection?: {
     database: string;
     titleProperty: string;
@@ -161,12 +177,47 @@ export interface QueryFilter {
 
 export interface NotisRuntimeContext {
   collectionItem?: CollectionItemDetail | null;
+  /** App-owned resource requested through the route's `?resource=<id>` link. */
+  resourceId?: string | null;
   /**
    * Set when the app is being rendered by the screenshot harness (`notis apps
    * screenshot`) for the named listing scenario. Lets apps and SDK components
    * hide dev-only chrome from listing images.
    */
   screenshotScenario?: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// App context shared with Notis
+// ---------------------------------------------------------------------------
+
+export type ContextAttributeValue = string | number | boolean | null;
+
+/**
+ * The specific thing currently in focus inside an app view. The host stamps
+ * app/view provenance onto this value before it reaches chat, so apps only
+ * describe their own resource rather than impersonating another surface.
+ */
+export interface ContextResource extends AgentContextContent {
+  additionalContext?: Record<string, unknown>;
+  id: string;
+  kind: string;
+  label: string;
+  url?: string | null;
+  revision?: string | null;
+  attributes?: Record<string, ContextAttributeValue>;
+  snapshot?: {
+    format: 'text' | 'markdown';
+    content: string;
+  } | null;
+}
+
+/** A quote copied from an app, kept separate from the user's prompt. */
+export interface ContextSelection extends AgentContextContent {
+  source?: AgentContextSource;
+  id: string;
+  text: string;
+  resource?: ContextResource | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -189,6 +240,38 @@ export interface NotisDocumentEditorProps {
   onSavingChange?: (saving: boolean) => void;
 }
 
+export interface NotisMarkdownEditorSavePayload {
+  markdown: string;
+  expectedRevision?: string | null;
+}
+
+export interface NotisMarkdownEditorSaveResult {
+  revision?: string | null;
+}
+
+/**
+ * Storage-neutral host markdown editor. The app owns persistence through
+ * `onSave`; the host only supplies Notis' editing experience.
+ */
+export interface NotisMarkdownEditorProps {
+  /** Stable identity of the edited resource. Changing it starts a fresh editor. */
+  resourceKey?: string;
+  value: string;
+  revision?: string | null;
+  readOnly?: boolean;
+  autosaveMs?: number;
+  placeholder?: string;
+  className?: string;
+  onChange?: (markdown: string) => void;
+  /** Persist an uploaded media/file block and return its durable URL. */
+  onUploadFile?: (file: File) => Promise<string>;
+  onSave?: (
+    payload: NotisMarkdownEditorSavePayload,
+  ) => Promise<NotisMarkdownEditorSaveResult | void>;
+  onDirtyChange?: (dirty: boolean) => void;
+  onSavingChange?: (saving: boolean) => void;
+}
+
 /**
  * Components the host (portal) injects through the runtime. Apps consume them
  * via the SDK wrappers (e.g. `DocumentEditor`), which fall back gracefully
@@ -196,6 +279,7 @@ export interface NotisDocumentEditorProps {
  */
 export interface NotisRuntimeUI {
   DocumentEditor?: ComponentType<NotisDocumentEditorProps>;
+  MarkdownEditor?: ComponentType<NotisMarkdownEditorProps>;
 }
 
 // ---------------------------------------------------------------------------
@@ -218,8 +302,8 @@ export interface SubscribeDatabaseOptions {
  * Work an app hands to the Notis manager chat through `NotisRuntime.handover`.
  */
 export interface HandoverPayload {
-  /** The message the manager should act on. */
-  prompt: string;
+  /** Optional starter message. Omit it to open a context-only composer. */
+  prompt?: string;
   /**
    * Key of a skill declared in `notis.config.ts` -> `skills[].key`. The host
    * rejects a key this app does not declare. Omit to hand over plain work.
@@ -281,11 +365,23 @@ export interface CloudComputerFacts {
 }
 
 export interface NotisRuntime {
+  /** Optional host-scoped in-memory read cache. Older hosts remain supported. */
+  queryClient?: NotisQueryClient;
   app: AppDescriptor;
   route: RouteDescriptor;
   databases: DatabaseDescriptor[];
   context: NotisRuntimeContext;
   ui?: NotisRuntimeUI;
+
+  /** Publish or clear the focused resource inside the current app view. */
+  contextSource?: AgentContextSource;
+  publishActiveResource?(resource: ContextResource | null): void;
+
+  /** Remember a copied quote so the host can recover it across iframe paste. */
+  captureContextSelection?(selection: ContextSelection): void;
+  addContext?(item: AgentContextItem): Promise<boolean>;
+  updateContext?(item: AgentContextItem): Promise<boolean>;
+  removeContext?(id: string): Promise<boolean>;
 
   /**
    * Subscribe to changes on an app-owned database. Returns an unsubscribe.
@@ -341,7 +437,11 @@ export interface NotisRuntime {
   setTopBarSearchLoading?: (loading: boolean) => void;
 
   listTools(): Promise<ToolDescriptor[]>;
-  callTool<TResult = unknown>(name: string, args?: Record<string, unknown>): Promise<TResult>;
+  callTool<TResult = unknown>(
+    name: string,
+    args?: Record<string, unknown>,
+    options?: ToolCallOptions,
+  ): Promise<TResult>;
 
   request(path: string, options?: {
     method?: string;

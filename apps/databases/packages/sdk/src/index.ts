@@ -10,6 +10,10 @@
 export { NotisProvider, useNotisRuntime } from './provider';
 
 // Hooks
+export { useQuery, useQueryClient } from './hooks/useQuery';
+export type { UseQueryOptions, UseQueryResult } from './hooks/useQuery';
+export { createQueryClient, createPrefetchQueue, queryKey } from './queryCache';
+export type { NotisQueryClient, QuerySnapshot, QueryFetchOptions } from './queryCache';
 export { useNotis } from './hooks/useNotis';
 export { useDocuments } from './hooks/useDocuments';
 export type { UseDocumentsOptions, UseDocumentsResult } from './hooks/useDocuments';
@@ -35,11 +39,23 @@ export { useNotisNavigation } from './hooks/useNotisNavigation';
 export { useTopBarSearch } from './hooks/useTopBarSearch';
 export { useBackend } from './hooks/useBackend';
 export { useMultiSelect } from './hooks/useMultiSelect';
+export { useCollectionInteractions, COLLECTION_ITEM_ATTRIBUTE } from './hooks/useCollectionInteractions';
+export { useActiveResource } from './hooks/useActiveResource';
+export {
+  ShortcutProvider,
+  SHORTCUT_SCOPE_PRIORITY,
+  isEditableShortcutEvent,
+  shortcutDisplay,
+  useShortcuts,
+} from './interactions/shortcuts';
 
 // Documents & markdown
 export { Markdown } from './components/Markdown';
 export type { MarkdownProps } from './components/Markdown';
 export { DocumentEditor } from './components/DocumentEditor';
+export { MarkdownEditor } from './components/MarkdownEditor';
+export { NotisSelectionBoundary, NOTIS_CONTEXT_CLIPBOARD_TYPE } from './components/NotisSelectionBoundary';
+export type { NotisSelectionBoundaryProps } from './components/NotisSelectionBoundary';
 export {
   asRecord,
   blockNoteToPlainText,
@@ -56,9 +72,12 @@ export {
 } from './documents';
 
 // Multi-select components
+export { Dialog } from './components/Dialog';
+export type { DialogProps } from './components/Dialog';
 export { MultiSelectActionBar } from './components/MultiSelectActionBar';
-export { MultiSelectCheckbox } from './components/MultiSelectCheckbox';
-export { MultiSelectDragOverlay } from './components/MultiSelectDragOverlay';
+export { MultiSelectCheckbox, MultiSelectCheckbox as SelectionCheckbox } from './components/MultiSelectCheckbox';
+export { MultiSelectDragOverlay, MultiSelectDragOverlay as SelectionMarquee } from './components/MultiSelectDragOverlay';
+export { ShortcutHints } from './components/ShortcutHints';
 export type {
   DragRect,
   MultiSelectController,
@@ -70,6 +89,31 @@ export type {
 } from './components/MultiSelectActionBar';
 export type { MultiSelectCheckboxProps } from './components/MultiSelectCheckbox';
 export type { MultiSelectDragOverlayProps } from './components/MultiSelectDragOverlay';
+export type { MultiSelectCheckboxProps as SelectionCheckboxProps } from './components/MultiSelectCheckbox';
+export type { MultiSelectDragOverlayProps as SelectionMarqueeProps } from './components/MultiSelectDragOverlay';
+export type { ShortcutHint, ShortcutHintsProps } from './components/ShortcutHints';
+export type {
+  CollectionInteractionController,
+  CollectionInteractionReason,
+  CollectionKeyboardShortcuts,
+  CollectionNavigationContext,
+  CollectionNavigationDirection,
+  CollectionSelectionChange,
+  SelectionMarqueeRect,
+  UseCollectionInteractionsOptions,
+} from './hooks/useCollectionInteractions';
+export type {
+  ShortcutDefinition,
+  ShortcutHelpEntry,
+  ShortcutScope,
+  UseShortcutsOptions,
+} from './interactions/shortcuts';
+export type {
+  CollectionAction,
+  CollectionActionContext,
+  CollectionActionIntent,
+  ResolvedCollectionAction,
+} from './interactions/actions';
 
 // Types (re-exported for convenience)
 export type {
@@ -77,6 +121,9 @@ export type {
   CloudComputerCliAuthFacts,
   CloudComputerFacts,
   CloudComputerSandboxFacts,
+  ContextAttributeValue,
+  ContextResource,
+  ContextSelection,
   CollectionItem,
   CollectionItemDetail,
   DatabaseDescriptor,
@@ -88,6 +135,9 @@ export type {
   HandoverPayload,
   HandoverResult,
   NotisDocumentEditorProps,
+  NotisMarkdownEditorProps,
+  NotisMarkdownEditorSavePayload,
+  NotisMarkdownEditorSaveResult,
   NotisRuntime,
   NotisRuntimeContext,
   NotisRuntimeUI,
@@ -96,5 +146,18 @@ export type {
   SecretPropertyValue,
   SubscribeDatabaseOptions,
   ToolDescriptor,
+  ToolCallOptions,
   ToolInputSchema,
 } from './runtime';
+
+export { useToolQuery } from './hooks/useToolQuery';
+
+export { Skeleton, ViewSkeleton } from './components/Skeleton';
+
+export { useLongPressSelection } from './hooks/useLongPressSelection';
+export { isInteractionElementVisible } from './interactions/visibility';
+
+export type { AgentContextContent, AgentContextItem, ContextAttachment } from './agentContext';
+export { useAgentContext } from './hooks/useAgentContext';
+export { NotisCommentBoundary, NotisCommentBox } from './components/NotisCommentBoundary';
+export type { NotisCommentBoundaryProps, NotisCommentBoxProps } from './components/NotisCommentBoundary';
