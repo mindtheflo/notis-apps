@@ -1,0 +1,209 @@
+[
+  {
+    "slug": "meetings",
+    "title": "Meetings",
+    "description": "Meetings owned by this installed app.",
+    "properties": [
+      {
+        "name": "Title",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Meeting ID",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Date",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Duration (min)",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Meeting Link",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Recording",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Calendar UID",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Attendees",
+        "type": "multi_select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Alex Morgan"
+          },
+          {
+            "name": "Sam Rivera"
+          }
+        ]
+      },
+      {
+        "name": "Attendee Emails",
+        "type": "multi_select",
+        "action": "add",
+        "options": [
+          {
+            "name": "alex@example.com"
+          },
+          {
+            "name": "sam@example.com"
+          }
+        ]
+      },
+      {
+        "name": "Attendee Count",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "External Attendees",
+        "type": "multi_select",
+        "action": "add",
+        "options": [
+          {
+            "name": "sam@example.com"
+          }
+        ]
+      },
+      {
+        "name": "Tags",
+        "type": "multi_select",
+        "action": "add",
+        "options": []
+      },
+      {
+        "name": "Summary",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Circleback"
+          },
+          {
+            "name": "Granola"
+          },
+          {
+            "name": "Notion Import"
+          },
+          {
+            "name": "Manual"
+          }
+        ]
+      },
+      {
+        "name": "Action Item Count",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Open Action Items",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Transcript Segments",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Has Transcript",
+        "type": "checkbox",
+        "action": "add"
+      },
+      {
+        "name": "Source URL",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Notes Link",
+        "type": "url",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "meeting_action_items",
+    "title": "Meeting Action Items",
+    "description": "Meeting action items owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Item ID",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Meeting",
+        "type": "relation",
+        "action": "add",
+        "target_slug": "meetings"
+      },
+      {
+        "name": "Description",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Assignee",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Assignee Email",
+        "type": "email",
+        "action": "add"
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "PENDING"
+          },
+          {
+            "name": "COMPLETED"
+          },
+          {
+            "name": "CANCELLED"
+          }
+        ]
+      },
+      {
+        "name": "Meeting Date",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "For Me",
+        "type": "checkbox",
+        "action": "add"
+      }
+    ]
+  }
+]
