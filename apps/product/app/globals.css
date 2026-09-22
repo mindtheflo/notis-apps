@@ -1,0 +1,45 @@
+@import '@notis/sdk/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .product-analysis-shell {
+    @apply mx-auto min-h-[45rem] w-full max-w-6xl space-y-8 bg-background px-4 py-5 text-foreground antialiased sm:px-6 sm:py-8 lg:px-8;
+  }
+
+  .analytics-header {
+    @apply flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between;
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* Flat list rows: hover and selection are carried by background tint only. */
+  .list-row {
+    @apply rounded-xl bg-muted px-4 py-3 transition-colors lg:bg-transparent lg:hover:bg-muted/60;
+  }
+
+  .list-row-selected {
+    @apply bg-primary/[0.06] lg:bg-primary/[0.06] lg:hover:bg-primary/[0.06];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

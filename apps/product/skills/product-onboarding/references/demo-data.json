@@ -1,0 +1,312 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Opt-in only. Deduplicate by demo key/title. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates may be shifted together relative to installer today.",
+  "databases": {
+    "tickets": [
+      {
+        "id": "demo-ticket-1",
+        "title": "Keep keyboard focus after saving",
+        "properties": {
+          "Name": "Keep keyboard focus after saving",
+          "Key": "LUM-101",
+          "Type": "Bug",
+          "Status": "In Progress",
+          "Priority": "High",
+          "Size": "Minor",
+          "Version": []
+        },
+        "content_markdown": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "plain_text": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-ticket-2",
+        "title": "Add reusable project templates",
+        "properties": {
+          "Name": "Add reusable project templates",
+          "Key": "LUM-102",
+          "Type": "Feature",
+          "Status": "Todo",
+          "Priority": "Medium",
+          "Size": "Minor",
+          "Version": []
+        },
+        "content_markdown": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "plain_text": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-ticket-3",
+        "title": "Clarify empty activity feeds",
+        "properties": {
+          "Name": "Clarify empty activity feeds",
+          "Key": "LUM-103",
+          "Type": "Feature",
+          "Status": "Beta",
+          "Priority": "Low",
+          "Size": "Minor",
+          "Version": []
+        },
+        "content_markdown": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "plain_text": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-ticket-4",
+        "title": "Improve date picker labels",
+        "properties": {
+          "Name": "Improve date picker labels",
+          "Key": "LUM-104",
+          "Type": "Bug",
+          "Status": "Done",
+          "Priority": "High",
+          "Size": "Minor",
+          "Version": [
+            "demo-version-1"
+          ]
+        },
+        "content_markdown": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "plain_text": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-ticket-5",
+        "title": "Explore guest feedback",
+        "properties": {
+          "Name": "Explore guest feedback",
+          "Key": "LUM-105",
+          "Type": "Feature",
+          "Status": "Backlog",
+          "Priority": "Medium",
+          "Size": "Minor",
+          "Version": []
+        },
+        "content_markdown": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "plain_text": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-ticket-6",
+        "title": "Remember the last board view",
+        "properties": {
+          "Name": "Remember the last board view",
+          "Key": "LUM-106",
+          "Type": "Feature",
+          "Status": "Done",
+          "Priority": "Low",
+          "Size": "Minor",
+          "Version": [
+            "demo-version-1"
+          ]
+        },
+        "content_markdown": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "plain_text": "Fictional product ticket. Acceptance: verify the described behavior with a synthetic workspace.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "versions": [
+      {
+        "id": "demo-version-1",
+        "title": "Lumen Board \u00b7 Autumn edition",
+        "properties": {
+          "Name": "Lumen Board \u00b7 Autumn edition",
+          "Status": "Published",
+          "Release date": "2026-09-18",
+          "Headline": "A calmer place to plan together",
+          "Summary": "Reusable project templates and a clearer activity feed."
+        },
+        "content_markdown": "# Autumn edition\n\n- Start from a reusable project template.\n- Find recent changes in a simpler activity feed.\n\nFictional demonstration release.",
+        "plain_text": "# Autumn edition\n\n- Start from a reusable project template.\n- Find recent changes in a simpler activity feed.\n\nFictional demonstration release.",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "product_feature_observations": [
+      {
+        "id": "demo-feature-0",
+        "title": "Project templates",
+        "properties": {
+          "Name": "Project templates",
+          "Key": "demo-adoption-0",
+          "Feature ID": "demo-feature-0",
+          "Feature": "Project templates",
+          "Measurement status": "Measured",
+          "Adopters": 248,
+          "Eligible users": 400,
+          "Successful outcomes": 744,
+          "Window start": "2026-09-15",
+          "Window end": "2026-09-22",
+          "Source": "Fictional demo analytics",
+          "Method": "Distinct synthetic users with a completed feature action / eligible synthetic users.",
+          "Interpretation": "Illustrative sample, not a real business result.",
+          "Comparable": false
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-feature-1",
+        "title": "Shared boards",
+        "properties": {
+          "Name": "Shared boards",
+          "Key": "demo-adoption-1",
+          "Feature ID": "demo-feature-1",
+          "Feature": "Shared boards",
+          "Measurement status": "Measured",
+          "Adopters": 312,
+          "Eligible users": 400,
+          "Successful outcomes": 936,
+          "Window start": "2026-09-15",
+          "Window end": "2026-09-22",
+          "Source": "Fictional demo analytics",
+          "Method": "Distinct synthetic users with a completed feature action / eligible synthetic users.",
+          "Interpretation": "Illustrative sample, not a real business result.",
+          "Comparable": false
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-feature-2",
+        "title": "Activity filters",
+        "properties": {
+          "Name": "Activity filters",
+          "Key": "demo-adoption-2",
+          "Feature ID": "demo-feature-2",
+          "Feature": "Activity filters",
+          "Measurement status": "Measured",
+          "Adopters": 176,
+          "Eligible users": 400,
+          "Successful outcomes": 528,
+          "Window start": "2026-09-15",
+          "Window end": "2026-09-22",
+          "Source": "Fictional demo analytics",
+          "Method": "Distinct synthetic users with a completed feature action / eligible synthetic users.",
+          "Interpretation": "Illustrative sample, not a real business result.",
+          "Comparable": false
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-feature-3",
+        "title": "Guest feedback",
+        "properties": {
+          "Name": "Guest feedback",
+          "Key": "demo-adoption-3",
+          "Feature ID": "demo-feature-3",
+          "Feature": "Guest feedback",
+          "Measurement status": "Measured",
+          "Adopters": 92,
+          "Eligible users": 400,
+          "Successful outcomes": 276,
+          "Window start": "2026-09-15",
+          "Window end": "2026-09-22",
+          "Source": "Fictional demo analytics",
+          "Method": "Distinct synthetic users with a completed feature action / eligible synthetic users.",
+          "Interpretation": "Illustrative sample, not a real business result.",
+          "Comparable": false
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "product_research_breakdowns": [
+      {
+        "id": "demo-research-1",
+        "title": "Demo \u00b7 Weekly customer themes",
+        "properties": {
+          "Name": "Demo \u00b7 Weekly customer themes",
+          "Key": "demo-research-week",
+          "Record kind": "Snapshot",
+          "Status": "Ready",
+          "Window start": "2026-09-15",
+          "Window end": "2026-09-22",
+          "Source": "Invented interview summaries",
+          "Method": "Manual thematic coding of 12 fictional conversations.",
+          "Summary": "People value a quick start and a clear sense of what changed. New collaborators need more context before contributing.",
+          "Findings": "[{\"title\": \"A confident first five minutes\", \"body\": \"Fictional participants wanted an example board before starting from scratch.\"}, {\"title\": \"Explain changes without noise\", \"body\": \"A focused activity feed helped sample users return to a project after a break.\"}]"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "product_opportunities": [
+      {
+        "id": "demo-opportunity-0",
+        "title": "Offer a starter board",
+        "properties": {
+          "Name": "Offer a starter board",
+          "Key": "demo-opp-0",
+          "Kind": "Product",
+          "Status": "Proposed",
+          "Priority": "High",
+          "Summary": "Help new teams understand the first useful action.",
+          "Evidence": "Wholly fictional research and feature-adoption examples.",
+          "Decision note": "Review the example, then replace it with your own evidence.",
+          "Last reviewed": "2026-09-22"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-opportunity-1",
+        "title": "Measure first collaboration",
+        "properties": {
+          "Name": "Measure first collaboration",
+          "Key": "demo-opp-1",
+          "Kind": "Tracking",
+          "Status": "Proposed",
+          "Priority": "Medium",
+          "Summary": "Define the first successful shared-board contribution.",
+          "Evidence": "Wholly fictional research and feature-adoption examples.",
+          "Decision note": "Review the example, then replace it with your own evidence.",
+          "Last reviewed": "2026-09-22"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      },
+      {
+        "id": "demo-opportunity-2",
+        "title": "Explain project templates",
+        "properties": {
+          "Name": "Explain project templates",
+          "Key": "demo-opp-2",
+          "Kind": "Marketing",
+          "Status": "Proposed",
+          "Priority": "Low",
+          "Summary": "Show how a reusable template saves setup time.",
+          "Evidence": "Wholly fictional research and feature-adoption examples.",
+          "Decision note": "Review the example, then replace it with your own evidence.",
+          "Last reviewed": "2026-09-22"
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-20T08:00:00Z",
+        "last_edited_time": "2026-09-22T08:00:00Z"
+      }
+    ],
+    "product_runs": []
+  }
+}

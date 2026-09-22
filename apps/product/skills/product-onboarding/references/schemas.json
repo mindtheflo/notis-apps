@@ -1,0 +1,869 @@
+[
+  {
+    "slug": "tickets",
+    "title": "Tickets",
+    "description": "Tickets owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Type",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Feature"
+          },
+          {
+            "name": "Bug"
+          }
+        ]
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Backlog"
+          },
+          {
+            "name": "Todo"
+          },
+          {
+            "name": "In Progress"
+          },
+          {
+            "name": "Beta"
+          },
+          {
+            "name": "Done"
+          },
+          {
+            "name": "Canceled"
+          }
+        ]
+      },
+      {
+        "name": "Priority",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Urgent"
+          },
+          {
+            "name": "High"
+          },
+          {
+            "name": "Medium"
+          },
+          {
+            "name": "Low"
+          },
+          {
+            "name": "No priority"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Major"
+          },
+          {
+            "name": "Minor"
+          }
+        ]
+      },
+      {
+        "name": "Version",
+        "type": "relation",
+        "action": "add",
+        "target_slug": "versions"
+      },
+      {
+        "name": "Shipped on",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Due",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Link",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Docs updated",
+        "type": "checkbox",
+        "action": "add"
+      },
+      {
+        "name": "Social post created",
+        "type": "checkbox",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "versions",
+    "title": "Versions",
+    "description": "Versions owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Release date",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Draft"
+          },
+          {
+            "name": "Ready"
+          },
+          {
+            "name": "Ready for review"
+          },
+          {
+            "name": "Published"
+          }
+        ]
+      },
+      {
+        "name": "Headline",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Changelog URL",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Subject",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Video",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Cover",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Summary",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "product_research_breakdowns",
+    "title": "Product Research Breakdowns",
+    "description": "Product research breakdowns owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Run key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Result digest",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Snapshot key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Window start",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Window end",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Method",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Evidence",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Published at",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Dimension",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Label",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Jobs",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Users",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Completed",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Partial",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Failed",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Abandoned",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Unclear",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Average frustration",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Note",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Record kind",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Snapshot"
+          },
+          {
+            "name": "Observation"
+          }
+        ]
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Draft"
+          },
+          {
+            "name": "Ready"
+          },
+          {
+            "name": "Superseded"
+          }
+        ]
+      },
+      {
+        "name": "Summary",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Dashboard charts",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "KPI data",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Findings",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Sources",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Verification",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Coverage",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "product_feature_observations",
+    "title": "Product Feature Observations",
+    "description": "Product feature observations owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Run key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Result digest",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Snapshot key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Window start",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Window end",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Method",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Evidence",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Published at",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Feature ID",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Feature",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Group",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Pricing IDs",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Measurement status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Measured"
+          },
+          {
+            "name": "Proxy"
+          },
+          {
+            "name": "Tracking gap"
+          },
+          {
+            "name": "Not applicable"
+          }
+        ]
+      },
+      {
+        "name": "Adopters",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Previous adopters",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Successful outcomes",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Previous successful outcomes",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Eligible users",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Configured stock",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Previous window start",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Previous window end",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Comparable",
+        "type": "checkbox",
+        "action": "add"
+      },
+      {
+        "name": "Interpretation",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Opportunity key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source revision",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Record kind",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Snapshot"
+          },
+          {
+            "name": "Observation"
+          }
+        ]
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Draft"
+          },
+          {
+            "name": "Ready"
+          },
+          {
+            "name": "Superseded"
+          }
+        ]
+      },
+      {
+        "name": "Summary",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Dashboard charts",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "KPI data",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Findings",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Sources",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Verification",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Coverage",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "product_opportunities",
+    "title": "Product Opportunities",
+    "description": "Product opportunities owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Kind",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Product"
+          },
+          {
+            "name": "Marketing"
+          },
+          {
+            "name": "SEO"
+          },
+          {
+            "name": "Tracking"
+          }
+        ]
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Proposed"
+          },
+          {
+            "name": "Held"
+          },
+          {
+            "name": "Approved"
+          },
+          {
+            "name": "Implementation started"
+          },
+          {
+            "name": "Closed"
+          }
+        ]
+      },
+      {
+        "name": "Priority",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "P1"
+          },
+          {
+            "name": "P2"
+          },
+          {
+            "name": "P3"
+          },
+          {
+            "name": "High"
+          },
+          {
+            "name": "Medium"
+          },
+          {
+            "name": "Low"
+          }
+        ]
+      },
+      {
+        "name": "Owner",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Summary",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Evidence",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source snapshots",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Repair contract",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Decision digest",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Decision note",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Implementation reference",
+        "type": "url",
+        "action": "add"
+      },
+      {
+        "name": "Ticket ID",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Last reviewed",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Run key",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "product_runs",
+    "title": "Product Runs",
+    "description": "Product runs owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Skill",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Dataset",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Stage",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Running"
+          },
+          {
+            "name": "Partial"
+          },
+          {
+            "name": "Failed"
+          },
+          {
+            "name": "Verified"
+          }
+        ]
+      },
+      {
+        "name": "Window start",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Window end",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Started at",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Completed at",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Expected",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Saved",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Verified",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Cursor",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Input digest",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Result digest",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Snapshot key",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Method",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Evidence",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Error",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Cost",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Checkpoint",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  }
+]
