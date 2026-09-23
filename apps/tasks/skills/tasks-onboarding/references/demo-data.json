@@ -1,0 +1,199 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Store installs already include these wholly fictional examples. Read existing installed rows or skills first and deduplicate by exact demo key/title/name. Create missing examples only when requested. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates are illustrative fixed dates; do not rewrite existing examples automatically.",
+  "databases": {
+    "projects": [
+      {
+        "id": "demo-project-garden",
+        "title": "Demo \u00b7 Community garden",
+        "properties": {
+          "Name": "Demo \u00b7 Community garden",
+          "Status": "In Progress",
+          "Color": "emerald",
+          "Description": "Plan a fictional neighborhood herb garden.",
+          "Order": 1
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-project-studio",
+        "title": "Demo \u00b7 Studio refresh",
+        "properties": {
+          "Name": "Demo \u00b7 Studio refresh",
+          "Status": "Planned",
+          "Color": "violet",
+          "Description": "A fictional creative workspace refresh.",
+          "Order": 2
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "demo-task-1",
+        "title": "Sketch the planting layout",
+        "properties": {
+          "Name": "Sketch the planting layout",
+          "Status": "In progress",
+          "Priority": "P1",
+          "Due": "2026-09-23",
+          "Project": [
+            "demo-project-garden"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 0
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-2",
+        "title": "Choose drought-friendly herbs",
+        "properties": {
+          "Name": "Choose drought-friendly herbs",
+          "Status": "Backlog",
+          "Priority": "P2",
+          "Due": "2026-09-23",
+          "Project": [
+            "demo-project-garden"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 1
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-3",
+        "title": "Book a volunteer planning call",
+        "properties": {
+          "Name": "Book a volunteer planning call",
+          "Status": "Ready for review",
+          "Priority": "P2",
+          "Due": "2026-09-24",
+          "Project": [
+            "demo-project-garden"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 2
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-4",
+        "title": "Measure the studio wall",
+        "properties": {
+          "Name": "Measure the studio wall",
+          "Status": "Backlog",
+          "Priority": "P3",
+          "Due": "2026-09-26",
+          "Project": [
+            "demo-project-studio"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 3
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-5",
+        "title": "Collect paint samples",
+        "properties": {
+          "Name": "Collect paint samples",
+          "Status": "Backlog",
+          "Priority": "P4",
+          "Due": "2026-09-28",
+          "Project": [
+            "demo-project-studio"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 4
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-6",
+        "title": "Make a weekend playlist",
+        "properties": {
+          "Name": "Make a weekend playlist",
+          "Status": "Backlog",
+          "Priority": "P4",
+          "Due": null,
+          "Project": [],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 5
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-7",
+        "title": "Order reusable plant labels",
+        "properties": {
+          "Name": "Order reusable plant labels",
+          "Status": "Done",
+          "Priority": "P3",
+          "Due": "2026-09-22",
+          "Project": [
+            "demo-project-garden"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 6
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-task-8",
+        "title": "Share the first garden draft",
+        "properties": {
+          "Name": "Share the first garden draft",
+          "Status": "In progress",
+          "Priority": "P2",
+          "Due": "2026-09-23",
+          "Project": [
+            "demo-project-garden"
+          ],
+          "Labels": [],
+          "Description": "Fictional example task for exploring the Tasks app.",
+          "Order": 7
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      }
+    ]
+  }
+}

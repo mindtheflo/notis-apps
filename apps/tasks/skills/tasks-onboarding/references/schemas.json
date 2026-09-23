@@ -1,0 +1,212 @@
+[
+  {
+    "slug": "projects",
+    "title": "Projects",
+    "description": "Projects owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Inbox"
+          },
+          {
+            "name": "Planned"
+          },
+          {
+            "name": "In Progress"
+          },
+          {
+            "name": "On Hold"
+          },
+          {
+            "name": "Completed"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      },
+      {
+        "name": "Description",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Color",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "rose"
+          },
+          {
+            "name": "amber"
+          },
+          {
+            "name": "emerald"
+          },
+          {
+            "name": "sky"
+          },
+          {
+            "name": "violet"
+          },
+          {
+            "name": "fuchsia"
+          },
+          {
+            "name": "teal"
+          },
+          {
+            "name": "slate"
+          }
+        ]
+      },
+      {
+        "name": "Start",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Due",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Order",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Parent project",
+        "type": "relation",
+        "action": "add",
+        "target_slug": "projects"
+      }
+    ]
+  },
+  {
+    "slug": "tasks",
+    "title": "Tasks",
+    "description": "Tasks owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Backlog"
+          },
+          {
+            "name": "In progress"
+          },
+          {
+            "name": "Ready for review"
+          },
+          {
+            "name": "Done"
+          }
+        ]
+      },
+      {
+        "name": "Priority",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "P1"
+          },
+          {
+            "name": "P2"
+          },
+          {
+            "name": "P3"
+          },
+          {
+            "name": "P4"
+          }
+        ]
+      },
+      {
+        "name": "Due",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Labels",
+        "type": "multi_select",
+        "action": "add",
+        "options": []
+      },
+      {
+        "name": "Project",
+        "type": "relation",
+        "action": "add",
+        "target_slug": "projects"
+      },
+      {
+        "name": "Description",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Location",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Work"
+          },
+          {
+            "name": "Home"
+          }
+        ]
+      },
+      {
+        "name": "Recurring",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "daily"
+          },
+          {
+            "name": "weekly"
+          },
+          {
+            "name": "monthly"
+          }
+        ]
+      },
+      {
+        "name": "Completed at",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Order",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Link",
+        "type": "rich_text",
+        "action": "add"
+      }
+    ]
+  }
+]
