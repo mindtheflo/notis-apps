@@ -1,6 +1,22 @@
+/* The SDK stylesheet joins the app's Tailwind entry point: it declares
+ * @layer blocks, which Tailwind only understands in a file that also carries
+ * the @tailwind directives. */
+@import '@notis/sdk/styles.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* Flat list rows: hover and selection are carried by background tint only. */
+  .list-row {
+    @apply rounded-xl bg-muted px-4 py-3 transition-colors lg:bg-transparent lg:hover:bg-muted/60;
+  }
+
+  .list-row-selected {
+    @apply bg-primary/[0.06] lg:bg-primary/[0.06] lg:hover:bg-primary/[0.06];
+  }
+}
 
 /*
  * The portal mounts the app inside [data-notis-app-root] (display: block,
@@ -37,7 +53,6 @@
   --accent-foreground: 0 0% 9%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 6% 90%;
   --input: 240 6% 90%;
   --ring: 0 0% 4%;
   --radius: 0.5rem;

@@ -12,7 +12,7 @@
 #   workspace.sh sync <repo> <name>       refresh git and pull request state
 #   workspace.sh pr <repo> <name> --title T [--body B] [--draft]
 #   workspace.sh list [repo]
-#   workspace.sh remove <repo> <name>
+#   workspace.sh remove <repo> <name> [--repo-id ROW] [--row-id ROW]
 #
 # The expected order is commit -> pr --draft -> keep committing. `gh pr create`
 # needs one commit ahead of base, and the pull request is the only place a
@@ -33,7 +33,7 @@ STATE_ROOT="${NOTIS_WORKSPACES_STATE:-/vercel/sandbox/.notis/workspaces}"
 REPOS_ROOT="${NOTIS_REPOS_ROOT:-/vercel/sandbox/repositories}"
 TREES_ROOT="${NOTIS_TREES_ROOT:-/vercel/sandbox/workspaces}"
 JOB="bash $HERE/job.sh"
-ROWS="python3 $HERE/notis_rows.py"
+ROWS="${NOTIS_ROWS_COMMAND:-python3 $HERE/notis_rows.py}"
 REPO="bash $HERE/repo.sh"
 
 die() { echo "error: $*" >&2; exit 1; }
@@ -47,6 +47,14 @@ validate_segment() {
     local label="$1" value="$2"
     [[ "$value" =~ ^[a-z0-9][a-z0-9._-]{0,63}$ ]] \
         && [ "$value" != "." ] && [ "$value" != ".." ] \
+        || die "invalid $label: $value"
+}
+# Row identifiers come from the app, which reads them out of the databases it
+# already renders. They are pasted into a command line, so they are checked like
+# any other caller-supplied segment rather than trusted for looking uuid-shaped.
+validate_row_id() {
+    local label="$1" value="$2"
+    [[ "$value" =~ ^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$ ]] \
         || die "invalid $label: $value"
 }
 validate_ref() {
@@ -89,6 +97,27 @@ row_field() {
 }
 
 case "${1:-}" in
+
+dev|dev-status|dev-url|dev-stop)
+    action="$1"; repo="${2:?repository required}"; name="${3:?workspace required}"; shift 3
+    validate_segment "repository slug" "$repo"
+    validate_segment "workspace name" "$name"
+    target="$(tree_path "$repo" "$name")"
+    [ -d "$target" ] || die "no workspace at $target"
+    case "$action" in
+        dev)
+            dev_cmd="$(row_field "$repo" 'Dev command')"
+            [ -n "$dev_cmd" ] || die "repository '$repo' has no dev command recorded"
+            [ "$#" -eq 0 ] || { [ "$#" -eq 1 ] && [ "$1" = "--entry-artifact" ]; } || die "unknown dev option"
+            python3 "$HERE/preview.py" open "$target" --command "$dev_cmd" "$@"
+            ;;
+        *)
+            [ "$#" -eq 0 ] || die "unexpected argument"
+            case "$action" in dev-status) verb=status ;; dev-url) verb=url ;; dev-stop) verb=stop ;; esac
+            python3 "$HERE/preview.py" "$verb" "$target"
+            ;;
+    esac
+    ;;
 
 new)
     repo="$2"; shift 2
@@ -431,18 +460,51 @@ remove)
     repo="$2"; name="$3"
     validate_segment "repository slug" "$repo"
     validate_segment "workspace name" "$name"
+    shift 3
+    repo_row=""
+    row_id=""
+    checkout_only=false
+    # The board already holds both rows it is asking about. Taking their ids
+    # rather than looking them up again is what makes archiving one workspace a
+    # single write, and it is the only way to archive the intended row when two
+    # workspaces share a name -- matching by name picks whichever comes first.
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --checkout-only) checkout_only=true; shift ;;
+            --repo-id)
+                repo_row="${2:-}"; validate_row_id "repository row id" "$repo_row"; shift 2 ;;
+            --row-id)
+                row_id="${2:-}"; validate_row_id "workspace row id" "$row_id"; shift 2 ;;
+            *) die "unknown option for remove: $1" ;;
+        esac
+    done
     target="$(tree_path "$repo" "$name")"
     source_repo="$(repo_path "$repo")"
-    [ -d "$target" ] || die "no workspace at $target"
-    repo_row="$($ROWS get repositories --name "$repo" \
-        | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("document_id") or "")')"
-    [ -n "$repo_row" ] || die "repository '$repo' has no database row"
+    if [ "$checkout_only" = false ] && [ -z "$row_id" ] && [ -z "$repo_row" ]; then
+        repo_row="$($ROWS get repositories --name "$repo" \
+            | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("document_id") or "")')"
+        [ -n "$repo_row" ] || die "repository '$repo' has no database row"
+    fi
     # Leave the branch alone: it may already be pushed and reviewed. Only the
-    # local tree goes.
-    git -C "$source_repo" worktree remove --force "$target"
-    $ROWS set workspaces --name "$name" \
-        --match-json-field "Repository=[\"$repo_row\"]" \
-        --field "Status=Archived" >/dev/null
+    # local tree goes. A row can outlive its checkout after a prior cleanup or
+    # interrupted run; treating that state as success makes archive idempotent
+    # and lets the UI clean up stale rows instead of failing forever.
+    registered="$(git -C "$source_repo" worktree list --porcelain 2>/dev/null \
+        | awk -v target="$target" '$1 == "worktree" && substr($0, 10) == target { print "yes"; exit }')"
+    if [ -d "$target" ] || [ -n "$registered" ]; then
+        git -C "$source_repo" worktree remove --force "$target"
+    fi
+    if [ "$checkout_only" = true ]; then
+        echo "removed $target (branch kept)"
+        exit 0
+    fi
+    if [ -n "$row_id" ]; then
+        $ROWS set workspaces --id "$row_id" --field "Status=Archived" >/dev/null
+    else
+        $ROWS set workspaces --name "$name" \
+            --match-json-field "Repository=[\"$repo_row\"]" \
+            --field "Status=Archived" >/dev/null
+    fi
     echo "removed $target (branch kept)"
     ;;
 

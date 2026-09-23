@@ -49,7 +49,7 @@ export function SyncButton({
 
   return (
     <span className="inline-flex items-center gap-2">
-      <Button variant="outline" size="sm" disabled={busy} onClick={() => void sync()}>
+      <Button variant="secondary" size="sm" disabled={busy} onClick={() => void sync()}>
         {busy ? (
           <CircleNotchIcon className="mr-1.5 h-3.5 w-3.5 animate-spin" />
         ) : (
@@ -60,7 +60,7 @@ export function SyncButton({
       {error && (
         <span
           title={error}
-          className="inline-flex items-center gap-1 truncate text-xs text-red-700 dark:text-red-400"
+          className="inline-flex items-center gap-1 truncate text-xs text-destructive"
         >
           <WarningCircleIcon className="h-3.5 w-3.5 shrink-0" />
           {error}

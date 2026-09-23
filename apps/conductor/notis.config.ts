@@ -2,7 +2,7 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'conductor',
-  title: 'Conductor',
+  title: 'Coding',
   description:
     'Track the git repositories configured on your Notis cloud computer and every workspace checked out from them. Each workspace is a git worktree on its own branch, created for one task: see its branch, how far ahead it is, uncommitted work, and its pull request state. Work opens as a draft pull request from the first commit, so a workspace stays reviewable after the conversation ends. The Repositories view shows how each project builds and runs and which environment files are staged.',
   icon: 'phosphor:git-branch',
@@ -15,28 +15,24 @@ export default defineNotisApp({
       path: 'metadata/screenshot-1.png',
       alt: 'Workspaces grouped by repository, each showing its branch, base, commits ahead, uncommitted files, and pull request state with the check rollup.',
       route: 'workspaces',
-      focus: '[data-store-screenshot="workspaces"]',
       theme: 'light',
     },
     {
       path: 'metadata/screenshot-2.png',
       alt: 'The same workspace list in dark mode, with an open pull request, a draft, a clean workspace, and a merged one.',
       route: 'workspaces',
-      focus: '[data-store-screenshot="workspaces"]',
       theme: 'dark',
     },
     {
       path: 'metadata/screenshot-3.png',
       alt: 'Repositories view showing the setup, run, and archive commands resolved for each project and the environment files staged for it.',
       route: 'repositories',
-      focus: '[data-store-screenshot="repositories"]',
       theme: 'light',
     },
     {
       path: 'metadata/screenshot-4.png',
       alt: 'The repository detail in dark mode, listing staged environment file names without their values.',
       route: 'repositories',
-      focus: '[data-store-screenshot="repositories"]',
       theme: 'dark',
     },
     {
@@ -52,7 +48,7 @@ export default defineNotisApp({
       theme: 'light',
     },
   ],
-  databases: ['repositories', 'workspaces'],
+  databases: [{ slug: 'repositories', seedDocuments: true }, { slug: 'workspaces', seedDocuments: true }],
   // Declared from source, so the skills ship with the app instead of being
   // published on the side and attached by id. A directory path packages every
   // file under it, which is why the shared scripts live in a directory of
@@ -62,12 +58,14 @@ export default defineNotisApp({
   // /vercel/sandbox/.notis/skills/<name>/, and both task skills call the one
   // copy of the scripts in `workspaces-shared`.
   skills: [
+    { key: 'coding-worktree-prune', path: './skills/coding-worktree-prune/', name: 'coding-worktree-prune', description: 'Review and safely retire approved merged workspaces.' },
+    { key: 'coding-onboarding', path: './skills/coding-onboarding/', name: 'coding-onboarding', description: 'Set up Coding with optional fictional examples.' },
     {
       key: 'new-repository',
       path: './skills/new-repository/',
       name: 'new-repository',
       description:
-        'Configure a git repository on the Notis cloud computer so workspaces can be created from it. Use when the user wants to add, set up, or reconnect a repository, sign the cloud computer in to GitHub, or fix a repository whose setup or secrets are incomplete. Also the first-run onboarding for Conductor.',
+        'Configure a git repository on the Notis cloud computer so workspaces can be created from it. Use when the user wants to add, set up, or reconnect a repository, sign the cloud computer in to GitHub, or fix a repository whose setup or secrets are incomplete. Also the first-run onboarding for Coding.',
     },
     {
       key: 'new-workspace',
@@ -96,9 +94,10 @@ export default defineNotisApp({
       path: './skills/workspaces-shared/',
       name: 'workspaces-shared',
       description:
-        "Carries the shell and Python scripts that Conductor's new-repository and new-workspace skills run on the cloud computer. It is not a task skill and has no procedure of its own; run new-repository to configure a repository and new-workspace to start work on one.",
+        "Carries the shell and Python scripts that Coding's new-repository and new-workspace skills run on the cloud computer. It is not a task skill and has no procedure of its own; run new-repository to configure a repository and new-workspace to start work on one.",
     },
   ],
+  onboarding: { skill: 'coding-onboarding', prompt: 'Help me set up Coding.' },
   routes: [
     {
       path: '/',
@@ -106,12 +105,14 @@ export default defineNotisApp({
       name: 'Workspaces',
       icon: 'phosphor:git-branch',
       default: true,
+      resourceDeepLinks: true,
     },
     {
       path: '/repositories',
       slug: 'repositories',
       name: 'Repositories',
       icon: 'phosphor:folder-open',
+      resourceDeepLinks: true,
     },
   ],
   // The cloud computer is reachable from here. `run_sandbox_shell` runs the
@@ -126,6 +127,7 @@ export default defineNotisApp({
   // first and no reason to hold a tool nothing calls.
   tools: [
     'LOCAL_NOTIS_DATABASE_QUERY',
+    'LOCAL_NOTIS_DATABASE_UPSERT_ROW',
     'LOCAL_NOTIS_UPLOAD_SANDBOX_FILE',
     'LOCAL_NOTIS_RUN_SANDBOX_SHELL',
   ],

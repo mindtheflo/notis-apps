@@ -36,9 +36,10 @@ import re
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-APP_SLUG = "conductor"
+CURRENT_APP_ID = os.environ.get("NOTIS_CODING_APP_ID", "")
 
 
 # --------------------------------------------------------------------------
@@ -125,7 +126,9 @@ _UNRESOLVED = re.compile(r"several databases use the slug|database not found", r
 
 
 def _installed_app_id() -> Optional[str]:
-    """Resolve the installed Conductor app, excluding local dev twins."""
+    """Resolve only the explicitly selected installed Coding app."""
+    if not _UUID.fullmatch(CURRENT_APP_ID):
+        raise RuntimeError("Set NOTIS_CODING_APP_ID to the selected installed Coding app ID before running a helper.")
     proc = subprocess.run(
         _cli_argv() + ["apps", "list", "--json"],
         capture_output=True,
@@ -143,7 +146,7 @@ def _installed_app_id() -> Optional[str]:
         app
         for app in apps or []
         if isinstance(app, dict)
-        and str(app.get("slug") or app.get("name") or "").casefold() == APP_SLUG
+        and str(app.get("app_id") or app.get("id") or "") == CURRENT_APP_ID
         and not bool((app.get("manifest") or {}).get("is_dev"))
         and not str(app.get("slug") or "").endswith("-dev")
     ]
@@ -201,14 +204,93 @@ def resolve_id(slug: str, error_message: str = "") -> Optional[str]:
     return _pick(described).get("id") if described else None
 
 
+# Which database a slug means does not change while Conductor stays installed,
+# but working it out costs two platform round trips -- and every read and write
+# used to pay them again. Remember the answer next to the other workspace state
+# so a row operation is one call, which is the difference between a bulk archive
+# that moves and one that looks frozen.
+STATE_ROOT = Path(os.environ.get("NOTIS_WORKSPACES_STATE", "/vercel/sandbox/.notis/workspaces"))
+_RESOLVED: Dict[str, str] = {}
+
+
+def _cache_path() -> Path:
+    if not _UUID.fullmatch(CURRENT_APP_ID):
+        raise RuntimeError("An exact installed Coding app ID is required for the database cache.")
+    return STATE_ROOT / CURRENT_APP_ID / "databases.json"
+
+
+def _cached_database_id(slug: str) -> Optional[str]:
+    if slug in _RESOLVED:
+        return _RESOLVED[slug]
+    try:
+        stored = json.loads(_cache_path().read_text())
+    except (OSError, ValueError):
+        return None
+    identifier = stored.get(slug) if isinstance(stored, dict) else None
+    if isinstance(identifier, str) and identifier:
+        _RESOLVED[slug] = identifier
+        return identifier
+    return None
+
+
+def _remember_database_id(slug: str, database_id: str) -> None:
+    _RESOLVED[slug] = database_id
+    path = _cache_path()
+    try:
+        stored = json.loads(path.read_text())
+        if not isinstance(stored, dict):
+            stored = {}
+    except (OSError, ValueError):
+        stored = {}
+    stored[slug] = database_id
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        # Rename rather than write in place: two workspace scripts can archive
+        # at the same time, and a half-written cache is a puzzle to debug.
+        scratch = path.with_suffix(f".{os.getpid()}.tmp")
+        scratch.write_text(json.dumps(stored, indent=1, sort_keys=True))
+        scratch.replace(path)
+    except OSError:
+        # A read-only or missing state directory costs speed, never correctness.
+        pass
+
+
+def _forget_database_id(slug: str) -> None:
+    _RESOLVED.pop(slug, None)
+    path = _cache_path()
+    try:
+        stored = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return
+    if isinstance(stored, dict) and stored.pop(slug, None) is not None:
+        try:
+            path.write_text(json.dumps(stored, indent=1, sort_keys=True))
+        except OSError:
+            pass
+
+
 def call_for_database(tool: str, slug: str, arguments: Dict[str, Any]) -> Any:
     """Run a database tool only against the installed Conductor app's DB id."""
+    remembered = _cached_database_id(slug)
+    if remembered:
+        try:
+            return tool_exec(tool, dict(arguments, database_id=remembered))
+        except RuntimeError as exc:
+            # Only a database that is gone or ambiguous is worth a second
+            # attempt, and only that answer proves the call did nothing. A
+            # rejected value or an expired credential is a real reply and is
+            # never replayed against a freshly resolved database.
+            if not _UNRESOLVED.search(str(exc)):
+                raise
+            _forget_database_id(slug)
+
     database_id = resolve_id(slug)
     if not database_id:
         raise RuntimeError(
             f"No database with slug '{slug}' owned by the installed Conductor app. "
             "Conductor has to be installed before its rows can be read or written."
         )
+    _remember_database_id(slug, database_id)
     return tool_exec(tool, dict(arguments, database_id=database_id))
 
 

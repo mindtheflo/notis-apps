@@ -94,6 +94,7 @@ function toRepository(flat: Flat): Repository {
   const name = String(flat.__title ?? flat.Name ?? 'Untitled');
   return {
     id: String(flat.__id ?? ''),
+    demo: flat.Demo === true,
     name,
     gitUrl: text(flat['Git URL']),
     owner: text(flat.Owner),
@@ -116,6 +117,7 @@ function toRepository(flat: Flat): Repository {
 function toWorkspace(flat: Flat): Workspace {
   return {
     id: String(flat.__id ?? ''),
+    demo: flat.Demo === true,
     name: String(flat.__title ?? flat.Name ?? 'Untitled'),
     repositoryId: firstRelation(flat.Repository),
     branch: text(flat.Branch),
@@ -129,6 +131,7 @@ function toWorkspace(flat: Flat): Workspace {
     checks: text(flat.Checks),
     ahead: count(flat.Ahead),
     dirtyFiles: count(flat['Dirty files']),
+    diskMb: count(flat['Disk MB']),
     thread: text(flat.Thread),
     lastSynced: text(flat['Last synced']),
     notes: text(flat.Notes),
@@ -138,7 +141,17 @@ function toWorkspace(flat: Flat): Workspace {
 export type AppData = {
   repositories: Repository[];
   workspaces: Workspace[];
+  /** True until neither database has ever returned a successful result. */
   loading: boolean;
+  /**
+   * True once both databases have returned at least one successful result.
+   * Drives the instant-loading contract: render `ViewSkeleton` only while this
+   * is false, and keep rendering cached content afterward even during a
+   * background refetch or a refetch error.
+   */
+  hasData: boolean;
+  /** True while either database is fetching, including a silent background refresh. */
+  isFetching: boolean;
   error: string | null;
   refresh: () => void;
   /**
@@ -184,6 +197,8 @@ export function useWorkspacesData(): AppData {
       repositories,
       workspaces,
       loading: repositoryQuery.loading || workspaceQuery.loading,
+      hasData: repositoryQuery.hasData && workspaceQuery.hasData,
+      isFetching: repositoryQuery.isFetching || workspaceQuery.isFetching,
       error: error ? error.message : null,
       refresh,
       live: repositoryQuery.live && workspaceQuery.live,
@@ -193,6 +208,10 @@ export function useWorkspacesData(): AppData {
       workspaces,
       repositoryQuery.loading,
       workspaceQuery.loading,
+      repositoryQuery.hasData,
+      workspaceQuery.hasData,
+      repositoryQuery.isFetching,
+      workspaceQuery.isFetching,
       repositoryQuery.live,
       workspaceQuery.live,
       error,

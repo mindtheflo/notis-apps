@@ -11,7 +11,7 @@ import {
 } from '@phosphor-icons/react';
 
 import { Button } from '@/components/ui/button';
-import { useCloudComputer } from '@notis/sdk';
+import { Skeleton, useCloudComputer } from '@notis/sdk';
 
 import { SCRIPTS, parseJson, useSandboxShell } from '@/lib/shell';
 
@@ -130,21 +130,13 @@ export function GithubConnect({ onConnected }: { onConnected?: () => void }) {
   }, [run, poll, onConnected]);
 
   if (phase.kind === 'checking') {
-    return (
-      <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-        <CircleNotchIcon className="h-4 w-4 animate-spin" />
-        Checking GitHub
-      </span>
-    );
+    return <Skeleton style={{ height: 32, width: 144 }} />;
   }
 
   if (phase.kind === 'connected') {
     return (
       <span className="inline-flex items-center gap-2 text-sm">
-        <CheckCircleIcon
-          weight="fill"
-          className="h-4 w-4 text-emerald-600 dark:text-emerald-400"
-        />
+        <CheckCircleIcon weight="fill" className="h-4 w-4 text-primary" />
         GitHub connected{phase.account ? ` as ${phase.account}` : ''}
       </span>
     );
@@ -152,16 +144,16 @@ export function GithubConnect({ onConnected }: { onConnected?: () => void }) {
 
   if (phase.kind === 'awaiting') {
     return (
-      <div className="rounded-md border border-border bg-muted/40 p-3">
+      <div className="rounded-xl bg-muted p-3">
         <p className="text-sm">
           Open GitHub and enter this code. This view is watching for the approval.
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <code className="rounded-md border border-border bg-background px-3 py-1.5 font-mono text-base tracking-widest">
+          <code className="rounded-md bg-background px-3 py-1.5 font-mono text-base tracking-widest">
             {phase.code}
           </code>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => {
               void navigator.clipboard
@@ -196,12 +188,12 @@ export function GithubConnect({ onConnected }: { onConnected?: () => void }) {
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Button variant="outline" size="sm" onClick={() => void connect()}>
+      <Button variant="secondary" size="sm" onClick={() => void connect()}>
         <GithubLogoIcon className="mr-1.5 h-3.5 w-3.5" />
         Connect GitHub
       </Button>
       {phase.kind === 'failed' && (
-        <span className="inline-flex items-center gap-1.5 text-sm text-red-700 dark:text-red-400">
+        <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
           <WarningCircleIcon className="h-4 w-4" />
           {phase.message}
         </span>
