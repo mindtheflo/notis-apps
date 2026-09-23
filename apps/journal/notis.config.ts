@@ -2,13 +2,12 @@ import { defineNotisApp } from '@notis/sdk/config';
 
 export default defineNotisApp({
   name: 'notis-journal',
-  devSlug: 'notis-journal',
   title: '5 Minutes Journal',
   description:
     'A display-only five-minute journal built from your morning and evening check-ins with Notis. Browse daily mood, energy, motivation, gratitude, intentions, affirmations, highlights, lessons, and free-form reflections, then use Stats to see trends and ritual consistency over time.',
   icon: 'phosphor:notebook',
   accent: 'amber',
-  author: { name: 'Florian (Flo) Pariset' },
+  author: { name: 'Notis' },
   categories: ['Personal', 'Productivity'],
   tagline: 'Five intentional minutes with Notis, split between morning and evening.',
   screenshots: [
@@ -61,11 +60,11 @@ export default defineNotisApp({
       theme: 'dark',
     },
   ],
-  databases: ['journal_entries'],
+  databases: [{ slug: 'journal_entries', seedDocuments: true }],
   skills: [
     {
       key: 'journal-onboarding',
-      path: './skills/journal-onboarding/SKILL.md',
+      path: './skills/journal-onboarding/',
       name: 'journal-onboarding',
       description:
         'Set up the Journal morning and evening automations and run their check-ins.',
@@ -82,6 +81,7 @@ export default defineNotisApp({
       name: 'Journal',
       icon: 'phosphor:notebook',
       default: true,
+      resourceDeepLinks: true,
     },
     {
       path: '/insights',
@@ -90,5 +90,5 @@ export default defineNotisApp({
       icon: 'phosphor:chart-line-up',
     },
   ],
-  tools: ['LOCAL_NOTIS_DATABASE_QUERY'],
+  tools: ['LOCAL_NOTIS_DATABASE_QUERY', 'LOCAL_NOTIS_DATABASE_GET_DOCUMENT'],
 });

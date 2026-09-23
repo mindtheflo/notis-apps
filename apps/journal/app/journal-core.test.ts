@@ -3,16 +3,44 @@ import test from 'node:test';
 
 import {
   average,
+  beginResourceNavigation,
   entryFromDocument,
   eveningComplete,
   gratitudeCount,
+  isDocumentMissingError,
+  isAwaitingResourceNavigationEcho,
   moodStep,
   morningComplete,
   morningStarted,
+  resolveJournalResource,
   sortEntries,
   topMoodWords,
   type JournalEntry,
 } from './journal-core';
+
+test('journal navigation waits for the host echo without latching same-resource clicks', () => {
+  assert.deepEqual(beginResourceNavigation('entry-a', undefined, 'entry-a'), {
+    pendingResourceId: undefined,
+    shouldNavigate: false,
+  });
+  assert.deepEqual(beginResourceNavigation('entry-a', undefined, 'entry-b'), {
+    pendingResourceId: 'entry-b',
+    shouldNavigate: true,
+  });
+  assert.deepEqual(beginResourceNavigation('entry-a', 'entry-b', 'entry-b'), {
+    pendingResourceId: 'entry-b',
+    shouldNavigate: false,
+  });
+  assert.deepEqual(beginResourceNavigation('entry-a', undefined, null), {
+    pendingResourceId: null,
+    shouldNavigate: true,
+  });
+  assert.equal(isAwaitingResourceNavigationEcho('entry-b', 'entry-a'), true);
+  assert.equal(isAwaitingResourceNavigationEcho('entry-b', 'entry-b'), false);
+  assert.equal(isAwaitingResourceNavigationEcho(null, 'entry-a'), true);
+  assert.equal(isAwaitingResourceNavigationEcho(null, null), false);
+  assert.equal(isAwaitingResourceNavigationEcho(undefined, 'entry-a'), false);
+});
 
 function entry(overrides: Partial<JournalEntry> = {}): JournalEntry {
   return {
@@ -75,6 +103,74 @@ test('entries sort newest first without mutating the input', () => {
   const original = [entry({ id: 'old', date: '2026-07-12' }), entry({ id: 'new', date: '2026-07-15' })];
   assert.deepEqual(sortEntries(original).map((item) => item.id), ['new', 'old']);
   assert.deepEqual(original.map((item) => item.id), ['old', 'new']);
+});
+
+test('journal resource resolution prefers a listed exact document', () => {
+  const listed = [entry({ id: 'new' }), entry({ id: 'requested', date: '2026-07-14' })];
+  const result = resolveJournalResource({
+    entries: listed,
+    resourceId: 'requested',
+    requestedDocument: null,
+    resourceSettled: false,
+  });
+
+  assert.equal(result.requested?.id, 'requested');
+  assert.equal(result.entries, listed);
+  assert.equal(result.pending, false);
+  assert.equal(result.missing, false);
+});
+
+test('journal resource resolution merges an older exact document into the rail', () => {
+  const result = resolveJournalResource({
+    entries: [entry({ id: 'new', date: '2026-07-15' })],
+    resourceId: 'old',
+    requestedDocument: {
+      id: 'old',
+      title: 'Old journal entry',
+      properties: { Date: '2025-01-10' },
+    },
+    resourceSettled: true,
+  });
+
+  assert.equal(result.requested?.id, 'old');
+  assert.deepEqual(result.entries.map((item) => item.id), ['new', 'old']);
+  assert.equal(result.missing, false);
+});
+
+test('journal resource resolution distinguishes loading from a missing document', () => {
+  const pending = resolveJournalResource({
+    entries: [],
+    resourceId: 'gone',
+    requestedDocument: null,
+    resourceSettled: false,
+  });
+  const missing = resolveJournalResource({
+    entries: [],
+    resourceId: 'gone',
+    requestedDocument: null,
+    resourceSettled: true,
+  });
+
+  assert.equal(pending.pending, true);
+  assert.equal(pending.missing, false);
+  assert.equal(missing.pending, false);
+  assert.equal(missing.missing, true);
+});
+
+test('journal resource resolution keeps failed reads distinct from missing documents', () => {
+  const failed = resolveJournalResource({
+    entries: [],
+    resourceId: 'unknown',
+    requestedDocument: null,
+    resourceSettled: true,
+    resourceFailed: true,
+  });
+
+  assert.equal(failed.pending, false);
+  assert.equal(failed.missing, false);
+  assert.equal(failed.failed, true);
+  assert.equal(isDocumentMissingError(new Error('Document not found')), true);
+  assert.equal(isDocumentMissingError(new Error('network unavailable')), false);
 });
 
 test('mood scale lookup rounds and rejects out-of-range values', () => {

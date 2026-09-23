@@ -66,18 +66,20 @@ export interface JournalEntry {
 export interface MoodStep {
   value: number; // 1..7
   label: string;
-  color: string; // accent used for dots / bars
-  soft: string; // translucent background
+  color: string; // accent used for dots / bars — token opacity steps, never a fixed hue
+  soft: string; // translucent background — same token, lower opacity
 }
 
+// A single-hue ramp (muted-foreground -> primary) instead of a rainbow: the
+// unpleasant half reads in neutral ink, the pleasant half warms into primary.
 export const MOOD_SCALE: MoodStep[] = [
-  { value: 1, label: 'Very unpleasant', color: '#8b5cf6', soft: 'rgba(139,92,246,0.15)' },
-  { value: 2, label: 'Unpleasant', color: '#6366f1', soft: 'rgba(99,102,241,0.15)' },
-  { value: 3, label: 'Slightly unpleasant', color: '#3b82f6', soft: 'rgba(59,130,246,0.15)' },
-  { value: 4, label: 'Neutral', color: '#0ea5e9', soft: 'rgba(14,165,233,0.15)' },
-  { value: 5, label: 'Slightly pleasant', color: '#14b8a6', soft: 'rgba(20,184,166,0.15)' },
-  { value: 6, label: 'Pleasant', color: '#10b981', soft: 'rgba(16,185,129,0.15)' },
-  { value: 7, label: 'Very pleasant', color: '#f59e0b', soft: 'rgba(245,158,11,0.17)' },
+  { value: 1, label: 'Very unpleasant', color: 'hsl(var(--muted-foreground) / 0.55)', soft: 'hsl(var(--muted-foreground) / 0.12)' },
+  { value: 2, label: 'Unpleasant', color: 'hsl(var(--muted-foreground) / 0.7)', soft: 'hsl(var(--muted-foreground) / 0.14)' },
+  { value: 3, label: 'Slightly unpleasant', color: 'hsl(var(--muted-foreground) / 0.85)', soft: 'hsl(var(--muted-foreground) / 0.16)' },
+  { value: 4, label: 'Neutral', color: 'hsl(var(--foreground) / 0.5)', soft: 'hsl(var(--foreground) / 0.1)' },
+  { value: 5, label: 'Slightly pleasant', color: 'hsl(var(--primary) / 0.55)', soft: 'hsl(var(--primary) / 0.12)' },
+  { value: 6, label: 'Pleasant', color: 'hsl(var(--primary) / 0.8)', soft: 'hsl(var(--primary) / 0.15)' },
+  { value: 7, label: 'Very pleasant', color: 'hsl(var(--primary))', soft: 'hsl(var(--primary) / 0.18)' },
 ];
 
 export function moodStep(value: number | null | undefined): MoodStep | null {
@@ -86,10 +88,10 @@ export function moodStep(value: number | null | undefined): MoodStep | null {
   return MOOD_SCALE.find((step) => step.value === rounded) ?? null;
 }
 
-export const ENERGY_COLOR = '#f59e0b';
-export const MOTIVATION_COLOR = '#3b82f6';
-export const MORNING_MOOD_COLOR = '#f59e0b';
-export const DAY_MOOD_COLOR = '#6366f1';
+export const ENERGY_COLOR = 'hsl(var(--primary))';
+export const MOTIVATION_COLOR = 'hsl(var(--foreground) / 0.45)';
+export const MORNING_MOOD_COLOR = 'hsl(var(--primary))';
+export const DAY_MOOD_COLOR = 'hsl(var(--foreground) / 0.55)';
 
 // ---------------------------------------------------------------------------
 // Entry adapter over SDK-normalized documents
@@ -138,6 +140,93 @@ export function sortEntries(entries: JournalEntry[]): JournalEntry[] {
     const bv = b.date ?? b.createdAt ?? '';
     return av < bv ? 1 : av > bv ? -1 : 0;
   });
+}
+
+export interface JournalResourceResolution {
+  entries: JournalEntry[];
+  requested: JournalEntry | null;
+  pending: boolean;
+  missing: boolean;
+  failed: boolean;
+}
+
+export function isDocumentMissingError(error: Error | null): boolean {
+  return error?.message === 'Document not found';
+}
+
+export type PendingResourceId = string | null | undefined;
+
+export function beginResourceNavigation(
+  hostResourceId: string | null,
+  pendingResourceId: PendingResourceId,
+  nextResourceId: string | null,
+): { pendingResourceId: PendingResourceId; shouldNavigate: boolean } {
+  if (pendingResourceId === nextResourceId) {
+    return { pendingResourceId, shouldNavigate: false };
+  }
+  if (pendingResourceId === undefined && hostResourceId === nextResourceId) {
+    return { pendingResourceId: undefined, shouldNavigate: false };
+  }
+  return { pendingResourceId: nextResourceId, shouldNavigate: true };
+}
+
+export function isAwaitingResourceNavigationEcho(
+  pendingResourceId: PendingResourceId,
+  hostResourceId: string | null,
+): boolean {
+  return pendingResourceId !== undefined && pendingResourceId !== hostResourceId;
+}
+
+/**
+ * Resolve an exact journal deep link without limiting it to the recent-entry
+ * window used by the timeline query. A separately fetched document is merged
+ * into the rail so an older entry remains selectable after it opens.
+ */
+export function resolveJournalResource({
+  entries,
+  resourceId,
+  requestedDocument,
+  resourceSettled,
+  resourceFailed = false,
+}: {
+  entries: JournalEntry[];
+  resourceId: string | null;
+  requestedDocument: DocumentRecord | null;
+  resourceSettled: boolean;
+  resourceFailed?: boolean;
+}): JournalResourceResolution {
+  if (!resourceId) {
+    return { entries, requested: null, pending: false, missing: false, failed: false };
+  }
+
+  const listed = entries.find((entry) => entry.id === resourceId) ?? null;
+  const fetched =
+    !listed && requestedDocument?.id === resourceId
+      ? entryFromDocument(requestedDocument)
+      : null;
+  const requested = listed ?? fetched;
+
+  if (requested) {
+    return {
+      entries: listed ? entries : sortEntries([...entries, requested]),
+      requested,
+      pending: false,
+      missing: false,
+      failed: false,
+    };
+  }
+
+  if (resourceFailed) {
+    return { entries, requested: null, pending: false, missing: false, failed: true };
+  }
+
+  return {
+    entries,
+    requested: null,
+    pending: !resourceSettled,
+    missing: resourceSettled,
+    failed: false,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -346,7 +435,7 @@ export function recentGratitudes(
 // ---------------------------------------------------------------------------
 
 export function useJournalEntries() {
-  const { documents, loading, error, refetch } = useDocuments(JOURNAL_DATABASE_SLUG, {
+  const { documents, loading, isFetching, hasData, error, refetch } = useDocuments(JOURNAL_DATABASE_SLUG, {
     // A one-year window keeps the embedded app fast while preserving enough
     // history for useful trends. Older entries remain available in Notis.
     pageSize: 365,
@@ -358,5 +447,5 @@ export function useJournalEntries() {
     [documents],
   );
 
-  return { entries, loading, error: error?.message ?? null, refresh: refetch };
+  return { entries, loading, isFetching, hasData, error: error?.message ?? null, refresh: refetch };
 }

@@ -3,7 +3,7 @@
 /** Shared presentational building blocks for Journal. */
 
 import type { ReactNode } from 'react';
-import { CircleNotchIcon, type Icon } from '@phosphor-icons/react';
+import type { Icon } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { MOOD_SCALE, moodStep } from './journal-core';
 
@@ -40,7 +40,7 @@ export function MoodScale({
                 backgroundColor: isActive ? step.color : 'transparent',
                 boxShadow: isActive
                   ? `0 0 0 3px ${step.soft}`
-                  : `inset 0 0 0 1.5px ${step.color}55`,
+                  : 'inset 0 0 0 1.5px hsl(var(--foreground) / 0.15)',
               }}
             />
           );
@@ -148,18 +148,16 @@ export function RitualSection({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-border bg-card text-card-foreground shadow-sm">
-      <header className="flex items-center justify-between gap-3 border-b border-border/60 px-5 py-3.5 sm:px-6">
+    <section className="rounded-2xl bg-muted text-card-foreground">
+      <header className="flex items-center justify-between gap-3 px-5 py-3.5 sm:px-6">
         <div className="flex items-center gap-2.5">
           <span
-            className="flex h-7 w-7 items-center justify-center rounded-full"
-            style={{ backgroundColor: `${accent}1f`, color: accent }}
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-background"
+            style={{ color: accent }}
           >
             <IconCmp size={15} weight="fill" />
           </span>
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            {title}
-          </h2>
+          <h2 className="text-sm font-semibold text-foreground">{title}</h2>
         </div>
         {aside}
       </header>
@@ -180,9 +178,7 @@ export function PromptBlock({
 }) {
   return (
     <div>
-      <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-        {prompt}
-      </p>
+      <p className="text-xs font-medium text-muted-foreground">{prompt}</p>
       {children ? (
         <div className="mt-1.5 text-sm leading-relaxed">{children}</div>
       ) : (
@@ -199,26 +195,23 @@ export function RitualChip({
   icon: IconCmp,
   label,
   state,
-  accent,
+  tone = 'default',
 }: {
   icon: Icon;
   label: string;
   state: 'complete' | 'partial' | 'missing';
-  accent: string;
+  tone?: 'default' | 'secondary';
 }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium',
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium',
         state === 'missing'
-          ? 'border-dashed border-border text-muted-foreground'
-          : 'border-transparent',
+          ? 'bg-muted text-muted-foreground'
+          : tone === 'secondary'
+            ? 'bg-foreground/[0.07] text-foreground'
+            : 'bg-primary/10 text-primary',
       )}
-      style={
-        state === 'missing'
-          ? undefined
-          : { backgroundColor: `${accent}1a`, color: accent }
-      }
     >
       <IconCmp size={12} weight={state === 'missing' ? 'regular' : 'fill'} />
       {label}
@@ -243,7 +236,7 @@ export function StatTile({
   accent?: string;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
+    <div className="rounded-2xl bg-muted p-5">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground">{label}</span>
         {IconCmp ? (
@@ -254,7 +247,7 @@ export function StatTile({
         <span className="text-2xl font-semibold tracking-tight tabular-nums">{value}</span>
         {suffix ? <span className="text-sm text-muted-foreground">{suffix}</span> : null}
       </div>
-      {hint ? <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }
@@ -275,16 +268,11 @@ export function SectionCard({
   className?: string;
 }) {
   return (
-    <section
-      className={cn(
-        'rounded-2xl border border-border bg-card text-card-foreground shadow-sm',
-        className,
-      )}
-    >
+    <section className={cn('rounded-2xl bg-muted text-card-foreground', className)}>
       <header className="flex items-start justify-between gap-3 px-5 pt-4 pb-3">
         <div className="flex items-start gap-2.5">
           {IconCmp ? (
-            <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-background text-muted-foreground">
               <IconCmp size={16} weight="bold" />
             </span>
           ) : null}
@@ -302,15 +290,6 @@ export function SectionCard({
   );
 }
 
-export function LoadingState({ label = 'Loading…' }: { label?: string }) {
-  return (
-    <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground">
-      <CircleNotchIcon size={16} className="animate-spin" />
-      {label}
-    </div>
-  );
-}
-
 export function EmptyState({
   icon: IconCmp,
   title,
@@ -323,7 +302,7 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/40 px-6 py-14 text-center">
+    <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
       <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-muted text-muted-foreground">
         <IconCmp size={20} weight="bold" />
       </span>
