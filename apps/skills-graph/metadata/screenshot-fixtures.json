@@ -1,0 +1,111 @@
+{
+  "tools": {
+    "LOCAL_NOTIS_LIST_SKILLS": {
+      "status": "success",
+      "installed_skills": [
+        {
+          "id": "sample-weekly-review",
+          "name": "weekly-review",
+          "description": "Run the Monday weekly review: pull last week’s numbers, decide the three priorities, and write the update.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-11T09:00:00.000Z",
+          "skill_md": "---\nname: weekly-review\ndescription: Run the Monday weekly review: pull last week’s numbers, decide the three priorities, and write the update.\n---\n\n# Weekly review\n\n1. Get the numbers first by running `/weekly-metrics`. Do not start the review without them.\n2. Draft the update, then hand the wording to the `brand-voice` skill before sending.\n3. File anything that needs a reply through `inbox-triage`."
+        },
+        {
+          "id": "sample-weekly-metrics",
+          "name": "weekly-metrics",
+          "description": "Collect the weekly numbers from the connected analytics and billing tools into one table.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-12T09:00:00.000Z",
+          "skill_md": "---\nname: weekly-metrics\ndescription: Collect the weekly numbers from the connected analytics and billing tools into one table.\n---\n\n# Weekly metrics\n\nOutput is consumed directly by `/weekly-review`, so keep the column order stable.\nNumbers only — no commentary, no recommendations."
+        },
+        {
+          "id": "sample-brand-voice",
+          "name": "brand-voice",
+          "description": "Rewrite any outgoing copy so it matches the house voice: short sentences, no hype, no emoji.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-13T09:00:00.000Z",
+          "skill_md": "---\nname: brand-voice\ndescription: Rewrite any outgoing copy so it matches the house voice: short sentences, no hype, no emoji.\n---\n\n# Brand voice\n\nApply to every outbound message: updates, launch notes, replies.\nWhen the copy ships an image, the `launch-images` skill owns the visual side."
+        },
+        {
+          "id": "sample-launch-notes",
+          "name": "launch-notes",
+          "description": "Turn a shipped release into launch notes: what changed, who it is for, and what to do next.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-14T09:00:00.000Z",
+          "skill_md": "---\nname: launch-notes\ndescription: Turn a shipped release into launch notes: what changed, who it is for, and what to do next.\n---\n\n# Launch notes\n\nStructure: headline, what changed, who it helps, next step.\nRun the finished copy through `brand-voice`.\nGenerate every visual with the `launch-images` skill so the set stays consistent."
+        },
+        {
+          "id": "sample-launch-images",
+          "name": "launch-images",
+          "description": "Generate on-brand launch visuals at the right sizes for each channel.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-15T09:00:00.000Z",
+          "skill_md": "---\nname: launch-images\ndescription: Generate on-brand launch visuals at the right sizes for each channel.\n---\n\n# Launch images\n\nSizes: 1200x630 social, 2000x1250 store, 1080x1080 square.\nCopy inside an image still follows `brand-voice`."
+        },
+        {
+          "id": "sample-inbox-triage",
+          "name": "inbox-triage",
+          "description": "Sort the inbox into reply now, reply later, and archive, and draft the replies that are obvious.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-16T09:00:00.000Z",
+          "skill_md": "---\nname: inbox-triage\ndescription: Sort the inbox into reply now, reply later, and archive, and draft the replies that are obvious.\n---\n\n# Inbox triage\n\nThree buckets, nothing else. Draft replies, never send them.\nAnything that turns into a task goes into the weekly list read by `/weekly-review`."
+        },
+        {
+          "id": "sample-meeting-notes",
+          "name": "meeting-notes",
+          "description": "Capture a meeting into decisions, owners, and follow-ups.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-17T09:00:00.000Z",
+          "skill_md": "---\nname: meeting-notes\ndescription: Capture a meeting into decisions, owners, and follow-ups.\n---\n\n# Meeting notes\n\nDecisions first, then owners, then follow-ups with dates."
+        },
+        {
+          "id": "sample-travel-planning",
+          "name": "travel-planning",
+          "description": "Plan a trip end to end: flights, stays, and a day-by-day outline.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-18T09:00:00.000Z",
+          "skill_md": "---\nname: travel-planning\ndescription: Plan a trip end to end: flights, stays, and a day-by-day outline.\n---\n\n# Travel planning\n\nAsk for dates and budget before proposing anything."
+        },
+        {
+          "id": "sample-recipe-capture",
+          "name": "recipe-capture",
+          "description": "Save a recipe from a photo, a link, or a voice note into a clean, repeatable format.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-19T09:00:00.000Z",
+          "skill_md": "---\nname: recipe-capture\ndescription: Save a recipe from a photo, a link, or a voice note into a clean, repeatable format.\n---\n\n# Recipe capture\n\nIngredients as a list, steps numbered, servings always stated."
+        },
+        {
+          "id": "sample-expense-log",
+          "name": "expense-log",
+          "description": "Log a receipt into the expense sheet with amount, category, and project.",
+          "source": "custom",
+          "status": "active",
+          "created_at": "2026-05-01T09:00:00.000Z",
+          "updated_at": "2026-06-20T09:00:00.000Z",
+          "skill_md": "---\nname: expense-log\ndescription: Log a receipt into the expense sheet with amount, category, and project.\n---\n\n# Expense log\n\nAmount, currency, category, project. Ask when the category is ambiguous."
+        }
+      ],
+      "curated_catalog": []
+    }
+  },
+  "requests": {}
+}

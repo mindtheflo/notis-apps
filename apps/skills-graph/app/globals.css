@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.skill-graph-shell {
+  /* The portal owns background and foreground tokens via @notis/sdk styles;
+     this shell only sets the working area. */
+  padding: clamp(0.75rem, 2.5vw, 1.5rem);
+  min-height: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* Header-only variant of the shell: same centered max-width and horizontal
+   padding, but no min-height, so it can sit above a full-bleed split layout
+   (map + sidebar, links list) without stretching to fill the page. */
+.skill-graph-header {
+  padding-inline: clamp(0.75rem, 2.5vw, 1.5rem);
+  padding-top: clamp(0.75rem, 2.5vw, 1.5rem);
+  max-width: 1400px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+@layer components {
+  /* Flat list rows: hover and selection are carried by background tint only. */
+  .list-row {
+    @apply rounded-xl bg-muted px-4 py-3 transition-colors lg:bg-transparent lg:hover:bg-muted/60;
+  }
+
+  .list-row-selected {
+    @apply bg-primary/[0.06] lg:bg-primary/[0.06] lg:hover:bg-primary/[0.06];
+  }
+}

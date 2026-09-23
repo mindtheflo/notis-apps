@@ -1,0 +1,18 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Store installs already include these wholly fictional examples. Read existing installed rows or skills first and deduplicate by exact demo key/title/name. Create missing examples only when requested. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates are illustrative fixed dates; do not rewrite existing examples automatically.",
+  "databases": {},
+  "skills": [
+    {
+      "name": "demo-plan",
+      "description": "Inert fictional planning skill",
+      "skill_md": "---\nname: demo-plan\ndescription: Inert fictional planning example\n---\nDraft a fictional plan in the conversation only. Then use the /demo-check skill to review it. Never execute external actions."
+    },
+    {
+      "name": "demo-check",
+      "description": "Inert fictional review skill",
+      "skill_md": "---\nname: demo-check\ndescription: Inert fictional review example\n---\nReview the fictional plan in the conversation. No external actions."
+    }
+  ]
+}
