@@ -1,7 +1,7 @@
 {
   "name": "skill-graph",
-  "version": "0.2.12",
-  "notisAppVersion": "0.2.12",
+  "version": "0.2.13",
+  "notisAppVersion": "0.2.13",
   "private": true,
   "type": "module",
   "scripts": {

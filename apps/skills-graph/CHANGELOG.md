@@ -1,8 +1,15 @@
+# Changelog
+
+## [Full-height skill inspector] - 2026-09-23
+
+- Align the inspector with the top of the app, beside the complete map pane.
+- Keep map controls and statistics with the map, and inspector content independently scrollable.
+- Preserve the same pane layout during loading and on smaller screens.
+
 ## [Full-height lists and readers] - 2026-09-23
 
 - Fill the available app height in list and reader layouts, with independent scrolling and responsive mobile flow.
 
-# Changelog
 
 ## [Fictional starter data included] - 2026-09-23
 

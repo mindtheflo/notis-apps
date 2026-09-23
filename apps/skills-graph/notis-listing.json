@@ -10,7 +10,12 @@
   "changelog": {
     "entries": [
       {
-        "body": "- Fill the available app height in list and reader layouts, with independent scrolling and responsive mobile flow.\n\n# Changelog",
+        "body": "- Align the inspector with the top of the app, beside the complete map pane.\n- Keep map controls and statistics with the map, and inspector content independently scrollable.\n- Preserve the same pane layout during loading and on smaller screens.",
+        "date": "2026-09-23",
+        "title": "Full-height skill inspector"
+      },
+      {
+        "body": "- Fill the available app height in list and reader layouts, with independent scrolling and responsive mobile flow.",
         "date": "2026-09-23",
         "title": "Full-height lists and readers"
       },
@@ -107,8 +112,8 @@
     }
   ],
   "source_app_id": "b6ada10f-0c8d-4972-b944-bcb6e003ae83",
-  "source_version": 6,
+  "source_version": 7,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "A map of how your skills reference each other.",
-  "version_notes": "- Fill the available app height in list and reader layouts, with independent scrolling and responsive mobile flow.\n\n# Changelog"
+  "version_notes": "- Align the inspector with the top of the app, beside the complete map pane.\n- Keep map controls and statistics with the map, and inspector content independently scrollable.\n- Preserve the same pane layout during loading and on smaller screens."
 }
