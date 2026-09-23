@@ -67,8 +67,8 @@ export default function MapPage() {
   const showContent = hasData && skills.length > 0;
 
   return (
-    <div className="flex flex-col">
-      <div className="skill-graph-header flex flex-col gap-3 pb-3">
+    <div className="flex flex-col lg:h-full lg:min-h-0">
+      <div className="skill-graph-header shrink-0 flex flex-col gap-3 pb-3">
         <PageHeading
           title="Map"
           description={
@@ -111,7 +111,7 @@ export default function MapPage() {
         <EmptyState />
       ) : showContent ? (
         <>
-          <div className="skill-graph-header pb-3">
+          <div className="skill-graph-header shrink-0 pb-3">
             <div className="flex flex-wrap items-start gap-x-8 gap-y-4">
               <StatFigure label="Skills" value={stats.skills} />
               <StatFigure label="Links" value={stats.links} hint={mode === 'strong' ? 'Clear references only' : 'Every mention'} />
@@ -120,14 +120,8 @@ export default function MapPage() {
             </div>
           </div>
 
-          {/* Split layout is full-bleed via notis-app-split / notis-app-pane-*: no
-              centered max-width shell, no outer padding. The row height is
-              viewport-relative (not h-full/flex-1) because the harness/portal
-              root only guarantees min-height, not a definite height percentage
-              chains can resolve against. The sidebar plays the tinted,
-              fixed-width "list pane" role even though it sits on the right, so
-              its hairline moves from border-r to border-l. */}
-          <div className="notis-app-split h-auto lg:h-[clamp(480px,calc(100vh-190px),900px)]">
+          {/* Fill the remaining desktop height after the header; stack naturally on mobile. */}
+          <div className="notis-app-split h-auto lg:min-h-0 lg:flex-1">
             <div
               {...containerProps}
               style={{
@@ -147,7 +141,7 @@ export default function MapPage() {
 
             <div className="notis-app-pane-list flex flex-col border-t border-border lg:h-auto lg:overflow-y-auto lg:border-t-0 lg:border-r-0 lg:border-l">
               {selectedId ? (
-                <NotisSelectionBoundary resource={skillResource} className="flex-1">
+                <NotisSelectionBoundary resource={skillResource} className="min-h-0 flex-1">
                   <SkillDetail graph={graph} skillId={selectedId} onSelect={setSelectedId} />
                 </NotisSelectionBoundary>
               ) : (
