@@ -95,7 +95,7 @@ export function SkillDetail({ graph, skillId, onSelect }: SkillDetailProps) {
   const isolated = node.incoming + node.outgoing === 0;
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-y-auto p-4" data-store-screenshot="detail">
+    <div className="flex h-full flex-col gap-4 overflow-y-auto p-4 lg:p-6" data-store-screenshot="detail">
       <header className="space-y-2">
         <div className="flex items-start gap-2">
           <span
