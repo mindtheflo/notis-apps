@@ -80,7 +80,7 @@ function HandoffPrompt({ prompt, skill }: { prompt: string; skill?: string }) {
 
   return (
     <div className="mt-3 flex items-center gap-2">
-      <code className="min-w-0 flex-1 truncate rounded-md border border-border bg-muted/60 px-2.5 py-1.5 font-mono text-xs">
+      <code className="min-w-0 flex-1 truncate rounded-md bg-background px-2.5 py-1.5 font-mono text-xs">
         {prompt}
       </code>
       {available && !handoverFailed ? (
@@ -98,7 +98,7 @@ function HandoffPrompt({ prompt, skill }: { prompt: string; skill?: string }) {
         </Button>
       ) : (
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           onClick={() => {
             void navigator.clipboard
@@ -161,16 +161,13 @@ export function Onboarding({
             <li
               key={step.title}
               className={cn(
-                'rounded-lg border p-4 transition-colors',
-                active ? 'border-border bg-card' : 'border-border/60 bg-transparent',
+                'rounded-2xl p-4 transition-colors',
+                active ? 'bg-muted' : 'bg-transparent',
               )}
             >
               <div className="flex items-start gap-3">
                 {complete ? (
-                  <CheckCircleIcon
-                    weight="fill"
-                    className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400"
-                  />
+                  <CheckCircleIcon weight="fill" className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 ) : (
                   <CircleIcon
                     className={cn(

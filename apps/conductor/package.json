@@ -1,16 +1,17 @@
 {
   "name": "conductor",
-  "version": "0.1.0",
-  "notisAppVersion": "0.1.0",
+  "version": "0.3.13",
+  "notisAppVersion": "0.3.13",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --configLoader runner",
+    "test": "node --test lib/resource-deep-links.test.ts lib/archive-workspace.test.ts lib/archive-batch.test.ts lib/bulk-archive.test.ts lib/workspace-remove.test.ts components/dev-controls.test.ts && python3 -m unittest discover -s skills/workspaces-shared/tests -p 'test_*.py'",
+    "typecheck": "tsc --noEmit",
     "generate-entry": "tsx ../../scripts/generate-entry.ts .",
     "prebuild": "npm run generate-entry",
-    "postbuild": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true});fs.cpSync('.notis/output/bundle','dist',{recursive:true})\"",
-    "typecheck": "tsc --noEmit"
+    "postbuild": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true});fs.cpSync('.notis/output/bundle','dist',{recursive:true})\""
   },
   "dependencies": {
     "@notis/sdk": "file:./packages/sdk",

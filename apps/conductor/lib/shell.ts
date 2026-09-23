@@ -11,7 +11,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useTool } from '@notis/sdk';
+import { useTool, useNotis } from '@notis/sdk';
 
 const SKILLS_ROOT = '/vercel/sandbox/.notis/skills';
 
@@ -49,14 +49,16 @@ export type ShellOutcome = {
 };
 
 export function useSandboxShell() {
+  const { app } = useNotis();
   const shell = useTool<ShellArgs, ShellResult>('LOCAL_NOTIS_RUN_SANDBOX_SHELL');
   const call = shell.call;
 
   const run = useCallback(
     async (command: string, options: { timeoutMs?: number; cwd?: string } = {}): Promise<ShellOutcome> => {
       try {
+        if (!app?.id) throw new Error('The installed Coding app identity is unavailable.');
         const result = await call({
-          command,
+          command: `export NOTIS_CODING_APP_ID=${quote(app.id)}; ${command}`,
           // Default well under the twelve minute ceiling: anything genuinely
           // long belongs in a detached job, not in a request a person is
           // waiting on.
@@ -101,7 +103,7 @@ export function useSandboxShell() {
         };
       }
     },
-    [call],
+    [call, app?.id],
   );
 
   return { run };
