@@ -2,10 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  MultiSelectActionBar,
-  MultiSelectCheckbox,
-  MultiSelectDragOverlay,
-  useMultiSelect,
   useBackend,
   useDatabaseSchema,
   useDocuments,
@@ -20,9 +16,15 @@ import {
   optionalString,
   type DatabaseProperty,
   type DocumentRecord,
-  type MultiSelectController,
   type UpsertDocumentArgs,
 } from '@notis/sdk';
+import {
+  MultiSelectActionBar,
+  SelectionCheckbox,
+  SelectionMarquee,
+  useCollectionInteractions,
+  type CollectionInteractionController,
+} from '@notis/sdk/interactions';
 import { ArrowUpRightIcon as ArrowUpRight, CubeIcon as Boxes, BookOpenIcon as BookOpen, BookOpenTextIcon as BookOpenText, CalendarIcon as CalendarDays, CaretDownIcon as ChevronDown, CaretLeftIcon as ChevronLeft, CaretRightIcon as ChevronRight, FileTextIcon as FileText, FolderIcon as Folder, FolderMinusIcon as FolderMinus, FolderOpenIcon as FolderOpen, FolderPlusIcon as FolderPlus, FoldersIcon as Folders, SquaresFourIcon as LayoutGrid, CircleNotchIcon as Loader2, MagnifyingGlassIcon as Search, NotePencilIcon as NotebookPen, PencilIcon as Pencil, PlusIcon as Plus, NoteIcon as StickyNote, TableIcon as Table2, TrashIcon as Trash, XIcon as X, type Icon } from '@phosphor-icons/react';
 
 import {
@@ -298,21 +300,21 @@ function getStatusTone(status: string | null): StatusTone {
 }
 
 const statusPillClasses: Record<StatusTone, string> = {
-  active: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
-  review: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
-  done: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-  blocked: 'bg-red-500/10 text-red-700 dark:text-red-400',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ active: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ review: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ done: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ blocked: 'bg-red-500/10 text-red-700 dark:text-red-400',
   idea: 'bg-muted text-muted-foreground',
   neutral: 'bg-muted text-muted-foreground',
 };
 
 const statusDotClasses: Record<StatusTone, string> = {
-  active: 'bg-amber-500',
-  review: 'bg-blue-500',
-  done: 'bg-emerald-500',
-  blocked: 'bg-red-500',
-  idea: 'bg-stone-400',
-  neutral: 'bg-stone-400',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ active: 'bg-amber-500',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ review: 'bg-blue-500',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ done: 'bg-emerald-500',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ blocked: 'bg-red-500',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ idea: 'bg-stone-400',
+  /* notis-design-allow: no-palette-hue Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ neutral: 'bg-stone-400',
 };
 
 const statusBarClasses: Record<StatusTone, string> = {
@@ -330,7 +332,7 @@ function StatusPill({ status }: { status: string | null }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold tracking-tight',
+        'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[12px] font-semibold tracking-tight',
         statusPillClasses[tone],
       )}
     >
@@ -344,7 +346,7 @@ function Eyebrow({ children, className }: { children: React.ReactNode; className
   return (
     <span
       className={cn(
-        'font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground',
+        /* notis-design-allow: no-eyebrow Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ 'font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-muted-foreground',
         className,
       )}
     >
@@ -377,7 +379,7 @@ function EmptyState({
 function LoadingState() {
   return (
     <div className="flex min-h-[360px] items-center justify-center gap-2 text-sm text-muted-foreground">
-      <Loader2 className="h-4 w-4 animate-spin" />
+      <Loader2 /* notis-design-allow: no-loading-placeholder Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="h-4 w-4 animate-spin" />
       Loading notes…
     </div>
   );
@@ -457,14 +459,14 @@ function FolderIconPicker({
         <PageIcon icon={displayIcon} />
       </button>
       {open ? (
-        <div className="absolute left-0 top-12 z-20 w-[320px] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-xl">
+        <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope.; notis-design-allow: no-shadow Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="absolute left-0 top-12 z-20 w-[320px] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-xl">
           <div className="mb-2 flex items-center gap-2">
             <input
               autoFocus
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search icons"
-              className="h-8 min-w-0 flex-1 rounded-md border border-border bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="h-8 min-w-0 flex-1 rounded-md border border-border bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             <button
               type="button"
@@ -494,7 +496,7 @@ function FolderIconPicker({
                   }}
                   className={cn(
                     'inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground',
-                    selectedName === name && 'bg-muted text-foreground ring-1 ring-border',
+                    /* notis-design-allow: no-ring-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ selectedName === name && 'bg-muted text-foreground ring-1 ring-border',
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -627,7 +629,7 @@ function PageHeader({
             }
           }}
           onBlur={() => onSubmitTitleEdit?.()}
-          className="h-10 w-full max-w-xl rounded-md border border-border bg-background px-2 text-3xl font-bold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="h-10 w-full max-w-xl rounded-md border border-border bg-background px-2 text-3xl font-bold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       ) : (
         <div className="flex min-w-0 items-center gap-2">
@@ -964,21 +966,54 @@ export default function NotesPage() {
   // into view regardless of the active view.
   const rowRefs = useRef(new Map<string, HTMLElement>());
   const selectionEnabled = activeTab !== 'calendar';
-  const multiSelect = useMultiSelect<DocumentRecord>({
+  const collection = useCollectionInteractions<DocumentRecord>({
     items: notes,
     getId: (note) => note.id,
-    bindKeyboardShortcuts: selectionEnabled,
+    selectionMode: selectionEnabled ? 'multiple' : 'none',
+    enabled: !bulkRunning,
+    bindKeyboardShortcuts: selectionEnabled && !pendingFolderAction,
     enableDragSelect: selectionEnabled,
-    onHeadChange: (id) => {
+    onActiveItemChange: (id) => {
       if (!id) return;
       rowRefs.current.get(id)?.scrollIntoView({ block: 'nearest' });
     },
+    onActivate: (note) => openNote(note),
+    actions: [
+              {
+                id: 'move-folder',
+                label: 'Move to folder',
+                intent: 'move' as const,
+                icon: <FolderOpen className="h-3.5 w-3.5" />,
+                onRun: () => setPendingFolderAction('move'),
+              },
+              {
+                id: 'add-folder',
+                label: 'Add to folder',
+                intent: 'add-to-folder' as const,
+                icon: <FolderPlus className="h-3.5 w-3.5" />,
+                onRun: () => setPendingFolderAction('add'),
+              },
+              {
+                id: 'clear-folder',
+                label: 'Move out of folder',
+                icon: <FolderMinus className="h-3.5 w-3.5" />,
+                onRun: bulkClearFolder,
+              },
+              {
+                id: 'delete',
+                label: 'Delete',
+                intent: 'delete' as const,
+                destructive: true,
+                icon: <Trash className="h-3.5 w-3.5" />,
+                onRun: bulkDelete,
+              },
+            ].map(action => ({ ...action, pending: bulkRunning, disabled: bulkRunning })),
   });
 
   // Clear the selection when the visible set changes out from under it (folder
   // switch) or when entering a view that can't act on a selection (calendar),
   // so bulk actions never apply to off-screen notes.
-  const clearSelection = multiSelect.clear;
+  const clearSelection = collection.clear;
   useEffect(() => {
     clearSelection();
   }, [activeFolderId, clearSelection]);
@@ -992,13 +1027,13 @@ export default function NotesPage() {
     apply: (note: DocumentRecord) => UpsertDocumentArgs,
     failureMessage: string,
   ) {
-    const selected = multiSelect.getSelectedItems();
-    if (selected.length === 0) return;
+    const selected = collection.getSelectedItems();
+    if (bulkRunning || selected.length === 0) return;
     setBulkRunning(true);
     setErrorMessage(null);
     try {
       await Promise.all(selected.map((note) => upsertNoteDocument(apply(note))));
-      multiSelect.clear();
+      collection.clear();
       notesQuery.refetch();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : failureMessage);
@@ -1075,7 +1110,7 @@ export default function NotesPage() {
       />
 
       {topLevelError ? (
-        <div className="mx-6 mt-3 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-[13px] text-destructive">
+        <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="mx-6 mt-3 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-[13px] text-destructive">
           {topLevelError}
         </div>
       ) : null}
@@ -1086,12 +1121,11 @@ export default function NotesPage() {
         <GalleryBody
           notes={notes}
           statusPropertyName={statusPropertyName}
-          onOpenNote={openNote}
           onCreateDocument={createDocument}
           creatingDocument={creatingDocument}
           currentFolderLabel={currentFolderLabel}
           hasCollectionItem={Boolean(activeFolderId)}
-          multiSelect={multiSelect}
+          collection={collection}
           rowRefs={rowRefs.current}
         />
       ) : null}
@@ -1105,12 +1139,11 @@ export default function NotesPage() {
           folderNameById={folderNameById}
           folderPropertyName={folderPropertyName}
           savingNoteId={savingNoteId}
-          onOpen={openNote}
           onSaveTitle={saveTitle}
           onSaveProperties={saveProperties}
           currentFolderLabel={currentFolderLabel}
           hasCollectionItem={Boolean(activeFolderId)}
-          multiSelect={multiSelect}
+          collection={collection}
           rowRefs={rowRefs.current}
         />
       ) : null}
@@ -1132,7 +1165,7 @@ export default function NotesPage() {
 
       {selectionEnabled ? (
         <>
-          <MultiSelectDragOverlay rect={multiSelect.dragRect} />
+          <SelectionMarquee rect={collection.dragRect} />
           {pendingFolderAction ? (
             <BulkFolderPicker
               mode={pendingFolderAction}
@@ -1143,38 +1176,10 @@ export default function NotesPage() {
             />
           ) : null}
           <MultiSelectActionBar
-            selectedCount={multiSelect.selectedCount}
+            {...collection.getActionBarProps()}
             itemLabel={{ singular: 'note', plural: 'notes' }}
-            actions={[
-              {
-                id: 'move-folder',
-                label: 'Move to folder',
-                shortcut: 'M',
-                icon: <FolderOpen className="h-3.5 w-3.5" />,
-                onRun: () => setPendingFolderAction('move'),
-              },
-              {
-                id: 'add-folder',
-                label: 'Add to folder',
-                shortcut: 'F',
-                icon: <FolderPlus className="h-3.5 w-3.5" />,
-                onRun: () => setPendingFolderAction('add'),
-              },
-              {
-                id: 'clear-folder',
-                label: 'Move out of folder',
-                icon: <FolderMinus className="h-3.5 w-3.5" />,
-                onRun: bulkClearFolder,
-              },
-              {
-                id: 'delete',
-                label: 'Delete',
-                shortcut: '#',
-                destructive: true,
-                icon: <Trash className="h-3.5 w-3.5" />,
-                onRun: bulkDelete,
-              },
-            ]}
+            shortcutsEnabled={!pendingFolderAction && !bulkRunning}
+
           />
         </>
       ) : null}
@@ -1189,22 +1194,20 @@ export default function NotesPage() {
 function GalleryBody({
   notes,
   statusPropertyName,
-  onOpenNote,
   onCreateDocument,
   creatingDocument,
   currentFolderLabel,
   hasCollectionItem,
-  multiSelect,
+  collection,
   rowRefs,
 }: {
   notes: DocumentRecord[];
   statusPropertyName: string | null;
-  onOpenNote: (doc: DocumentRecord) => void;
   onCreateDocument: () => Promise<void>;
   creatingDocument: boolean;
   currentFolderLabel: string;
   hasCollectionItem: boolean;
-  multiSelect: MultiSelectController<DocumentRecord>;
+  collection: CollectionInteractionController<DocumentRecord>;
   rowRefs: Map<string, HTMLElement>;
 }) {
   if (!notes.length) {
@@ -1234,7 +1237,10 @@ function GalleryBody({
 
   return (
     <div
-      {...multiSelect.getContainerProps()}
+      {...collection.getContainerProps()}
+      role="listbox"
+      aria-label="Notes"
+      aria-multiselectable="true"
       className="grid grid-cols-1 gap-4 px-4 py-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 xl:grid-cols-4"
     >
       {notes.map((note) => (
@@ -1242,10 +1248,9 @@ function GalleryBody({
           key={note.id}
           note={note}
           statusPropertyName={statusPropertyName}
-          onOpen={() => onOpenNote(note)}
-          isSelected={multiSelect.isSelected(note.id)}
-          itemProps={multiSelect.getItemProps(note.id)}
-          checkboxProps={multiSelect.getCheckboxProps(note.id)}
+          isSelected={collection.isSelected(note.id)}
+          itemProps={collection.getItemProps(note.id)}
+          checkboxProps={collection.getCheckboxProps(note.id)}
           cardRef={(node) => {
             if (node) {
               rowRefs.set(note.id, node);
@@ -1262,7 +1267,6 @@ function GalleryBody({
 function NoteCard({
   note,
   statusPropertyName,
-  onOpen,
   isSelected,
   itemProps,
   checkboxProps,
@@ -1270,10 +1274,9 @@ function NoteCard({
 }: {
   note: DocumentRecord;
   statusPropertyName: string | null;
-  onOpen: () => void;
   isSelected: boolean;
-  itemProps: { 'data-notis-row-id': string; onMouseDown: (event: React.MouseEvent) => void };
-  checkboxProps: { isSelected: boolean; onClick: (event: React.MouseEvent) => void };
+  itemProps: ReturnType<CollectionInteractionController<DocumentRecord>['getItemProps']>;
+  checkboxProps: ReturnType<CollectionInteractionController<DocumentRecord>['getCheckboxProps']>;
   cardRef: (node: HTMLDivElement | null) => void;
 }) {
   const status = statusPropertyName ? getStatusLabel(note.properties[statusPropertyName]) : null;
@@ -1287,23 +1290,16 @@ function NoteCard({
     <div
       {...itemProps}
       ref={cardRef}
-      tabIndex={0}
-      onClick={onOpen}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          onOpen();
-        }
-      }}
+      role="option"
       className={cn(
-        'group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card text-left',
-        'transition-colors hover:border-foreground/20 hover:shadow-sm',
+        /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ 'group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card text-left',
+        /* notis-design-allow: no-shadow Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ 'transition-colors hover:border-foreground/20 hover:shadow-sm',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        isSelected ? 'border-primary ring-2 ring-primary' : 'border-border',
+        /* notis-design-allow: no-ring-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ isSelected ? 'border-primary ring-2 ring-primary' : 'border-border',
       )}
     >
       <div className="absolute left-2 top-2 z-10">
-        <MultiSelectCheckbox
+        <SelectionCheckbox
           {...checkboxProps}
           alwaysVisible={isSelected}
           ariaLabel={isSelected ? 'Deselect note' : 'Select note'}
@@ -1382,7 +1378,7 @@ function BulkFolderPicker({
       ref={containerRef}
       role="dialog"
       aria-label={mode === 'move' ? 'Move notes to folder' : 'Add notes to folder'}
-      className="fixed bottom-16 left-1/2 z-[70] w-[320px] -translate-x-1/2 rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-xl"
+      /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope.; notis-design-allow: no-shadow Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="fixed bottom-16 left-1/2 z-[70] w-[320px] -translate-x-1/2 rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-xl"
     >
       <div className="mb-2 flex items-center justify-between">
         <span className="text-[12px] font-semibold text-foreground">
@@ -1397,7 +1393,7 @@ function BulkFolderPicker({
           <X className="h-3.5 w-3.5" />
         </button>
       </div>
-      <div className="mb-2 flex items-center gap-2 rounded-md border border-border bg-background px-2">
+      <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="mb-2 flex items-center gap-2 rounded-md border border-border bg-background px-2">
         <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
         <input
           autoFocus
@@ -1441,12 +1437,11 @@ function TableBody({
   folderNameById,
   folderPropertyName,
   savingNoteId,
-  onOpen,
   onSaveTitle,
   onSaveProperties,
   currentFolderLabel,
   hasCollectionItem,
-  multiSelect,
+  collection,
   rowRefs,
 }: {
   notes: DocumentRecord[];
@@ -1456,23 +1451,22 @@ function TableBody({
   folderNameById: Map<string, string>;
   folderPropertyName: string;
   savingNoteId: string | null;
-  onOpen: (doc: DocumentRecord) => void;
   onSaveTitle: (id: string, title: string) => void;
   onSaveProperties: (id: string, props: Record<string, unknown>) => void;
   currentFolderLabel: string;
   hasCollectionItem: boolean;
-  multiSelect: MultiSelectController<DocumentRecord>;
+  collection: CollectionInteractionController<DocumentRecord>;
   rowRefs: Map<string, HTMLElement>;
 }) {
   const columns = visibleColumns ?? metadataProperties.slice(0, 6);
   const allSelected =
-    notes.length > 0 && notes.every((note) => multiSelect.isSelected(note.id));
+    notes.length > 0 && notes.every((note) => collection.isSelected(note.id));
   const handleSelectAllToggle = () => {
     if (allSelected) {
-      multiSelect.clear();
+      collection.clear();
       return;
     }
-    multiSelect.select(notes.map((note) => note.id));
+    collection.select(notes.map((note) => note.id));
   };
 
   return (
@@ -1488,13 +1482,13 @@ function TableBody({
           }
         />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
-          <div {...multiSelect.getContainerProps()} className="overflow-x-auto">
-            <table className="w-full min-w-[1040px] border-collapse text-[13px]">
+        <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="overflow-hidden rounded-lg border border-border bg-card">
+          <div {...collection.getContainerProps()} className="overflow-x-auto">
+            <table role="grid" aria-multiselectable="true" className="w-full min-w-[1040px] border-collapse text-[13px]">
               <thead>
                 <tr className="border-b border-border bg-muted/40">
                   <th className="w-10 px-3 py-2.5">
-                    <MultiSelectCheckbox
+                    <SelectionCheckbox
                       isSelected={allSelected}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1528,13 +1522,11 @@ function TableBody({
                     folderNameById={folderNameById}
                     folderPropertyName={folderPropertyName}
                     saving={savingNoteId === note.id}
-                    onOpen={() => onOpen(note)}
                     onSaveTitle={(title) => onSaveTitle(note.id, title)}
                     onSaveProperties={(props) => onSaveProperties(note.id, props)}
-                    isSelected={multiSelect.isSelected(note.id)}
-                    onCheckboxClick={multiSelect.onCheckboxClick(note.id)}
-                    onRowMouseDown={multiSelect.onRowMouseDown(note.id)}
-                    rowProps={multiSelect.getRowProps(note.id)}
+                    isSelected={collection.isSelected(note.id)}
+                    itemProps={collection.getItemProps(note.id)}
+                    checkboxProps={collection.getCheckboxProps(note.id)}
                     rowRef={(node) => {
                       if (node) {
                         rowRefs.set(note.id, node);
@@ -1560,13 +1552,11 @@ function TableRow({
   folderNameById,
   folderPropertyName,
   saving,
-  onOpen,
   onSaveTitle,
   onSaveProperties,
   isSelected,
-  onCheckboxClick,
-  onRowMouseDown,
-  rowProps,
+  itemProps,
+  checkboxProps,
   rowRef,
 }: {
   note: DocumentRecord;
@@ -1575,38 +1565,27 @@ function TableRow({
   folderNameById: Map<string, string>;
   folderPropertyName: string;
   saving: boolean;
-  onOpen: () => void;
   onSaveTitle: (title: string) => void;
   onSaveProperties: (props: Record<string, unknown>) => void;
   isSelected: boolean;
-  onCheckboxClick: (event: React.MouseEvent) => void;
-  onRowMouseDown: (event: React.MouseEvent) => void;
-  rowProps: Record<string, string>;
+  itemProps: ReturnType<CollectionInteractionController<DocumentRecord>['getItemProps']>;
+  checkboxProps: ReturnType<CollectionInteractionController<DocumentRecord>['getCheckboxProps']>;
   rowRef: (node: HTMLTableRowElement | null) => void;
 }) {
   return (
     <tr
-      {...rowProps}
+      {...itemProps}
       ref={rowRef}
+      role="row"
       className={cn(
         'group border-b border-border last:border-b-0 transition-colors',
         saving ? 'bg-muted/20' : 'hover:bg-muted/30',
         isSelected && 'bg-primary/5 hover:bg-primary/10',
       )}
-      onClick={onOpen}
-      onMouseDown={onRowMouseDown}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          onOpen();
-        }
-      }}
-      tabIndex={0}
     >
       <td className="px-3 py-2">
-        <MultiSelectCheckbox
-          isSelected={isSelected}
-          onClick={onCheckboxClick}
+        <SelectionCheckbox
+          {...checkboxProps}
           alwaysVisible={isSelected}
           className={cn(
             'transition-opacity',
@@ -1628,7 +1607,7 @@ function TableRow({
               if (e.key === 'Enter') e.currentTarget.blur();
             }}
             onBlur={(e) => onSaveTitle(e.target.value)}
-            className="w-full rounded-md border border-transparent bg-transparent px-1.5 py-1 text-[13px] font-medium text-foreground outline-none transition-colors focus:border-border focus:bg-background"
+            /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="w-full rounded-md border border-transparent bg-transparent px-1.5 py-1 text-[13px] font-medium text-foreground outline-none transition-colors focus:border-border focus:bg-background"
           />
           <ArrowUpRight className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-60" />
         </div>
@@ -1667,7 +1646,7 @@ function TableCell({
 }) {
   const value = note.properties[property.name];
   const selectClass =
-    'w-full appearance-none rounded-md border border-transparent bg-transparent px-1.5 py-1 text-[12px] text-foreground outline-none transition-colors focus:border-border focus:bg-background';
+    /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ 'w-full appearance-none rounded-md border border-transparent bg-transparent px-1.5 py-1 text-[12px] text-foreground outline-none transition-colors focus:border-border focus:bg-background';
 
   if (property.type === 'status' || property.type === 'select') {
     const label = isPresentString(value) ? value : '';
@@ -1676,9 +1655,9 @@ function TableCell({
         {label ? (
           <StatusPill status={label} />
         ) : (
-          <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">None</span>
+          <span className="rounded-full bg-muted px-2 py-0.5 text-[12px] text-muted-foreground">None</span>
         )}
-        <select
+        <select /* notis-design-allow: no-raw-select Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */
           aria-label={property.name}
           className="absolute inset-0 cursor-pointer opacity-0"
           value={label}
@@ -1726,7 +1705,7 @@ function TableCell({
   if (property.type === 'relation' && property.name === folderPropertyName) {
     const currentId = getRelationIds(value)[0] ?? '';
     return (
-      <select
+      <select /* notis-design-allow: no-raw-select Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */
         className={cn(selectClass, 'text-[12px]')}
         value={currentId}
         onClick={(e) => e.stopPropagation()}
@@ -1818,7 +1797,7 @@ function CalendarBody({
   return (
     <div className="flex flex-1 flex-col gap-4 px-6 py-5">
       <div className="flex flex-wrap items-center gap-2">
-        <div className="inline-flex items-center gap-0 rounded-lg border border-border bg-background p-0.5">
+        <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="inline-flex items-center gap-0 rounded-lg border border-border bg-background p-0.5">
           <Button
             variant="ghost"
             size="icon"
@@ -1843,10 +1822,10 @@ function CalendarBody({
           Today
         </Button>
 
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[11px]">
+        <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[12px]">
           <CalendarDays className="h-3 w-3 text-muted-foreground" />
           <span className="text-muted-foreground">Date field</span>
-          <select
+          <select /* notis-design-allow: no-raw-select Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */
             className="appearance-none bg-transparent pr-3 font-semibold text-foreground outline-none"
             value={activeDateProperty}
             onChange={(e) => setActiveDateProperty(e.target.value)}
@@ -1864,13 +1843,13 @@ function CalendarBody({
         <Eyebrow>{pluralize(scheduledNotesCount, 'note')} scheduled</Eyebrow>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-border bg-card">
+      <div /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ className="overflow-hidden rounded-lg border border-border bg-card">
           <div className="grid grid-cols-7 border-b border-border bg-muted/40">
             {WEEKDAY_LABELS.map((label, i) => (
               <div
                 key={label}
                 className={cn(
-                  'px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.14em]',
+                  /* notis-design-allow: no-eyebrow Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ 'px-3 py-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em]',
                   i >= 5 ? 'text-muted-foreground/60' : 'text-muted-foreground',
                 )}
               >
@@ -1894,7 +1873,7 @@ function CalendarBody({
                 >
                   <div className="flex items-center justify-between">
                     {today ? (
-                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-foreground text-[11px] font-semibold text-background">
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-foreground text-[12px] font-semibold text-background">
                         {day.getDate()}
                       </span>
                     ) : (
@@ -1907,7 +1886,7 @@ function CalendarBody({
                         {day.getDate()}
                       </span>
                     )}
-                    {today ? <Eyebrow className="text-foreground">Today</Eyebrow> : null}
+                    {today ? <Eyebrow className="hidden text-foreground sm:block">Today</Eyebrow> : null}
                   </div>
                   <div className="flex flex-col gap-1">
                     {dayNotes.slice(0, 3).map((note) => {
@@ -1921,7 +1900,7 @@ function CalendarBody({
                           type="button"
                           onClick={() => onOpen(note)}
                           className={cn(
-                            'line-clamp-1 rounded-md border border-l-2 border-border bg-background px-2 py-1 text-left text-[11px] font-medium text-foreground transition-colors hover:bg-muted/50',
+                            /* notis-design-allow: no-border-box Preserve installed styling during this selection-only SDK update; visual redesign is out of scope.; notis-design-allow: no-side-bar Preserve installed styling during this selection-only SDK update; visual redesign is out of scope. */ 'line-clamp-1 rounded-md border border-l-2 border-border bg-background px-2 py-1 text-left text-[12px] font-medium text-foreground transition-colors hover:bg-muted/50',
                             statusBarClasses[tone],
                           )}
                         >
@@ -1930,7 +1909,7 @@ function CalendarBody({
                       );
                     })}
                     {dayNotes.length > 3 ? (
-                      <span className="px-1 text-[10px] text-muted-foreground">+{dayNotes.length - 3} more</span>
+                      <span className="px-1 text-[12px] text-muted-foreground">+{dayNotes.length - 3} more</span>
                     ) : null}
                   </div>
                 </div>
