@@ -10,6 +10,11 @@
   "changelog": {
     "entries": [
       {
+        "body": "- Fill the available app height in list and reader layouts, with independent scrolling and responsive mobile flow.\n\n# Changelog",
+        "date": "2026-09-23",
+        "title": "Full-height lists and readers"
+      },
+      {
         "body": "- Include wholly invented starter examples on installation, with no personal or publisher records.\n- Recognize existing examples during onboarding without creating duplicates or activating external actions.",
         "date": "2026-09-23",
         "title": "Fictional starter data included"
@@ -1517,8 +1522,8 @@
     }
   ],
   "source_app_id": "9c475a92-684f-44e1-a774-84d0e871b6fc",
-  "source_version": 5,
+  "source_version": 6,
   "submitted_by_notis_user_id": "9f9002d8-05c5-d78a-b105-b6f2422b25bc",
   "tagline": "Read every meeting, and the promises made in it.",
-  "version_notes": "- Include wholly invented starter examples on installation, with no personal or publisher records.\n- Recognize existing examples during onboarding without creating duplicates or activating external actions."
+  "version_notes": "- Fill the available app height in list and reader layouts, with independent scrolling and responsive mobile flow.\n\n# Changelog"
 }
