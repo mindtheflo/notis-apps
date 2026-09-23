@@ -218,7 +218,7 @@ export default function JournalPage() {
   const showInitialSkeleton = (loading || resourceResolution.pending) && !availableEntries.length;
 
   return (
-    <div data-store-screenshot="journal" className="mx-auto w-full max-w-6xl px-5 py-6 sm:px-8">
+    <div data-store-screenshot="journal" className="mx-auto w-full max-w-6xl px-5 py-6 sm:px-8 lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <PageHeading
         title="Journal"
         description="Written with Notis, one morning and one evening at a time."
@@ -310,13 +310,13 @@ export default function JournalPage() {
           />
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[248px_minmax(0,1fr)]">
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:min-h-0 lg:flex-1 lg:grid-cols-[248px_minmax(0,1fr)]">
           {/* Timeline rail */}
           <nav
             {...collection.getContainerProps()}
             role="listbox"
             aria-label="Journal timeline"
-            className="max-h-56 min-w-0 overflow-y-auto lg:max-h-[calc(100vh-220px)] lg:pr-1"
+            className="max-h-56 min-w-0 overflow-y-auto lg:h-full lg:min-h-0 lg:max-h-none lg:pr-1"
           >
             <div className="space-y-5">
               {monthGroups.map((group) => (
@@ -341,7 +341,7 @@ export default function JournalPage() {
 
           {/* Day spread */}
           {selected ? (
-            <NotisSelectionBoundary resource={{ id: selected.id, kind: 'journal-entry', label: selected.title }}>
+            <NotisSelectionBoundary className="min-w-0 lg:min-h-0 lg:overflow-y-auto" resource={{ id: selected.id, kind: 'journal-entry', label: selected.title }}>
               <DaySpread
                 entry={selected}
                 onNewer={newer ? () => selectEntry(newer.id) : undefined}
