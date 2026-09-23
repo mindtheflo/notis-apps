@@ -12,3 +12,6 @@
     @apply bg-primary/[0.06] lg:bg-primary/[0.06] lg:hover:bg-primary/[0.06];
   }
 }
+
+/* Resolve full-height panes against the app host; document views still overflow naturally. */
+[data-notis-app-root] { height: 100%; }
