@@ -46,3 +46,6 @@
   --ring: 222.2 84% 4.9%;
   --radius: 0.5rem;
 }
+
+/* Resolve full-height panes against the app host; document views still overflow naturally. */
+[data-notis-app-root] { height: 100%; }
