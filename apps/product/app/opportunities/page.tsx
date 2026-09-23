@@ -1,0 +1,48 @@
+import {ReaderSelection} from '@/components/reader-selection';
+import {useState,useEffect,useRef} from 'react';
+import {useDocuments,useNotis,useNotisNavigation,useTopBarSearch,useTool,ViewSkeleton,Dialog,useCollectionInteractions,useShortcuts,type DocumentRecord} from '@notis/sdk';
+import {Button} from '@/components/ui/button';import {NativeSelect} from '@/components/ui/native-select';import {ActiveRecord,recordResource,Empty,ErrorNotice,WorkButton} from '@/components/analysis-ui';import {DB,text,date} from '@/lib/analysis';
+import {ReaderShortcutHints} from '@/components/reader-shortcut-hints';
+import {Menu} from '../controls';
+const WRITE='LOCAL_NOTIS_DATABASE_UPSERT_PRODUCT_OPPORTUNITIES';
+const area=(value:string)=>value==='Tracking'?'Measurement':value;
+const state=(value:string)=>({'Proposed':'To review','Held':'On hold','Approved':'Approved','Implementation started':'In progress','Closed':'Done'}[value]||value);
+export default function Opportunities(){
+ const data=useDocuments(DB.opportunities,{fetchAll:true,pageSize:100,includeContent:false});const {resourceId}=useNotis();const lastRead=useRef(resourceId||'');const [selectedResource,setSelectedResource]=useState(resourceId||'');useEffect(()=>{setSelectedResource(resourceId||'');if(resourceId)lastRead.current=resourceId;},[resourceId]);const {toRoute}=useNotisNavigation();const [query,setQuery]=useState('');const [kind,setKind]=useState('all');const [removed,setRemoved]=useState<Set<string>>(()=>new Set());const [deleteId,setDeleteId]=useState<string|null>(null);const [deleteError,setDeleteError]=useState<string|null>(null);const writer=useTool<{operation:'archive'|'restore';document_id:string},{document?:{id:string};status?:string;message?:string;error?:string}>(WRITE);
+ // Local tombstones cover only the optimistic interval. A successful fresh read
+ // is authoritative, including rows restored by another connected agent.
+ const sawRefresh=useRef(false);
+ useEffect(()=>{if(data.isFetching){sawRefresh.current=true;return;}if(sawRefresh.current){sawRefresh.current=false;if(data.hasData&&!data.error)setRemoved(current=>current.size?new Set():current);}},[data.isFetching,data.hasData,data.error,data.documents]);
+ useTopBarSearch({value:query,onChange:setQuery,placeholder:'Search opportunities…'});const available=data.documents.filter(r=>!removed.has(r.id));const target=available.find(r=>r.id===deleteId);const rows=available.filter(r=>(kind==='all'||text(r,'Kind')===kind)&&`${r.title} ${text(r,'Summary')}`.toLowerCase().includes(query.toLowerCase())).sort((a,b)=>text(a,'Priority').localeCompare(text(b,'Priority')));const active=selectedResource?available.find(r=>r.id===selectedResource||text(r,'Key')===selectedResource):(rows.find(r=>r.id===lastRead.current)||rows[0]);
+ const listRef=useRef<HTMLElement|null>(null);
+ const open=(id:string)=>{lastRead.current=id;setSelectedResource(id);toRoute('/opportunities',{resourceId:id});};
+ const close=()=>{setSelectedResource('');toRoute('/opportunities',{resourceId:null});requestAnimationFrame(()=>(listRef.current?.querySelector<HTMLElement>('[data-notis-active="true"]')||listRef.current?.querySelector<HTMLElement>('[data-notis-collection-item-id]'))?.focus());};
+ const collection=useCollectionInteractions<DocumentRecord>({items:rows,getId:r=>r.id,selectionMode:'none',enableDragSelect:false,enabled:!writer.loading&&!deleteId,onActivate:r=>open(r.id),shortcuts:{clear:false}});
+ useEffect(()=>{if(active&&rows.some(r=>r.id===active.id))collection.setActive(active.id);},[active?.id]);
+ const owner=collection.getActionBarProps();
+ const {style:_selectionStyle,...collectionProps}=collection.getContainerProps();
+ useShortcuts([
+  {id:'opportunities.back',keys:'Escape',label:'Back to opportunity list',enabled:!!selectedResource,onTrigger:close},
+  {id:'opportunities.delete',keys:['#','Delete'],label:'Delete opportunity…',enabled:!!active,onTrigger:()=>{const row=rows.find(r=>r.id===collection.activeId)||active;if(row){setDeleteError(null);setDeleteId(row.id);}}},
+  {id:'opportunities.refresh',keys:'R',label:'Refresh opportunities',onTrigger:()=>data.refetch()},
+ ],{scope:'route',enabled:!writer.loading&&!deleteId,collectionOwnerId:owner.collectionOwnerId,isAvailable:owner.isAvailable});
+ const activeResource=recordResource(active||null,'product-opportunity');
+ const deleteOpportunity=async()=>{if(!target||writer.loading)return;setDeleteError(null);try{const result=await writer.call({operation:'archive',document_id:target.id});if(result.error||result.status==='error'||result.document?.id!==target.id)throw new Error(result.error||result.message||'The deletion was not confirmed. Please try again.');setRemoved(previous=>new Set([...previous,target.id]));setDeleteId(null);close();data.refetch();}catch(e){setDeleteError(e instanceof Error?e.message:'Could not delete this opportunity.');}};
+ return <main {...collectionProps} className="opportunities-shell insight-page isolate" data-has-selection={!!selectedResource}>
+ <ActiveRecord row={active||null} kind="product-opportunity"/>
+ <div className="notis-app-split op-split">
+ <nav ref={listRef} className="notis-app-pane-list op-list-pane" aria-label="Opportunities">
+  <header className="op-list-header"><div className="op-title-row"><h1>Opportunities</h1><p className="research-muted">{rows.length}</p></div><p className="research-muted">Ideas to improve your product.</p>
+   <div className="op-controls"><Button variant="ghost" size="sm" onClick={data.refetch}>Refresh</Button><WorkButton label="Review priorities" skill="prioritize-opportunities" prompt="Review the current Product opportunities. Explain each in plain language: what people need, what we observed and the suggested next step. Preserve existing decisions and do not start implementation."/></div>
+   <NativeSelect name="opportunity-area" aria-label="Opportunity area" value={kind} onChange={e=>{setKind(e.target.value);close();}}>{['all','Product','Marketing','SEO','Tracking'].map(k=><option key={k} value={k}>{k==='all'?'All areas':area(k)}</option>)}</NativeSelect>
+   <ErrorNotice error={data.error} retry={data.refetch}/><ReaderShortcutHints canDelete/>
+  </header>
+  {!data.hasData&&!data.error?<ViewSkeleton variant="table" rows={6}/>:data.hasData&&rows.length===0?<Empty title={query?'No matching opportunities':'No opportunities to review'}>New ideas will appear here after the next analysis.</Empty>:<div className="op-rows" role="listbox" aria-label="Opportunity list">{rows.map(r=><div {...collection.getItemProps(r.id)} role="option" aria-selected={active?.id===r.id} className={`list-row op-row ${active?.id===r.id?'list-row-selected':''}`} aria-current={active?.id===r.id?'true':undefined} key={r.id}><h2>{r.title}</h2><p className="op-row-summary">{text(r,'Summary')}</p><p className="research-muted">{area(text(r,'Kind'))} · {state(text(r,'Status'))}</p></div>)}</div>}
+ </nav>
+ <section className="notis-app-pane-detail op-reader" aria-label="Opportunity details">
+  {active?<ReaderSelection resource={activeResource}><article className="op-detail"><header className="op-detail-header"><div><h2>{active.title}</h2><p className="research-muted">{area(text(active,'Kind'))} · {state(text(active,'Status'))} · Last reviewed {date(text(active,'Last reviewed'))}</p></div><div className="op-controls"><Menu label="Opportunity actions" trigger="Actions" value={null} disabled={writer.loading} options={[{value:'delete',label:'Delete opportunity…'}]} onSelect={()=>{setDeleteError(null);setDeleteId(active.id);}}/><Button variant="ghost" onClick={close}>Back to list</Button></div></header><p>{text(active,'Summary')}</p><h3>What we noticed</h3><p className="analysis-pre">{text(active,'Evidence')}</p>{text(active,'Decision note')&&<><h3>Suggested next step</h3><p>{text(active,'Decision note')}</p></>}{text(active,'Repair contract')&&<details className="research-disclosure"><summary>Technical details</summary><p className="analysis-pre">{text(active,'Repair contract')}</p></details>}{text(active,'Implementation reference')&&<a className="research-link" href={text(active,'Implementation reference')} target="_blank" rel="noreferrer">Open linked work</a>}<div className="op-controls"><WorkButton label="Discuss this idea" prompt={`Discuss Product opportunity ${active.id}, key ${text(active,'Key')}, decision digest ${text(active,'Decision digest')||'not yet reviewed'}. Explain the evidence and suggested next step in plain language. This draft is not implementation approval. Require explicit approval of current scope before launching work; check existing implementation first.`}/></div></article></ReaderSelection>:data.hasData?<Empty title={selectedResource?'Opportunity unavailable':'Select an opportunity'}>{selectedResource?'This opportunity is no longer available.':'Choose an idea from the list to read the evidence and next step.'}</Empty>:data.error?<Empty title="Could not load opportunity">Retry from the list to load its details.</Empty>:<ViewSkeleton variant="detail" rows={5}/> }
+ </section>
+ </div>
+ <Dialog open={!!target} onClose={()=>{if(!writer.loading)setDeleteId(null);}} title="Delete this opportunity?" description={target?`“${target.title}” will be removed from this list. It can be restored from Trash.`:''} role="alertdialog">{deleteError&&<p role="alert" className="research-notice">{deleteError}</p>}<div className="analysis-actions"><Button variant="outline" disabled={writer.loading} onClick={()=>setDeleteId(null)}>Cancel</Button><Button disabled={writer.loading} onClick={deleteOpportunity}>{writer.loading?'Deleting…':'Delete opportunity'}</Button></div></Dialog>
+ </main>;
+}
