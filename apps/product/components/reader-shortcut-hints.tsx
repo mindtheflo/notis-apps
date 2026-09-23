@@ -1,0 +1,2 @@
+import {ShortcutHints} from '@notis/sdk';
+export function ReaderShortcutHints({canDelete=false}:{canDelete?:boolean}){return <details className="reader-shortcuts"><summary>Keyboard shortcuts</summary><ShortcutHints shortcuts={[{id:'next',keys:'J',label:'Next (or ↓)'},{id:'previous',keys:'K',label:'Previous (or ↑)'},{id:'open',keys:'Enter',label:'Open'},{id:'back',keys:'Escape',label:'Back to list'},...(canDelete?[{id:'delete',keys:'#',label:'Delete…'}]:[]),{id:'help',keys:'?',label:'All shortcuts'}]}/></details>;}
