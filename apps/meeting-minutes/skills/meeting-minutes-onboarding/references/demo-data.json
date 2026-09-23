@@ -1,0 +1,233 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Store installs already include these wholly fictional examples. Read existing installed rows or skills first and deduplicate by exact demo key/title/name. Create missing examples only when requested. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates are illustrative fixed dates; do not rewrite existing examples automatically.",
+  "databases": {
+    "meetings": [
+      {
+        "id": "demo-meeting-1",
+        "title": "Demo \u00b7 Garden planning",
+        "properties": {
+          "Title": "Demo \u00b7 Garden planning",
+          "Meeting ID": "demo-meeting-1",
+          "Date": "2026-09-23T10:00:00Z",
+          "Duration (min)": 25,
+          "Attendees": [
+            "Alex Morgan",
+            "Sam Rivera"
+          ],
+          "Attendee Emails": [
+            "alex@example.com",
+            "sam@example.com"
+          ],
+          "Attendee Count": 2,
+          "Summary": "Agreed a small herb bed, a volunteer welcome session, and a reusable sign system.",
+          "Source": "Manual",
+          "Action Item Count": 2,
+          "Open Action Items": 2,
+          "Has Transcript": true,
+          "Transcript Segments": 2,
+          "External Attendees": [
+            "sam@example.com"
+          ]
+        },
+        "content_markdown": "# Summary\n\nAgreed a small herb bed, a volunteer welcome session, and a reusable sign system.\n\n# Analysis\n\nStart small and test the plan with a short pilot.\n\n# Action Items\n\n- Alex will share a draft by the next check-in.\n- Sam will gather feedback.\n\n# Transcript\n\n**Alex** (00:00): Let us choose one small step we can finish this week.\n\n**Sam** (00:15): I can collect feedback on the draft.\n\nThis meeting and every participant are fictional.",
+        "plain_text": "# Summary\n\nAgreed a small herb bed, a volunteer welcome session, and a reusable sign system.\n\n# Analysis\n\nStart small and test the plan with a short pilot.\n\n# Action Items\n\n- Alex will share a draft by the next check-in.\n- Sam will gather feedback.\n\n# Transcript\n\n**Alex** (00:00): Let us choose one small step we can finish this week.\n\n**Sam** (00:15): I can collect feedback on the draft.\n\nThis meeting and every participant are fictional.",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-meeting-2",
+        "title": "Demo \u00b7 Studio workshop",
+        "properties": {
+          "Title": "Demo \u00b7 Studio workshop",
+          "Meeting ID": "demo-meeting-2",
+          "Date": "2026-09-21T10:00:00Z",
+          "Duration (min)": 30,
+          "Attendees": [
+            "Alex Morgan",
+            "Sam Rivera"
+          ],
+          "Attendee Emails": [
+            "alex@example.com",
+            "sam@example.com"
+          ],
+          "Attendee Count": 2,
+          "Summary": "Selected a paper-craft theme and a simple materials list for the autumn workshop.",
+          "Source": "Manual",
+          "Action Item Count": 2,
+          "Open Action Items": 2,
+          "Has Transcript": true,
+          "Transcript Segments": 2,
+          "External Attendees": [
+            "sam@example.com"
+          ]
+        },
+        "content_markdown": "# Summary\n\nSelected a paper-craft theme and a simple materials list for the autumn workshop.\n\n# Analysis\n\nStart small and test the plan with a short pilot.\n\n# Action Items\n\n- Alex will share a draft by the next check-in.\n- Sam will gather feedback.\n\n# Transcript\n\n**Alex** (00:00): Let us choose one small step we can finish this week.\n\n**Sam** (00:15): I can collect feedback on the draft.\n\nThis meeting and every participant are fictional.",
+        "plain_text": "# Summary\n\nSelected a paper-craft theme and a simple materials list for the autumn workshop.\n\n# Analysis\n\nStart small and test the plan with a short pilot.\n\n# Action Items\n\n- Alex will share a draft by the next check-in.\n- Sam will gather feedback.\n\n# Transcript\n\n**Alex** (00:00): Let us choose one small step we can finish this week.\n\n**Sam** (00:15): I can collect feedback on the draft.\n\nThis meeting and every participant are fictional.",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-meeting-3",
+        "title": "Demo \u00b7 Reading club",
+        "properties": {
+          "Title": "Demo \u00b7 Reading club",
+          "Meeting ID": "demo-meeting-3",
+          "Date": "2026-09-19T10:00:00Z",
+          "Duration (min)": 35,
+          "Attendees": [
+            "Alex Morgan",
+            "Sam Rivera"
+          ],
+          "Attendee Emails": [
+            "alex@example.com",
+            "sam@example.com"
+          ],
+          "Attendee Count": 2,
+          "Summary": "Chose three broad reading themes and agreed to rotate facilitation.",
+          "Source": "Manual",
+          "Action Item Count": 2,
+          "Open Action Items": 0,
+          "Has Transcript": true,
+          "Transcript Segments": 2,
+          "External Attendees": [
+            "sam@example.com"
+          ]
+        },
+        "content_markdown": "# Summary\n\nChose three broad reading themes and agreed to rotate facilitation.\n\n# Analysis\n\nStart small and test the plan with a short pilot.\n\n# Action Items\n\n- Alex will share a draft by the next check-in.\n- Sam will gather feedback.\n\n# Transcript\n\n**Alex** (00:00): Let us choose one small step we can finish this week.\n\n**Sam** (00:15): I can collect feedback on the draft.\n\nThis meeting and every participant are fictional.",
+        "plain_text": "# Summary\n\nChose three broad reading themes and agreed to rotate facilitation.\n\n# Analysis\n\nStart small and test the plan with a short pilot.\n\n# Action Items\n\n- Alex will share a draft by the next check-in.\n- Sam will gather feedback.\n\n# Transcript\n\n**Alex** (00:00): Let us choose one small step we can finish this week.\n\n**Sam** (00:15): I can collect feedback on the draft.\n\nThis meeting and every participant are fictional.",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      }
+    ],
+    "meeting_action_items": [
+      {
+        "id": "demo-action-0-0",
+        "title": "Share the planting draft",
+        "properties": {
+          "Name": "Share the planting draft",
+          "Item ID": "demo-action-0-0",
+          "Meeting": [
+            "demo-meeting-1"
+          ],
+          "Assignee": "Alex Morgan",
+          "Assignee Email": "alex@example.com",
+          "Status": "PENDING",
+          "Meeting Date": "2026-09-23",
+          "For Me": true,
+          "Description": "A fictional commitment from this sample meeting."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-action-0-1",
+        "title": "Collect feedback on the draft",
+        "properties": {
+          "Name": "Collect feedback on the draft",
+          "Item ID": "demo-action-0-1",
+          "Meeting": [
+            "demo-meeting-1"
+          ],
+          "Assignee": "Sam Rivera",
+          "Assignee Email": "sam@example.com",
+          "Status": "PENDING",
+          "Meeting Date": "2026-09-23",
+          "For Me": false,
+          "Description": "A fictional commitment from this sample meeting."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-action-1-0",
+        "title": "Share the workshop outline",
+        "properties": {
+          "Name": "Share the workshop outline",
+          "Item ID": "demo-action-1-0",
+          "Meeting": [
+            "demo-meeting-2"
+          ],
+          "Assignee": "Alex Morgan",
+          "Assignee Email": "alex@example.com",
+          "Status": "PENDING",
+          "Meeting Date": "2026-09-21",
+          "For Me": true,
+          "Description": "A fictional commitment from this sample meeting."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-action-1-1",
+        "title": "Collect feedback on the draft",
+        "properties": {
+          "Name": "Collect feedback on the draft",
+          "Item ID": "demo-action-1-1",
+          "Meeting": [
+            "demo-meeting-2"
+          ],
+          "Assignee": "Sam Rivera",
+          "Assignee Email": "sam@example.com",
+          "Status": "PENDING",
+          "Meeting Date": "2026-09-21",
+          "For Me": false,
+          "Description": "A fictional commitment from this sample meeting."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-action-2-0",
+        "title": "Share the reading shortlist",
+        "properties": {
+          "Name": "Share the reading shortlist",
+          "Item ID": "demo-action-2-0",
+          "Meeting": [
+            "demo-meeting-3"
+          ],
+          "Assignee": "Alex Morgan",
+          "Assignee Email": "alex@example.com",
+          "Status": "COMPLETED",
+          "Meeting Date": "2026-09-19",
+          "For Me": true,
+          "Description": "A fictional commitment from this sample meeting."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-action-2-1",
+        "title": "Collect feedback on the draft",
+        "properties": {
+          "Name": "Collect feedback on the draft",
+          "Item ID": "demo-action-2-1",
+          "Meeting": [
+            "demo-meeting-3"
+          ],
+          "Assignee": "Sam Rivera",
+          "Assignee Email": "sam@example.com",
+          "Status": "COMPLETED",
+          "Meeting Date": "2026-09-19",
+          "For Me": false,
+          "Description": "A fictional commitment from this sample meeting."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      }
+    ]
+  }
+}
