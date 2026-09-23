@@ -1,0 +1,182 @@
+[
+  {
+    "slug": "macro_meals",
+    "title": "Macro Meals",
+    "description": "Macro meals owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Date",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Meal Type",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Calories",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Protein",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Carbs",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Fat",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Ingredients",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Notes",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Confidence",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Source",
+        "type": "rich_text",
+        "action": "add"
+      },
+      {
+        "name": "Image URL",
+        "type": "url",
+        "action": "add"
+      }
+    ]
+  },
+  {
+    "slug": "macro_goals",
+    "title": "Macro Goals",
+    "description": "Macro goals owned by this installed app.",
+    "properties": [
+      {
+        "name": "Name",
+        "type": "title",
+        "action": "add"
+      },
+      {
+        "name": "Effective Date",
+        "type": "date",
+        "action": "add"
+      },
+      {
+        "name": "Calories Goal",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Protein Goal",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Carbs Goal",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Fat Goal",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "BMR",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "TDEE",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Goal",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Lose fat"
+          },
+          {
+            "name": "Maintain"
+          },
+          {
+            "name": "Gain muscle"
+          },
+          {
+            "name": "Recomposition"
+          }
+        ]
+      },
+      {
+        "name": "Weekly Rate",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Weight",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Height",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Age",
+        "type": "number",
+        "action": "add"
+      },
+      {
+        "name": "Activity",
+        "type": "select",
+        "action": "add",
+        "options": [
+          {
+            "name": "Sedentary"
+          },
+          {
+            "name": "Lightly active"
+          },
+          {
+            "name": "Moderately active"
+          },
+          {
+            "name": "Very active"
+          },
+          {
+            "name": "Exceptional"
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "type": "checkbox",
+        "action": "add"
+      }
+    ]
+  }
+]
