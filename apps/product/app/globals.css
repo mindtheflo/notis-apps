@@ -43,3 +43,6 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Resolve full-height panes against the app host; document views still overflow naturally. */
+[data-notis-app-root] { height: 100%; }

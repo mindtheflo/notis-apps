@@ -1,7 +1,7 @@
 {
   "name": "product",
-  "version": "0.5.10",
-  "notisAppVersion": "0.5.10",
+  "version": "0.5.11",
+  "notisAppVersion": "0.5.11",
   "private": true,
   "type": "module",
   "scripts": {
