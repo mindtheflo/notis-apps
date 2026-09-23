@@ -1,9 +1,10 @@
 'use client';
 
 import { useNotisRuntime } from '../provider';
-import type { AppDescriptor, CollectionItemDetail, DatabaseDescriptor, RouteDescriptor } from '../runtime';
+import type { RuntimeResource, AppDescriptor, CollectionItemDetail, DatabaseDescriptor, RouteDescriptor } from '../runtime';
 
 interface NotisContext {
+  resource: RuntimeResource | null;
   /** App metadata (id, name, icon, description). Null before runtime loads. */
   app: AppDescriptor | null;
   /** Current route descriptor. Null before runtime loads. */
@@ -12,6 +13,8 @@ interface NotisContext {
   databases: DatabaseDescriptor[];
   /** Selected collection item for the current route, when applicable. */
   collectionItem: CollectionItemDetail | null;
+  /** Resource requested through this route's canonical deep link. */
+  resourceId: string | null;
   /** Whether the runtime is loaded and available. */
   ready: boolean;
 }
@@ -25,10 +28,12 @@ export function useNotis(): NotisContext {
   const runtime = useNotisRuntime();
 
   return {
+    resource: runtime?.resource ?? null,
     app: runtime?.app ?? null,
     route: runtime?.route ?? null,
     databases: runtime?.databases ?? [],
     collectionItem: runtime?.context?.collectionItem ?? null,
+    resourceId: runtime?.context?.resourceId ?? null,
     ready: runtime !== null,
   };
 }

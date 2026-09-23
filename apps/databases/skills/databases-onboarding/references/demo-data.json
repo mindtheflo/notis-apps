@@ -1,0 +1,153 @@
+{
+  "fictional": true,
+  "provenance": "Entirely invented for demonstration; no publisher records used.",
+  "instructions": "Store installs already include these wholly fictional examples. Read existing installed rows or skills first and deduplicate by exact demo key/title/name. Create missing examples only when requested. Map symbolic IDs/relations to installed IDs. Preserve real rows. Dates are illustrative fixed dates; do not rewrite existing examples automatically.",
+  "databases": {
+    "demo_accounts": [
+      {
+        "id": "demo-account-0",
+        "title": "Lumen Studio",
+        "properties": {
+          "Name": "Lumen Studio",
+          "Tier": "Growth",
+          "Status": "Active",
+          "ARR": 1200,
+          "Seats": 5,
+          "Renewal": "2026-12-02",
+          "Owner": "demo@example.com",
+          "Website": "https://example.com/demo",
+          "Regions": [
+            "Europe"
+          ],
+          "Strategic": false,
+          "Health score": 80,
+          "Account notes": "Entirely fictional organization for schema exploration."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-account-1",
+        "title": "Papertrail Workshop",
+        "properties": {
+          "Name": "Papertrail Workshop",
+          "Tier": "Starter",
+          "Status": "Active",
+          "ARR": 2400,
+          "Seats": 10,
+          "Renewal": "2026-12-02",
+          "Owner": "demo@example.com",
+          "Website": "https://example.com/demo",
+          "Regions": [
+            "Europe"
+          ],
+          "Strategic": false,
+          "Health score": 81,
+          "Account notes": "Entirely fictional organization for schema exploration."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-account-2",
+        "title": "Willow Cooperative",
+        "properties": {
+          "Name": "Willow Cooperative",
+          "Tier": "Growth",
+          "Status": "Active",
+          "ARR": 3600,
+          "Seats": 15,
+          "Renewal": "2026-12-02",
+          "Owner": "demo@example.com",
+          "Website": "https://example.com/demo",
+          "Regions": [
+            "Europe"
+          ],
+          "Strategic": false,
+          "Health score": 82,
+          "Account notes": "Entirely fictional organization for schema exploration."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-account-3",
+        "title": "Harbor Makers",
+        "properties": {
+          "Name": "Harbor Makers",
+          "Tier": "Starter",
+          "Status": "Active",
+          "ARR": 4800,
+          "Seats": 20,
+          "Renewal": "2026-12-02",
+          "Owner": "demo@example.com",
+          "Website": "https://example.com/demo",
+          "Regions": [
+            "Europe"
+          ],
+          "Strategic": false,
+          "Health score": 83,
+          "Account notes": "Entirely fictional organization for schema exploration."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-account-4",
+        "title": "Cedar Learning",
+        "properties": {
+          "Name": "Cedar Learning",
+          "Tier": "Growth",
+          "Status": "Active",
+          "ARR": 6000,
+          "Seats": 25,
+          "Renewal": "2026-12-02",
+          "Owner": "demo@example.com",
+          "Website": "https://example.com/demo",
+          "Regions": [
+            "Europe"
+          ],
+          "Strategic": false,
+          "Health score": 84,
+          "Account notes": "Entirely fictional organization for schema exploration."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      },
+      {
+        "id": "demo-account-5",
+        "title": "Fieldnote Collective",
+        "properties": {
+          "Name": "Fieldnote Collective",
+          "Tier": "Starter",
+          "Status": "Active",
+          "ARR": 7200,
+          "Seats": 30,
+          "Renewal": "2026-12-02",
+          "Owner": "demo@example.com",
+          "Website": "https://example.com/demo",
+          "Regions": [
+            "Europe"
+          ],
+          "Strategic": false,
+          "Health score": 85,
+          "Account notes": "Entirely fictional organization for schema exploration."
+        },
+        "content_markdown": "",
+        "plain_text": "",
+        "created_time": "2026-09-21T08:00:00Z",
+        "last_edited_time": "2026-09-23T08:00:00Z"
+      }
+    ]
+  }
+}
